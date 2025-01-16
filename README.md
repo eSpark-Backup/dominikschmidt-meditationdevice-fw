@@ -1,1 +1,2 @@
-# dominikschmidt-meditationdevice-fw
+# Meditation Device
+#### Client Name: Dominik Schmidt
