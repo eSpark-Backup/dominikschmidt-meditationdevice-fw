@@ -1,0 +1,30 @@
+{
+    "C_Cpp.intelliSenseEngine": "default",
+    "idf.espIdfPathWin": "c:\\Users\\eSpark\\esp\\v4.4.6\\esp-idf",
+    "idf.toolsPathWin": "c:\\Users\\eSpark\\esp\\v4.4.6\\.espressif",
+    "files.associations": {
+        "st7789.h": "c",
+        "lvgl.h": "c",
+        "lvgl_helpers.h": "c",
+        "lvgl_private.h": "c",
+        "lv_api_map_v9_1.h": "c",
+        "lv_init.h": "c",
+        "lv_types.h": "c",
+        "lv_conf_internal.h": "c",
+        "lv_global.h": "c",
+        "lv_indev_private.h": "c",
+        "lv_display_private.h": "c",
+        "disp_driver.h": "c",
+        "lvgl_spi_conf.h": "c",
+        "lv_text_private.h": "c",
+        "lv_api_map_v8.h": "c",
+        "ili9341.h": "c",
+        "lv_portsupport.h": "c",
+        "touch_driver.h": "c",
+        "freertos.h": "c",
+        "lv_demo_benchmark.h": "c",
+        "*.in": "cpp"
+    },
+    "idf.portWin": "COM10",
+    "idf.flashType": "UART"
+}
