@@ -23,7 +23,10 @@
         "touch_driver.h": "c",
         "freertos.h": "c",
         "lv_demo_benchmark.h": "c",
-        "*.in": "cpp"
+        "*.in": "cpp",
+        "lv_examples.h": "c",
+        "shapes.h": "c",
+        "screen_design.h": "c"
     },
     "idf.portWin": "COM10",
     "idf.flashType": "UART"
