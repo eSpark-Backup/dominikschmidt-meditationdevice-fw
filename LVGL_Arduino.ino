@@ -2,7 +2,7 @@
  *Be sure to read the docs here: https://docs.lvgl.io/master/integration/framework/arduino.html  */
 
 #include <lvgl.h>
-#include "ui_EndGong.h"
+#include "src/screens/screens.h"
 
 #if LV_USE_TFT_ESPI
 #include <TFT_eSPI.h>
@@ -24,7 +24,7 @@
 /*LVGL draw into this buffer, 1/10 screen size usually works well. The size is in bytes*/
 // #define DRAW_BUF_SIZE (TFT_HOR_RES * TFT_VER_RES / 10 * (LV_COLOR_DEPTH / 8))
 // uint32_t draw_buf[DRAW_BUF_SIZE / 4];
-#define DRAW_BUF_SIZE (TFT_HOR_RES *40)
+#define DRAW_BUF_SIZE (TFT_HOR_RES * 40)
 
 #if LV_USE_LOG != 0
 void my_print( lv_log_level_t level, const char * buf )
@@ -153,11 +153,11 @@ void setup()
      
     // // lv_obj_set_style_bg_color(lv_screen_active(), lv_color_black(), LV_PART_MAIN);
 
-    lv_disp_t *dispp = lv_display_get_default();
-    lv_theme_t *theme = lv_theme_default_init(dispp, lv_color_white(), lv_color_black(),
+    // lv_disp_t *dispp = lv_display_get_default();
+    lv_theme_t *theme = lv_theme_default_init(disp, lv_color_white(), lv_color_black(),
                                               true, LV_FONT_DEFAULT);
 
-    lv_disp_set_theme(dispp, theme);
+    lv_disp_set_theme(disp, theme);
 
     // Create a white background style
     // static lv_style_t bg_style;

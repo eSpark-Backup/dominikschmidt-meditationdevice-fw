@@ -1,6 +1,3 @@
-
-#pragma once
-
 #ifndef UI_ENDGONG_H
 #define UI_ENDGONG_H
 
@@ -8,8 +5,7 @@
  *lvgl based screen designs based on mediation display theme
  ***************************/
 
-// #include "shapes.h"
-#include "images.h"
+#include "../../images/images.h"
 
 #ifdef __cplusplus
 extern "C" {

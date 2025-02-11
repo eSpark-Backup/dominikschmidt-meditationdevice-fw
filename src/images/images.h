@@ -1,11 +1,10 @@
-/**
- * @file screen_design.h
- * Include all related headers and macros
- */
-#pragma once
-
 #ifndef IMAGES_H
 #define IMAGES_H
+
+// #ifdef __cplusplus
+// extern "C"
+// {
+// #endif
 
 #include "lvgl.h"
 
@@ -17,5 +16,9 @@ LV_IMG_DECLARE(ui_img_52_blacktimeicon_png);  // assets/52_blackTimeIcon.png
 LV_IMG_DECLARE(ui_img_52_blackbticon_png);    // assets/52_blackBTIcon.png
 LV_IMG_DECLARE(ui_img_52_blacktuneicon_png);  // assets/52_blackTuneIcon.png
 LV_IMG_DECLARE(ui_img_52_blackhearticon_png); // assets/52_blackHeartIcon.png
+
+// #ifdef __cplusplus
+// }
+// #endif
 
 #endif /*IMAGES_H */
