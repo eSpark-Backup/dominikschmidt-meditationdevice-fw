@@ -10,6 +10,8 @@ extern "C"
 #endif
 
 #include "EndGong/ui_EndGong.h"
+#include "MeditationTimeScr/ui_MeditationScreen.h"
+#include "BluetoothScreen/ui_BluetoothScreen.h"
 
 #ifdef __cplusplus
 }

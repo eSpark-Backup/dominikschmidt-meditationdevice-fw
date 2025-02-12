@@ -6,6 +6,7 @@
  ***************************/
 
 #include "../../images/images.h"
+#include "../ScreenHelpers/ui_helpers.h"
 
 #ifdef __cplusplus
 extern "C" {
