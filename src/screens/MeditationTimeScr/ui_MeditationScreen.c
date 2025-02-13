@@ -91,24 +91,16 @@ void ui_MeditationScreen_screen_init(void)
     lv_obj_set_style_text_opa(ui_medTimePassed, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_medTimePassed, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_medPauseBtn = lv_button_create(ui_MeditationScreen);
-    lv_obj_set_width(ui_medPauseBtn, 230);
-    lv_obj_set_height(ui_medPauseBtn, 230);
-    lv_obj_set_x(ui_medPauseBtn, 88);
-    lv_obj_set_y(ui_medPauseBtn, 149);
+    ui_medPauseBtn = lv_obj_create(ui_MeditationScreen);
+    lv_obj_remove_style_all(ui_medPauseBtn);
+    lv_obj_set_width(ui_medPauseBtn, 52);
+    lv_obj_set_height(ui_medPauseBtn, 52);
+    lv_obj_set_x(ui_medPauseBtn, 0);
+    lv_obj_set_y(ui_medPauseBtn, 61);
     lv_obj_set_align(ui_medPauseBtn, LV_ALIGN_CENTER);
-    // lv_obj_add_flag(ui_medPauseBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS); /// Flags
-    lv_obj_remove_flag(ui_medPauseBtn, LV_OBJ_FLAG_SCROLLABLE);   /// Flags
+    lv_obj_remove_flag(ui_medPauseBtn, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(ui_medPauseBtn, 100, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_medPauseBtn, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_medPauseBtn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_image_src(ui_medPauseBtn, &ui_img_pauseicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_transform_scale(ui_medPauseBtn, 60, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_medPauseBtn, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_CHECKED);
-    lv_obj_set_style_bg_opa(ui_medPauseBtn, 255, LV_PART_MAIN | LV_STATE_CHECKED);
-    lv_obj_set_style_bg_image_src(ui_medPauseBtn, &ui_img_220_blackstarticon_png, LV_PART_MAIN | LV_STATE_CHECKED);
-    lv_obj_set_style_bg_image_recolor(ui_medPauseBtn, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_CHECKED);
-    lv_obj_set_style_bg_image_recolor_opa(ui_medPauseBtn, 255, LV_PART_MAIN | LV_STATE_CHECKED);
-
-    lv_obj_add_event_cb(ui_medPauseBtn, ui_event_medPauseBtn, LV_EVENT_ALL, NULL);
+    lv_obj_set_style_bg_image_src(ui_medPauseBtn, &ui_img_52_pauseicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 }

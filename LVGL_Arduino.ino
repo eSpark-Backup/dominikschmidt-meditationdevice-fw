@@ -15,8 +15,8 @@
 #define TFT_HOR_RES   240
 #define TFT_VER_RES   240
 #define TFT_ROTATION  LV_DISPLAY_ROTATION_270
-// #define DRAW_BUF_SIZE (TFT_HOR_RES * 40)
-#define DRAW_BUF_SIZE (1024 * 40)
+#define DRAW_BUF_SIZE (TFT_HOR_RES * 40)
+// #define DRAW_BUF_SIZE (TFT_HOR_RES * TFT_HOR_RES * 2)
 
 #if LV_USE_LOG != 0
 void my_print( lv_log_level_t level, const char * buf )
@@ -46,12 +46,12 @@ void setup()
     lv_tick_set_cb(my_tick);
 
     static void *buf0 = (lv_color_t *)heap_caps_malloc(DRAW_BUF_SIZE, MALLOC_CAP_SPIRAM);
-    // static void *buf1 = (lv_color_t *)heap_caps_malloc(DRAW_BUF_SIZE, MALLOC_CAP_SPIRAM);
+    static void *buf1 = (lv_color_t *)heap_caps_malloc(DRAW_BUF_SIZE, MALLOC_CAP_SPIRAM);
 
     // lv_color_t *buf1 = (lv_color_t *)malloc(TFT_HOR_RES * TFT_VER_RES * sizeof(lv_color_t));
     // buf1 = heap_caps_malloc(TFT_HOR_RES * 100 * sizeof(lv_color_t), MALLOC_CAP_SPIRAM);
     assert(buf0 != NULL);
-    // assert(buf1 != NULL);
+    assert(buf1 != NULL);
     uint32_t size_in_px = DRAW_BUF_SIZE;
     /* register print function for debugging */
 #if LV_USE_LOG != 0
@@ -61,14 +61,14 @@ void setup()
     lv_display_t * disp;
 #if LV_USE_TFT_ESPI
     /*TFT_eSPI can be enabled lv_conf.h to initialize the display in a simple way*/
-    disp = lv_tft_espi_create(TFT_HOR_RES, TFT_VER_RES, buf0, size_in_px);
+    disp = lv_tft_espi_create(TFT_HOR_RES, TFT_VER_RES, buf0, buf1, size_in_px, LV_DISPLAY_RENDER_MODE_PARTIAL);
     lv_display_set_rotation(disp, TFT_ROTATION);
 
 #else
     /*Else create a display yourself*/
     disp = lv_display_create(TFT_HOR_RES, TFT_VER_RES);
     lv_display_set_flush_cb(disp, my_disp_flush);
-    lv_display_set_buffers(disp, NULL, buf0, size_in_px, LV_DISPLAY_RENDER_MODE_PARTIAL);
+    lv_display_set_buffers(disp, buf0, buf1, size_in_px, LV_DISPLAY_RENDER_MODE_PARTIAL);
 #endif
 
    
@@ -100,7 +100,7 @@ void setup()
     ui_MeditationScreen_screen_init();
     // ui_BluetoothScreen_screen_init();
     
-        // lv_disp_load_scr(ui_EndGong1);
+    // lv_disp_load_scr(ui_EndGong1);
     lv_disp_load_scr(ui_MeditationScreen);
     // lv_disp_load_scr(ui_BluetoothScreen);
 
