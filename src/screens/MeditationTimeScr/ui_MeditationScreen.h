@@ -1,5 +1,5 @@
-#ifndef UI_MEDITATIONTIMESCR_H
-#define UI_MEDITATIONTIMESCR_H
+#ifndef UI_MEDITATIONTIMESCREEN_H
+#define UI_MEDITATIONTIMESCREEN_H
 
 /***************************
  *lvgl based screen designs based on mediation display theme
@@ -26,4 +26,4 @@ extern lv_obj_t *ui_medPauseBtn;
 #ifdef __cplusplus
 }
 #endif
-#endif /*UI_MEDITATIONTIMESCR_H */
+#endif /*UI_MEDITATIONTIMESCREEN_H */

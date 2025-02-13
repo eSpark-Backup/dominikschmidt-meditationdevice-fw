@@ -12,6 +12,7 @@ extern "C"
 #include "EndGong/ui_EndGong.h"
 #include "MeditationTimeScr/ui_MeditationScreen.h"
 #include "BluetoothScreen/ui_BluetoothScreen.h"
+#include "SetTimerScreen/ui_SetTimerScreen.h"
 
 #ifdef __cplusplus
 }
