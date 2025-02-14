@@ -1,0 +1,62 @@
+#ifndef UI_SOUNDSCREEN_H
+#define UI_SOUNDSCREEN_H
+
+/***************************
+ *lvgl based screen designs based on mediation display theme
+ ***************************/
+
+#include "../../images/images.h"
+#include "../ScreenHelpers/ui_helpers.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// SCREEN: ui_SoundScreen
+void ui_SoundScreen_screen_init(void);
+extern lv_obj_t * ui_SoundScreen;
+extern lv_obj_t * ui_SoundPanel;
+extern lv_obj_t * ui_NoSoundBtn;
+extern lv_obj_t * ui_NoSoundCb;
+extern lv_obj_t * ui_NoSoundIcon;
+extern lv_obj_t * ui_NoSoundLabel;
+extern lv_obj_t * ui_NatureSoundBtn;
+extern lv_obj_t * ui_NatureSoundCb;
+extern lv_obj_t * ui_NatureSounIcon;
+extern lv_obj_t * ui_NatureSoundLbl;
+extern lv_obj_t * ui_WhiteNoiseBtn;
+extern lv_obj_t * ui_WhiteNoiseCb;
+extern lv_obj_t * ui_WhiteNoiseIcon;
+extern lv_obj_t * ui_WhiteNoiseLbl;
+extern lv_obj_t * ui_BinauralBeatBtn;
+extern lv_obj_t * ui_BinauralBeatCb;
+extern lv_obj_t * ui_BinauralBeatIcon;
+extern lv_obj_t * ui_BinauralBeatLbl;
+extern lv_obj_t * ui_SingingBowlsBtn;
+extern lv_obj_t * ui_SingingBowlsCb;
+extern lv_obj_t * ui_SingingBowlsIcon;
+extern lv_obj_t * ui_SingingBowlsLbl;
+extern lv_obj_t * ui_PanelTopShadow;
+extern lv_obj_t * ui_PanelBtmShadow;
+extern lv_obj_t * ui_leftheart;
+extern lv_obj_t * ui_midLeftGong;
+extern lv_obj_t * ui_midRightTimer;
+extern lv_obj_t * ui_midTune;
+extern lv_obj_t * ui_SoundpgCntr;
+extern lv_obj_t * ui_pg6;
+extern lv_obj_t * ui_pg7;
+extern lv_obj_t * ui_pg8;
+extern lv_obj_t * ui_pg9;
+extern lv_obj_t * ui_pg10;
+extern lv_obj_t * ui_SoundStartBtnBox;
+extern lv_obj_t * ui_SoundStartLabel;
+extern lv_obj_t * ui_SoundStartIcon;
+extern lv_obj_t * ui_SoundLabel;
+// CUSTOM VARIABLES
+
+
+
+#ifdef __cplusplus
+}
+#endif
+#endif /*UI_SOUNDSCREEN_H */

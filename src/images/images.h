@@ -14,5 +14,10 @@ LV_IMG_DECLARE(ui_img_52_pauseicon_png);
 LV_IMG_DECLARE(ui_img_arcspaces230x240_png);  
 LV_IMG_DECLARE(ui_img_pauseicon_png);         
 LV_IMG_DECLARE(ui_img_220_blackstarticon_png);
+LV_IMG_DECLARE(ui_img_52_blacknosoundicon_png);
+LV_IMG_DECLARE(ui_img_52_blackbirdicon_png);   
+LV_IMG_DECLARE(ui_img_52_whitenoiseicon_png);  
+LV_IMG_DECLARE(ui_img_52_binauralbeats_png);   
+LV_IMG_DECLARE(ui_img_52_singingbowls_png);    
 
 #endif /*IMAGES_H */
