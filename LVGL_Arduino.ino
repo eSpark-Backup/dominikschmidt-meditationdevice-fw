@@ -100,12 +100,15 @@ void setup()
     // ui_MeditationScreen_screen_init();
     // ui_BluetoothScreen_screen_init();
     // ui_SetTimerScr_screen_init();
-    ui_SoundScreen_screen_init();
+    // ui_SoundScreen_screen_init();
+    ui_FavPreview_screen_init();
 
     // lv_disp_load_scr(ui_EndGong1);
     // lv_disp_load_scr(ui_BluetoothScreen);
+    // lv_disp_load_scr(ui_MeditationScreen);
     // lv_disp_load_scr(ui_SetTimerScr);
-    lv_disp_load_scr(ui_SoundScreen);
+    // lv_disp_load_scr(ui_SoundScreen);
+    lv_disp_load_scr(ui_FavPreviewScreen);
 
     memLog();
 }

@@ -14,6 +14,7 @@ extern "C"
 #include "BluetoothScreen/ui_BluetoothScreen.h"
 #include "SetTimerScreen/ui_SetTimerScreen.h"
 #include "SoundScreen/ui_SoundScreen.h"
+#include "FavPreviewScreen/ui_FavPreviewScreen.h"
 
 #ifdef __cplusplus
 }

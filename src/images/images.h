@@ -18,6 +18,8 @@ LV_IMG_DECLARE(ui_img_52_blacknosoundicon_png);
 LV_IMG_DECLARE(ui_img_52_blackbirdicon_png);   
 LV_IMG_DECLARE(ui_img_52_whitenoiseicon_png);  
 LV_IMG_DECLARE(ui_img_52_binauralbeats_png);   
-LV_IMG_DECLARE(ui_img_52_singingbowls_png);    
+LV_IMG_DECLARE(ui_img_52_singingbowls_png);
+LV_IMG_DECLARE(ui_img_20_smalltuneicon_png);
+LV_IMG_DECLARE(ui_img_20_smallgongicon_png);
 
 #endif /*IMAGES_H */

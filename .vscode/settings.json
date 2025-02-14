@@ -3,6 +3,7 @@
         "ui_endgong.h": "c",
         "images.h": "c",
         "ui_meditationscreen.h": "c",
-        "ui_helpers.h": "c"
+        "ui_helpers.h": "c",
+        "ui_favpreviewscreen.h": "c"
     }
 }
