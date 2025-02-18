@@ -14,13 +14,13 @@ extern "C" {
 
 // SCREEN: ui_SetTimerScreen
 void ui_SetTimerScr_screen_init(void);
-extern lv_obj_t *ui_SetTimerScr;
+extern lv_obj_t *ui_SetTimerScreen;
 extern lv_obj_t *ui_startBtnBox1;
 extern lv_obj_t *ui_startLabel1;
 extern lv_obj_t *ui_startIcon1;
-extern lv_obj_t *ui_leftGong1;
-extern lv_obj_t *ui_midLeftHeart1;
-extern lv_obj_t *ui_midBt1;
+extern lv_obj_t *ui_rightGong;
+extern lv_obj_t *ui_midRightTune;
+extern lv_obj_t *ui_midTime;
 extern lv_obj_t *ui_mainCntr;
 extern lv_obj_t *ui_clkColon1;
 extern lv_obj_t *ui_clkColon2;

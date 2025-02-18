@@ -18,6 +18,16 @@ extern "C"
 #include "FavEditScreen/ui_FavEditScreen.h"
 #include "FavPreviewScreen/ui_FavPreviewScreen.h"
 
+
+
+typedef struct screenMenu
+{
+    lv_obj_t *prevScr;
+    lv_obj_t *curScr;
+    lv_obj_t *nextScr;
+};
+
+
 #ifdef __cplusplus
 }
 #endif

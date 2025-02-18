@@ -34,6 +34,7 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_align(ui_startBtnBox2, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_startBtnBox2, LV_OBJ_FLAG_SCROLL_ON_FOCUS); /// Flags
     lv_obj_remove_flag(ui_startBtnBox2, LV_OBJ_FLAG_SCROLLABLE);   /// Flags
+    lv_obj_set_style_radius(ui_startBtnBox2, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_startBtnBox2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_startBtnBox2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -74,16 +75,15 @@ void ui_BluetoothScreen_screen_init(void)
 
     ui_btBtnIcon = lv_obj_create(ui_btBtn);
     lv_obj_remove_style_all(ui_btBtnIcon);
-    lv_obj_set_width(ui_btBtnIcon, 50);
-    lv_obj_set_height(ui_btBtnIcon, 50);
-    lv_obj_set_x(ui_btBtnIcon, 14);
-    lv_obj_set_y(ui_btBtnIcon, 4);
+    lv_obj_set_width(ui_btBtnIcon, 32);
+    lv_obj_set_height(ui_btBtnIcon, 32);
+    lv_obj_set_x(ui_btBtnIcon, 0);
+    lv_obj_set_y(ui_btBtnIcon, -10);
     lv_obj_set_align(ui_btBtnIcon, LV_ALIGN_CENTER);
     lv_obj_remove_flag(ui_btBtnIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE); /// Flags
-    lv_obj_set_style_bg_image_src(ui_btBtnIcon, &ui_img_52_blackbticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_src(ui_btBtnIcon, &ui_img_20_blackbticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor(ui_btBtnIcon, lv_color_hex(0x62DA41), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_btBtnIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_transform_scale(ui_btBtnIcon, 100, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btBtnLabel = lv_label_create(ui_btBtn);
     lv_obj_set_width(ui_btBtnLabel, LV_SIZE_CONTENT);  /// 1
@@ -112,53 +112,50 @@ void ui_BluetoothScreen_screen_init(void)
 
     ui_leftGong2 = lv_obj_create(ui_BluetoothScreen);
     lv_obj_remove_style_all(ui_leftGong2);
-    lv_obj_set_width(ui_leftGong2, 96);
-    lv_obj_set_height(ui_leftGong2, 96);
-    lv_obj_set_x(ui_leftGong2, -28);
-    lv_obj_set_y(ui_leftGong2, -47);
+    lv_obj_set_width(ui_leftGong2, 33);
+    lv_obj_set_height(ui_leftGong2, 33);
+    lv_obj_set_x(ui_leftGong2, -61);
+    lv_obj_set_y(ui_leftGong2, -79);
     lv_obj_set_align(ui_leftGong2, LV_ALIGN_CENTER);
     lv_obj_remove_flag(ui_leftGong2, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(ui_leftGong2, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_leftGong2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_leftGong2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_image_src(ui_leftGong2, &ui_img_52_blackgongicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_src(ui_leftGong2, &ui_img_20_smallgongicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor(ui_leftGong2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_leftGong2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_color(ui_leftGong2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_leftGong2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_width(ui_leftGong2, 3, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_transform_scale(ui_leftGong2, 86, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_leftGong2, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_midLeftHeart = lv_obj_create(ui_BluetoothScreen);
     lv_obj_remove_style_all(ui_midLeftHeart);
-    lv_obj_set_width(ui_midLeftHeart, 96);
-    lv_obj_set_height(ui_midLeftHeart, 96);
-    lv_obj_set_x(ui_midLeftHeart, -6);
-    lv_obj_set_y(ui_midLeftHeart, -56);
+    lv_obj_set_width(ui_midLeftHeart, 42);
+    lv_obj_set_height(ui_midLeftHeart, 42);
+    lv_obj_set_x(ui_midLeftHeart, -34);
+    lv_obj_set_y(ui_midLeftHeart, -83);
     lv_obj_set_align(ui_midLeftHeart, LV_ALIGN_CENTER);
     lv_obj_remove_flag(ui_midLeftHeart, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(ui_midLeftHeart, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_midLeftHeart, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_midLeftHeart, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_image_src(ui_midLeftHeart, &ui_img_52_blackhearticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_src(ui_midLeftHeart, &ui_img_24_blackhearticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor(ui_midLeftHeart, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_midLeftHeart, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_color(ui_midLeftHeart, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_midLeftHeart, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_width(ui_midLeftHeart, 3, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_transform_scale(ui_midLeftHeart, 110, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_midLeftHeart, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_midBt = lv_obj_create(ui_BluetoothScreen);
     lv_obj_remove_style_all(ui_midBt);
-    lv_obj_set_width(ui_midBt, 96);
-    lv_obj_set_height(ui_midBt, 96);
-    lv_obj_set_x(ui_midBt, 21);
-    lv_obj_set_y(ui_midBt, -67);
+    lv_obj_set_width(ui_midBt, 52);
+    lv_obj_set_height(ui_midBt, 52);
+    lv_obj_set_x(ui_midBt, 0);
+    lv_obj_set_y(ui_midBt, -90);
     lv_obj_set_align(ui_midBt, LV_ALIGN_CENTER);
     lv_obj_remove_flag(ui_midBt, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(ui_midBt, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_midBt, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_midBt, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_image_src(ui_midBt, &ui_img_52_blackbticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_transform_scale(ui_midBt, 140, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_src(ui_midBt, &ui_img_30_blackbticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 }

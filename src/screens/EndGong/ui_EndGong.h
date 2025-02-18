@@ -17,7 +17,6 @@ extern lv_obj_t *ui_EndGong1;
 extern lv_obj_t *ui_startBtnBox;
 extern lv_obj_t *ui_startLabel;
 extern lv_obj_t *ui_startIcon;
-extern lv_obj_t *ui_overlayPanel;
 extern lv_obj_t *ui_onButton;
 extern lv_obj_t *ui_onBtnLabel;
 extern lv_obj_t *ui_offButton;

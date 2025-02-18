@@ -9,8 +9,6 @@
 #endif
 
 
-#include <demos/lv_demos.h>
-
 /*Set to your screen resolution and rotation*/
 #define TFT_HOR_RES   240
 #define TFT_VER_RES   240
@@ -61,14 +59,14 @@ void setup()
     lv_display_t * disp;
 #if LV_USE_TFT_ESPI
     /*TFT_eSPI can be enabled lv_conf.h to initialize the display in a simple way*/
-    disp = lv_tft_espi_create(TFT_HOR_RES, TFT_VER_RES, buf0, buf1, size_in_px, LV_DISPLAY_RENDER_MODE_PARTIAL);
+    disp = lv_tft_espi_create(TFT_HOR_RES, TFT_VER_RES, buf0, NULL, size_in_px, LV_DISPLAY_RENDER_MODE_PARTIAL);
     lv_display_set_rotation(disp, TFT_ROTATION);
 
 #else
     /*Else create a display yourself*/
     disp = lv_display_create(TFT_HOR_RES, TFT_VER_RES);
     lv_display_set_flush_cb(disp, my_disp_flush);
-    lv_display_set_buffers(disp, buf0, buf1, size_in_px, LV_DISPLAY_RENDER_MODE_PARTIAL);
+    lv_display_set_buffers(disp, buf0, NULL, size_in_px, LV_DISPLAY_RENDER_MODE_PARTIAL);
 #endif
 
    
@@ -86,7 +84,6 @@ void setup()
     // // lv_demo_stress();
      
     // // lv_obj_set_style_bg_color(lv_screen_active(), lv_color_black(), LV_PART_MAIN);
-    memLog();
 
     // lv_disp_t *dispp = lv_display_get_default();
     lv_theme_t *theme = lv_theme_default_init(disp, lv_color_white(), lv_color_black(),
@@ -95,37 +92,113 @@ void setup()
     lv_disp_set_theme(disp, theme);
 
     // Initialize screen and set background
-    // lv_obj_clean(lv_screen_active());
-    // ui_EndGong1_screen_init();
-    // ui_MeditationScreen_screen_init();
-    // ui_BluetoothScreen_screen_init();
-    // ui_SetTimerScr_screen_init();
-    // ui_SoundScreen_screen_init();
+    lv_obj_clean(lv_screen_active());
+    ui_EndGong1_screen_init();
+    ui_MeditationScreen_screen_init();
+    ui_BluetoothScreen_screen_init();
+    ui_SetTimerScr_screen_init();
+    ui_SoundScreen_screen_init();
     ui_FavScreen_screen_init();
-    // ui_FavEditScreen_screen_init();
-    // ui_FavPreview_screen_init();
+    ui_FavEditScreen_screen_init();
+    ui_FavPreview_screen_init();
+    Serial.println("Screens initialized successfully\n\n");
 
-    // lv_disp_load_scr(ui_EndGong1);
+    lv_disp_load_scr(ui_EndGong1);
     // lv_disp_load_scr(ui_BluetoothScreen);
     // lv_disp_load_scr(ui_MeditationScreen);
-    // lv_disp_load_scr(ui_SetTimerScr);
+    // lv_disp_load_scr(ui_SetTimerScreen);
     // lv_disp_load_scr(ui_SoundScreen);
-    lv_disp_load_scr(ui_FavScreen);
+    // lv_disp_load_scr(ui_FavScreen);
     // lv_disp_load_scr(ui_FavEditScreen);
     // lv_disp_load_scr(ui_FavPreviewScreen);
 
     memLog();
 }
 
+lv_obj_t *Screen[8] = {
+    ui_SetTimerScreen,
+    ui_SoundScreen,
+    ui_EndGong1,
+    ui_FavScreen,
+    ui_FavEditScreen,
+    ui_FavPreviewScreen,
+    ui_BluetoothScreen,
+    ui_MeditationScreen
+};
+
+unsigned long lastScreenChange = 0;  // Track last screen change time
+unsigned long screenInterval = 10000; // 5 seconds
+int screenCount = 0;
+
 void loop()
 {
     lv_timer_handler(); /* let the GUI do its work */
     delay(5); /* let this time pass */
 
-    if(millis()%5000 == 0)
+    if (millis() - lastScreenChange >= screenInterval)
     {
-      memLog();
-    }    
+        lastScreenChange = millis();  // Update last switch time
+        
+        screenCount++;
+        if (screenCount > 7)  // Prevent out-of-bounds access
+        {
+            screenCount = 0;
+        }
+        if(screenCount == 1)
+        {
+            // ui_BluetoothScreen_screen_init();
+            // lv_obj_del(ui_EndGong1);
+            // ui_EndGong1 = NULL;
+            lv_disp_load_scr(ui_BluetoothScreen);
+        }
+        if(screenCount == 2)
+        {
+            // ui_MeditationScreen_screen_init();
+            // lv_obj_del(ui_BluetoothScreen);
+            // ui_BluetoothScreen = NULL;
+            lv_disp_load_scr(ui_MeditationScreen);
+        }
+        if(screenCount == 3)
+        {
+            // ui_SetTimerScr_screen_init();
+            // lv_obj_del(ui_MeditationScreen);
+            // ui_MeditationScreen = NULL;
+            lv_disp_load_scr(ui_SetTimerScreen);
+            // screenInterval = 1000000;
+        }
+        if (screenCount == 4)
+        {
+            // ui_MeditationScreen_screen_init();
+            // lv_obj_del(ui_BluetoothScreen);
+            // ui_BluetoothScreen = NULL;
+            lv_disp_load_scr(ui_FavEditScreen);
+        }
+        if (screenCount == 5)
+        {
+            // ui_MeditationScreen_screen_init();
+            // lv_obj_del(ui_BluetoothScreen);
+            // ui_BluetoothScreen = NULL;
+            lv_disp_load_scr(ui_FavPreviewScreen);
+        }
+        if (screenCount == 6)
+        {
+            // ui_MeditationScreen_screen_init();
+            // lv_obj_del(ui_BluetoothScreen);
+            // ui_BluetoothScreen = NULL;
+            lv_disp_load_scr(ui_FavScreen);
+        }
+        if (screenCount == 7)
+        {
+            // ui_MeditationScreen_screen_init();
+            // lv_obj_del(ui_BluetoothScreen);
+            // ui_BluetoothScreen = NULL;
+            lv_disp_load_scr(ui_EndGong1);
+        }
+
+        // lv_disp_load_scr(Screen[screenCount]);
+
+        memLog();
+    }  
 }
 
 void memLog()
