@@ -3,6 +3,7 @@
 
 #include <lvgl.h>
 #include "src/screens/screens.h"
+#include "src/SystemInit/SystemInit.h"
 
 #if LV_USE_TFT_ESPI
 #include <TFT_eSPI.h>
@@ -12,7 +13,7 @@
 /*Set to your screen resolution and rotation*/
 #define TFT_HOR_RES   240
 #define TFT_VER_RES   240
-#define TFT_ROTATION  LV_DISPLAY_ROTATION_270
+#define TFT_ROTATION  LV_DISPLAY_ROTATION_90
 #define DRAW_BUF_SIZE (TFT_HOR_RES * 40)
 // #define DRAW_BUF_SIZE (TFT_HOR_RES * TFT_HOR_RES * 2)
 
@@ -25,6 +26,8 @@ void my_print( lv_log_level_t level, const char * buf )
 }
 #endif
 
+/// Create system initializer object
+System Core;
 
 void memLog();
 
@@ -37,6 +40,7 @@ static uint32_t my_tick(void)
 void setup()
 {
     Serial.begin( 115200 );
+    Core.Initialize();
 
     lv_init();
 
