@@ -27,6 +27,8 @@ typedef struct screenMenu
     lv_obj_t *nextScr;
 };
 
+extern lv_obj_t *Screen[8];
+
 
 #ifdef __cplusplus
 }

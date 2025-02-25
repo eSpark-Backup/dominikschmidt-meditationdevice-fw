@@ -8,7 +8,7 @@
 #include <Arduino.h>
 #include "esp_timer.h"
 
-#define DEBOUNCE_TIME 50      // Debounce time in ms
+#define DEBOUNCE_TIME 30      // Debounce time in ms
 #define DOUBLE_CLICK_TIME 300 // Max time between two clicks
 #define SHORT_HOLD_TIME 500   // Short press-hold duration
 #define LONG_HOLD_TIME 2000   // Long press-hold duration
