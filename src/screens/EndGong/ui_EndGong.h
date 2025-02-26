@@ -27,6 +27,7 @@ extern lv_obj_t *ui_RightBt;
 extern lv_obj_t *ui_midLeftTune;
 extern lv_obj_t *ui_midRightHeart;
 extern lv_obj_t *ui_midGong;
+extern lv_group_t *EndGongGroup;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

@@ -19,9 +19,13 @@ lv_obj_t *ui_RightBt;
 lv_obj_t *ui_midLeftTune;
 lv_obj_t *ui_midRightHeart;
 lv_obj_t *ui_midGong;
+lv_group_t *EndGongGroup;
 
 void ui_EndGong1_screen_init(void)
 {
+    // Create navigation group
+    EndGongGroup = lv_group_create();
+
     ui_EndGong1 = lv_obj_create(NULL);
     lv_obj_remove_flag(ui_EndGong1, LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_bg_color(ui_EndGong1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -38,6 +42,7 @@ void ui_EndGong1_screen_init(void)
     lv_obj_set_style_radius(ui_startBtnBox, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_startBtnBox, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_startBtnBox, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_group_add_obj(EndGongGroup, ui_startBtnBox);
 
     ui_startLabel = lv_label_create(ui_startBtnBox);
     lv_obj_set_width(ui_startLabel, LV_SIZE_CONTENT);  /// 1
@@ -73,6 +78,7 @@ void ui_EndGong1_screen_init(void)
     lv_obj_set_style_radius(ui_onButton, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_onButton, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_onButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_group_add_obj(EndGongGroup, ui_onButton);
 
     ui_onBtnLabel = lv_label_create(ui_onButton);
     lv_obj_set_width(ui_onBtnLabel, LV_SIZE_CONTENT);  /// 1
@@ -92,6 +98,7 @@ void ui_EndGong1_screen_init(void)
     lv_obj_set_style_radius(ui_offButton, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_offButton, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_offButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_group_add_obj(EndGongGroup, ui_offButton);
 
     ui_offBtnLabel = lv_label_create(ui_offButton);
     lv_obj_set_width(ui_offBtnLabel, LV_SIZE_CONTENT);  /// 1
@@ -196,4 +203,10 @@ void ui_EndGong1_screen_init(void)
     lv_obj_set_style_bg_color(ui_midGong, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_midGong, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_midGong, &ui_img_30_blackgongicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    // Assign group to default input device (e.g., encoder or keyboard)
+    lv_indev_t * indev = lv_indev_get_next(NULL);
+    if(indev) {
+        lv_indev_set_group(indev, EndGongGroup);
+    }
 }

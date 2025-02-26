@@ -36,6 +36,7 @@ class System
         void ButtonsInit();
         void IRAM_ATTR checkButtons();
         void NavigateScreens(ButtonData btnData);
+        void navigateWidgets(ButtonState state, int screenCount);
 };
 
 extern System Core;

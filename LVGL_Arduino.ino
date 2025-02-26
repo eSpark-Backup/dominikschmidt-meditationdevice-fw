@@ -81,7 +81,7 @@ void setup()
     
     // Initialize screen and set background
     Core.Initialize();
-    lv_disp_load_scr(ui_EndGong1);
+    lv_disp_load_scr(Screen[0]);
     memLog();
 }
 
