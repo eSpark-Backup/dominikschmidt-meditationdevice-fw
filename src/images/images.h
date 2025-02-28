@@ -47,6 +47,9 @@ LV_IMG_DECLARE(ui_img_30whitenoiseicon_png);
 LV_IMG_DECLARE(ui_img_44_blacktuneicon_png);  
 LV_IMG_DECLARE(ui_img_30greaterthanicon_png); 
 LV_IMG_DECLARE(ui_img_44_blackhearticon_png); 
+LV_IMG_DECLARE(ui_img_30binauralbeats_png); 
+LV_IMG_DECLARE(ui_img_30singingbowls_png); 
+LV_IMG_DECLARE(ui_img_30_blackbirdicon_png); 
 LV_IMG_DECLARE(ui_img_30editicon_png); 
 LV_IMG_DECLARE(ui_img_30deleteicon_png); 
 

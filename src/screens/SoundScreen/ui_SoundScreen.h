@@ -43,6 +43,7 @@ extern lv_obj_t * ui_midLeftGong;
 extern lv_obj_t * ui_midRightTimer;
 extern lv_obj_t * ui_midTune;
 extern lv_obj_t * ui_SoundpgCntr;
+extern lv_obj_t * ui_pgCntr2;
 extern lv_obj_t * ui_pg6;
 extern lv_obj_t * ui_pg7;
 extern lv_obj_t * ui_pg8;
