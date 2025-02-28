@@ -1,8 +1,8 @@
 #include "SystemInit.h"
 
 // Buttons
-#define Button1_Pin 5
-#define Button2_Pin 18
+#define Button1_Pin 36
+#define Button2_Pin 39
 
 Button button1(Button1_Pin);
 Button button2(Button2_Pin);
@@ -91,9 +91,9 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     if (Btn_A.State == BUTTON_SINGLE_CLICK || Btn_A.State == BUTTON_DOUBLE_CLICK) {
          NavigateScreens(Btn_A);
     } 
-    if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_DOUBLE_CLICK) {
-         NavigateScreens(Btn_B);
-    } 
+    // if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_DOUBLE_CLICK) {
+    //      NavigateScreens(Btn_B);
+    // } 
     data->state = LV_INDEV_STATE_RELEASED; // No need to pass a key, just release
 }
 

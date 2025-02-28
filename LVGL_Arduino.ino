@@ -11,8 +11,8 @@
 
 
 /*Set to your screen resolution and rotation*/
-#define TFT_HOR_RES   240
-#define TFT_VER_RES   240
+#define TFT_HOR_RES   360
+#define TFT_VER_RES   360
 #define TFT_ROTATION  LV_DISPLAY_ROTATION_90
 #define DRAW_BUF_SIZE (TFT_HOR_RES * 40)
 // #define DRAW_BUF_SIZE (TFT_HOR_RES * TFT_HOR_RES * 2)
@@ -37,6 +37,11 @@ static uint32_t my_tick(void)
 void setup()
 {
     Serial.begin( 115200 );
+
+    // // Turn on the back-light LED
+    pinMode(27, OUTPUT);
+    digitalWrite(27, HIGH);
+
     
     lv_init();
     /*Set a tick source so that LVGL will know how much time elapsed. */
@@ -71,6 +76,7 @@ void setup()
     lv_indev_t * indev = lv_indev_create();
     lv_indev_set_type(indev, LV_INDEV_TYPE_KEYPAD);
     lv_indev_set_read_cb(indev, System::ButtonReadStatic);
+    lv_obj_set_style_transform_pivot_x(lv_screen_active(), true, 0);
     
     
     // lv_obj_clean(lv_screen_active());
