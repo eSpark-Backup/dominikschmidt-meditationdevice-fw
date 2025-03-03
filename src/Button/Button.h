@@ -39,11 +39,12 @@ class Button
         bool _previousSteadyState;
         bool _lastSteadyState;
         bool _lastFlickerableState;
+        bool _pullUp = false;
         unsigned long _lastDebounceTime;
         ButtonState _detectedState;
 
     public:
-        Button(int buttonPin, int mode = INPUT_PULLUP);
+        Button(int buttonPin, int mode = INPUT_PULLDOWN);
         void checkState();
         ButtonState getState();
 

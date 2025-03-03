@@ -89,7 +89,7 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     ButtonData Btn_B = {B, button2.getState()};
     
     if (Btn_A.State == BUTTON_SINGLE_CLICK || Btn_A.State == BUTTON_DOUBLE_CLICK) {
-         NavigateScreens(Btn_A);
+        NavigateScreens(Btn_A);
     } 
     // if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_DOUBLE_CLICK) {
     //      NavigateScreens(Btn_B);

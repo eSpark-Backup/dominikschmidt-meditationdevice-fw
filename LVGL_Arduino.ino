@@ -13,7 +13,7 @@
 /*Set to your screen resolution and rotation*/
 #define TFT_HOR_RES   360
 #define TFT_VER_RES   360
-#define TFT_ROTATION  LV_DISPLAY_ROTATION_90
+#define TFT_ROTATION  LV_DISPLAY_ROTATION_270
 #define DRAW_BUF_SIZE (TFT_HOR_RES * 40)
 // #define DRAW_BUF_SIZE (TFT_HOR_RES * TFT_HOR_RES * 2)
 

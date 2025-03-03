@@ -9,6 +9,7 @@ Button::Button(int buttonPin, int mode)
     _pressStartTime = 0;
     _clickCount = 0;
     _singleClickDetected = false;
+    _pullUp = mode == INPUT_PULLDOWN ? false : true;
     _lastSteadyState = HIGH; // Default state for INPUT_PULLUP
     _lastFlickerableState = _lastSteadyState;
     _lastDebounceTime = 0;
@@ -37,7 +38,7 @@ void Button::checkState()
         _lastSteadyState = currentState;
 
         // Button Pressed
-        if (_previousSteadyState == HIGH && _lastSteadyState == LOW)
+        if (_previousSteadyState == _pullUp && _lastSteadyState == !_pullUp)
         {
             _pressStartTime = millis();
             _pressed = true;
@@ -48,7 +49,7 @@ void Button::checkState()
         }
 
         // Button Released
-        if (_previousSteadyState == LOW && _lastSteadyState == HIGH)
+        if (_previousSteadyState == !_pullUp && _lastSteadyState == _pullUp)
         {
             _pressed = false;
             unsigned long pressDuration = millis() - _pressStartTime;
