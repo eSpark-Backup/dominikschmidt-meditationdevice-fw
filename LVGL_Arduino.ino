@@ -10,6 +10,12 @@
 #endif
 
 
+const int pwmPin = 27;  // GPIO pin for PWM control
+const int pwmFrequency = 5000; // 5kHz PWM frequency
+const int pwmResolution = 10;   // 8-bit resolution (0-255)
+const int brightness = 512;   // 8-bit resolution (0-255)
+
+
 /*Set to your screen resolution and rotation*/
 #define TFT_HOR_RES   360
 #define TFT_VER_RES   360
@@ -38,10 +44,9 @@ void setup()
 {
     Serial.begin( 115200 );
 
-    // // Turn on the back-light LED
-    pinMode(27, OUTPUT);
-    digitalWrite(27, HIGH);
-
+    // Turn on the back-light LED & set brightness 50%
+    ledcAttach(pwmPin, pwmFrequency, pwmResolution);
+    ledcWrite(pwmPin, brightness);  // Use channel, NOT pin!
     
     lv_init();
     /*Set a tick source so that LVGL will know how much time elapsed. */
@@ -94,9 +99,8 @@ void setup()
 
 void loop()
 {
-    lv_timer_handler(); /* let the GUI do its work */
-    delay(5); /* let this time pass */
-
+  lv_timer_handler(); /* let the GUI do its work */
+  delay(5); /* let this time pass */
 }
 
 void memLog()
