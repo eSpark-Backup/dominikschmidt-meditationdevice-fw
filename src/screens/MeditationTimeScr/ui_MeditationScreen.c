@@ -12,6 +12,8 @@ lv_obj_t *ui_ArcOverlay;
 lv_obj_t *ui_medTimeRemain;
 lv_obj_t *ui_medTimePassed;
 lv_obj_t *ui_medPauseBtn;
+lv_obj_t *ui_HiddenMedScrBtn;
+lv_group_t *MeditationGroup;
 
 void ui_event_medPauseBtn(lv_event_t *e)
 {
@@ -97,4 +99,18 @@ void ui_MeditationScreen_screen_init(void)
     lv_obj_set_style_bg_color(ui_medPauseBtn, lv_color_hex(0xEF1212), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_medPauseBtn, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_medPauseBtn, &ui_img_80_pauseicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_HiddenMedScrBtn = lv_obj_create(ui_MeditationScreen);
+    lv_obj_add_flag(ui_HiddenMedScrBtn, LV_OBJ_FLAG_HIDDEN);
+
+    lv_obj_add_style(ui_medPauseBtn, &style_focus, LV_STATE_FOCUS_KEY);
+    
+    MeditationGroup = lv_group_create();
+    lv_group_add_obj(MeditationGroup, ui_medPauseBtn);
+    lv_group_add_obj(MeditationGroup, ui_HiddenMedScrBtn);
+
+    lv_indev_t * indev = lv_indev_get_next(NULL);
+    if(indev) {
+        lv_indev_set_group(indev, MeditationGroup);
+    }
 }

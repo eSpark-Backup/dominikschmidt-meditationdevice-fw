@@ -45,6 +45,8 @@ lv_obj_t *ui_SoundStartBtnBox;
 lv_obj_t *ui_SoundStartLabel;
 lv_obj_t *ui_SoundStartIcon;
 lv_obj_t *ui_SoundLabel;
+lv_obj_t *ui_HiddenSoundBtn;
+lv_group_t *SoundGroup;
 // CUSTOM VARIABLES
 
 
@@ -56,7 +58,7 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_set_style_bg_opa(ui_SoundScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_SoundPanel = lv_obj_create(ui_SoundScreen);
-    lv_obj_set_width(ui_SoundPanel, 337);
+    lv_obj_set_width(ui_SoundPanel, 320);
     lv_obj_set_height(ui_SoundPanel, 160);
     lv_obj_set_x(ui_SoundPanel, 0);
     lv_obj_set_y(ui_SoundPanel, 15);
@@ -73,7 +75,8 @@ void ui_SoundScreen_screen_init(void)
 
     lv_obj_set_style_bg_color(ui_SoundPanel, lv_color_hex(0xFFFFFF), LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_SoundPanel, 0, LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
-
+    lv_obj_set_scroll_dir(ui_SoundPanel, LV_DIR_VER);
+    
     ui_NoSoundBtn = lv_button_create(ui_SoundPanel);
     lv_obj_set_width(ui_NoSoundBtn, 286);
     lv_obj_set_height(ui_NoSoundBtn, 58);
@@ -561,4 +564,30 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_set_style_text_align(ui_SoundLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_SoundLabel, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_HiddenSoundBtn = lv_obj_create(ui_SoundScreen);
+    lv_obj_add_flag(ui_HiddenSoundBtn, LV_OBJ_FLAG_HIDDEN);
+
+    lv_obj_add_style(ui_SoundPanel,       &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_NoSoundBtn,       &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_NatureSoundBtn,   &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_WhiteNoiseBtn,    &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_BinauralBeatBtn,  &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_SingingBowlsBtn,  &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_SoundStartBtnBox, &style_focus, LV_STATE_FOCUS_KEY);
+    
+    SoundGroup = lv_group_create();
+    lv_group_add_obj(SoundGroup, ui_SoundPanel);
+    lv_group_add_obj(SoundGroup, ui_NoSoundBtn);
+    lv_group_add_obj(SoundGroup, ui_NatureSoundBtn);
+    lv_group_add_obj(SoundGroup, ui_WhiteNoiseBtn);
+    lv_group_add_obj(SoundGroup, ui_BinauralBeatBtn);
+    lv_group_add_obj(SoundGroup, ui_SingingBowlsBtn);
+    lv_group_add_obj(SoundGroup, ui_SoundStartBtnBox);
+    lv_group_add_obj(SoundGroup, ui_HiddenSoundBtn);
+
+    // Assign group to default input device (e.g., encoder or keyboard)
+    lv_indev_t * indev = lv_indev_get_next(NULL);
+    if(indev) {
+        lv_indev_set_group(indev, SoundGroup);
+    }
 }

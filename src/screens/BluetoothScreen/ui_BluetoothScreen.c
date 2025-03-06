@@ -17,10 +17,12 @@ lv_obj_t *ui_btLabel2;
 lv_obj_t *ui_leftGong2;
 lv_obj_t *ui_midLeftHeart;
 lv_obj_t *ui_midBt;
+lv_obj_t *ui_HiddenBTScrBtn;
+lv_group_t *BTGroup;
 // CUSTOM VARIABLES
 
 void ui_BluetoothScreen_screen_init(void)
-{
+{    
     ui_BluetoothScreen = lv_obj_create(NULL);
     lv_obj_remove_flag(ui_BluetoothScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_BluetoothScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -225,4 +227,19 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_bg_color(ui_pg15, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_pg15, 250, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_HiddenBTScrBtn = lv_obj_create(ui_BluetoothScreen);
+    lv_obj_add_flag(ui_HiddenBTScrBtn, LV_OBJ_FLAG_HIDDEN);
+    
+    lv_obj_add_style(ui_startBtnBox2, &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_btBtn, &style_focus, LV_STATE_FOCUS_KEY);
+    
+    BTGroup = lv_group_create();
+    lv_group_add_obj(BTGroup, ui_btBtn);
+    lv_group_add_obj(BTGroup, ui_startBtnBox2);
+    lv_group_add_obj(BTGroup, ui_HiddenBTScrBtn);
+
+    lv_indev_t * indev = lv_indev_get_next(NULL);
+    if(indev) {
+        lv_indev_set_group(indev, BTGroup);
+    }
 }

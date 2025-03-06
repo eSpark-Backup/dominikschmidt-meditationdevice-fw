@@ -21,16 +21,6 @@ lv_group_t *FavEditGroup;
 
 void ui_FavEditScreen_screen_init(void)
 {
-    FavEditGroup = lv_group_create();
-
-    // Create a focus style
-    static lv_style_t style_focus;
-    lv_style_init(&style_focus);
-    lv_style_set_outline_width(&style_focus, 2);
-    lv_style_set_outline_color(&style_focus, lv_color_hex(0x424242)); // Green focus border
-    lv_style_set_outline_opa(&style_focus, LV_OPA_COVER);
-    lv_style_set_outline_pad(&style_focus, 5); // Add spacing around the outline
-
     ui_FavEditScreen = lv_obj_create(NULL);
     lv_obj_remove_flag(ui_FavEditScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_FavEditScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -128,11 +118,12 @@ void ui_FavEditScreen_screen_init(void)
 
     lv_obj_add_style(ui_EditBtn, &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_DeleteBtn, &style_focus, LV_STATE_FOCUS_KEY);
+    
+    FavEditGroup = lv_group_create();
     lv_group_add_obj(FavEditGroup, ui_EditBtn);
     lv_group_add_obj(FavEditGroup, ui_DeleteBtn);
     lv_group_add_obj(FavEditGroup, ui_HiddenBtn);
 
-    // Assign group to default input device (e.g., encoder or keyboard)
     lv_indev_t * indev = lv_indev_get_next(NULL);
     if(indev) {
         lv_indev_set_group(indev, FavEditGroup);

@@ -53,6 +53,8 @@ extern lv_obj_t * ui_SoundStartBtnBox;
 extern lv_obj_t * ui_SoundStartLabel;
 extern lv_obj_t * ui_SoundStartIcon;
 extern lv_obj_t * ui_SoundLabel;
+extern lv_obj_t *ui_HiddenSoundBtn;
+extern lv_group_t *SoundGroup;
 // CUSTOM VARIABLES
 
 

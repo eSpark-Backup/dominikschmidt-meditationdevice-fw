@@ -5,6 +5,8 @@
 
 #include "ui_helpers.h"
 
+lv_style_t style_focus;
+
 void _ui_bar_set_property(lv_obj_t * target, int id, int val)
 {
     if(id == _UI_BAR_PROPERTY_VALUE_WITH_ANIM) lv_bar_set_value(target, val, LV_ANIM_ON);
@@ -345,4 +347,12 @@ void _ui_switch_theme(int val)
 #endif
 }
 
-
+void setFocusStyle(void)
+{
+    // Create a focus style
+    lv_style_init(&style_focus);
+    lv_style_set_outline_width(&style_focus, 2);
+    lv_style_set_outline_color(&style_focus, lv_color_hex(0x424242)); // Green focus border
+    lv_style_set_outline_opa(&style_focus, LV_OPA_COVER);
+    lv_style_set_outline_pad(&style_focus, 5); // Add spacing around the outline
+}

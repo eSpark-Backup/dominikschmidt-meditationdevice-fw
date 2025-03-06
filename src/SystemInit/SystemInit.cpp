@@ -20,6 +20,7 @@ void System::Initialize()
 {
     numButtons = sizeof(buttons) / sizeof(buttons[0]); // Store safely
     // ButtonsInit();                                     // No need to pass as argument
+    setFocusStyle();
     initScreens();
 }
 
@@ -46,13 +47,13 @@ void System::initScreens()
     Screen[7] = ui_MeditationScreen;
 
     ScreenGroup[0] = NULL;
-    ScreenGroup[1] = NULL;
+    ScreenGroup[1] = SoundGroup;
     ScreenGroup[2] = EndGongGroup;
     ScreenGroup[3] = FavScrGroup;
     ScreenGroup[4] = FavEditGroup;
-    ScreenGroup[5] = NULL;
-    ScreenGroup[6] = NULL;
-    ScreenGroup[7] = NULL;
+    ScreenGroup[5] = FavPrevGroup;
+    ScreenGroup[6] = BTGroup;
+    ScreenGroup[7] = MeditationGroup;
 
     Serial.println("Screens initialized successfully\n\n");
 }

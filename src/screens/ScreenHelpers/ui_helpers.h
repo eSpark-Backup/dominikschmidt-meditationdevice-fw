@@ -140,7 +140,8 @@ void _ui_spinbox_step(lv_obj_t * target, int val)
 void _ui_switch_theme(int val)
 ;
 
-
+extern lv_style_t style_focus;
+void setFocusStyle(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/

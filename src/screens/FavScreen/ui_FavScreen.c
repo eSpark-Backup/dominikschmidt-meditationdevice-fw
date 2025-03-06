@@ -49,16 +49,6 @@ lv_group_t *FavScrGroup;
 
 void ui_FavScreen_screen_init(void)
 {
-    FavScrGroup = lv_group_create();
-
-    // Create a focus style
-    static lv_style_t style_focus;
-    lv_style_init(&style_focus);
-    lv_style_set_outline_width(&style_focus, 2);
-    lv_style_set_outline_color(&style_focus, lv_color_hex(0x424242)); // Green focus border
-    lv_style_set_outline_opa(&style_focus, LV_OPA_COVER);
-    lv_style_set_outline_pad(&style_focus, 5); // Add spacing around the outline
- 
     ui_FavScreen = lv_obj_create(NULL);
     lv_obj_remove_flag(ui_FavScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_FavScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -82,12 +72,14 @@ void ui_FavScreen_screen_init(void)
 
     lv_obj_set_style_bg_color(ui_FavsPanel, lv_color_hex(0xFFFFFF), LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_FavsPanel, 0, LV_PART_SCROLLBAR | LV_STATE_DEFAULT);
+    lv_obj_set_scroll_dir(ui_FavsPanel, LV_DIR_VER);
 
     ui_Fav1 = lv_obj_create(ui_FavsPanel);
     lv_obj_remove_style_all(ui_Fav1);
     lv_obj_set_width(ui_Fav1, 286);
     lv_obj_set_height(ui_Fav1, 58);
     lv_obj_set_align(ui_Fav1, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Fav1, LV_OBJ_FLAG_SCROLL_ON_FOCUS); 
     lv_obj_remove_flag(ui_Fav1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(ui_Fav1, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_Fav1, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -121,6 +113,7 @@ void ui_FavScreen_screen_init(void)
     lv_obj_set_width(ui_Fav2, 286);
     lv_obj_set_height(ui_Fav2, 58);
     lv_obj_set_align(ui_Fav2, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Fav2, LV_OBJ_FLAG_SCROLL_ON_FOCUS); 
     lv_obj_remove_flag(ui_Fav2, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(ui_Fav2, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_Fav2, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -154,6 +147,7 @@ void ui_FavScreen_screen_init(void)
     lv_obj_set_width(ui_Fav3, 286);
     lv_obj_set_height(ui_Fav3, 58);
     lv_obj_set_align(ui_Fav3, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Fav3, LV_OBJ_FLAG_SCROLL_ON_FOCUS); 
     lv_obj_remove_flag(ui_Fav3, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(ui_Fav3, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_Fav3, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -187,6 +181,7 @@ void ui_FavScreen_screen_init(void)
     lv_obj_set_width(ui_Fav4, 286);
     lv_obj_set_height(ui_Fav4, 58);
     lv_obj_set_align(ui_Fav4, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Fav4, LV_OBJ_FLAG_SCROLL_ON_FOCUS); 
     lv_obj_remove_flag(ui_Fav4, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(ui_Fav4, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_Fav4, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -214,12 +209,13 @@ void ui_FavScreen_screen_init(void)
     lv_obj_set_style_bg_image_src(ui_GreaterThanIcon4, &ui_img_30greaterthanicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor(ui_GreaterThanIcon4, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_GreaterThanIcon4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
+    
     ui_Fav5 = lv_obj_create(ui_FavsPanel);
     lv_obj_remove_style_all(ui_Fav5);
     lv_obj_set_width(ui_Fav5, 286);
     lv_obj_set_height(ui_Fav5, 58);
     lv_obj_set_align(ui_Fav5, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Fav5, LV_OBJ_FLAG_SCROLL_ON_FOCUS); 
     lv_obj_remove_flag(ui_Fav5, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(ui_Fav5, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_Fav5, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -253,6 +249,7 @@ void ui_FavScreen_screen_init(void)
     lv_obj_set_width(ui_Fav6, 286);
     lv_obj_set_height(ui_Fav6, 58);
     lv_obj_set_align(ui_Fav6, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Fav6, LV_OBJ_FLAG_SCROLL_ON_FOCUS); 
     lv_obj_remove_flag(ui_Fav6, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE); /// Flags
     lv_obj_set_style_radius(ui_Fav6, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_Fav6, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -487,21 +484,27 @@ void ui_FavScreen_screen_init(void)
     lv_obj_set_align(ui_FavStartIcon, LV_ALIGN_CENTER);
     lv_obj_remove_flag(ui_FavStartIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_image_src(ui_FavStartIcon, &ui_img_31_blackstarticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     
     ui_HiddenFavScrBtn = lv_obj_create(ui_FavScreen);
     lv_obj_add_flag(ui_HiddenFavScrBtn, LV_OBJ_FLAG_HIDDEN);
 
-    lv_obj_add_style(ui_FavsPanel, &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_Fav1, &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_Fav2, &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_Fav3, &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_FavsPanel,      &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_Fav1,           &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_Fav2,           &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_Fav3,           &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_Fav4,           &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_Fav5,           &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_Fav6,           &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_FavStartBtnBox, &style_focus, LV_STATE_FOCUS_KEY);
-
+    
+    FavScrGroup = lv_group_create();
     lv_group_add_obj(FavScrGroup, ui_FavsPanel);
     lv_group_add_obj(FavScrGroup, ui_Fav1);
     lv_group_add_obj(FavScrGroup, ui_Fav2);
     lv_group_add_obj(FavScrGroup, ui_Fav3);
+    lv_group_add_obj(FavScrGroup, ui_Fav4);
+    lv_group_add_obj(FavScrGroup, ui_Fav5);
+    lv_group_add_obj(FavScrGroup, ui_Fav6);
     lv_group_add_obj(FavScrGroup, ui_FavStartBtnBox);
     lv_group_add_obj(FavScrGroup, ui_HiddenFavScrBtn);
 

@@ -35,6 +35,8 @@ extern lv_obj_t *ui_FavEditGongStatus;
 extern lv_obj_t *ui_FavEditStartBtn;
 extern lv_obj_t *ui_FavEditStartBtnLbl;
 extern lv_obj_t *ui_FavEditStartBtnIcon;
+extern lv_obj_t *ui_HiddenFavPrevBtn;
+extern lv_group_t *FavPrevGroup;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

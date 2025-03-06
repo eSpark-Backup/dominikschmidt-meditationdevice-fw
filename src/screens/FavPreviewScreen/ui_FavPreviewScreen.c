@@ -28,6 +28,8 @@ lv_obj_t *ui_FavEditGongStatus;
 lv_obj_t *ui_FavEditStartBtn;
 lv_obj_t *ui_FavEditStartBtnLbl;
 lv_obj_t *ui_FavEditStartBtnIcon;
+lv_obj_t *ui_HiddenFavPrevBtn;
+lv_group_t *FavPrevGroup;
 // CUSTOM VARIABLES
 
 
@@ -271,4 +273,19 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_align(ui_FavEditStartBtnIcon, LV_ALIGN_CENTER);
     lv_obj_remove_flag(ui_FavEditStartBtnIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_image_src(ui_FavEditStartBtnIcon, &ui_img_31_blackstarticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_HiddenFavPrevBtn = lv_obj_create(ui_FavPreviewScreen);
+    lv_obj_add_flag(ui_HiddenFavPrevBtn, LV_OBJ_FLAG_HIDDEN);
+
+    lv_obj_add_style(ui_FavEditStartBtn, &style_focus, LV_STATE_FOCUS_KEY);
+    
+    FavPrevGroup = lv_group_create();
+    lv_group_add_obj(FavPrevGroup, ui_FavEditStartBtn);
+    lv_group_add_obj(FavPrevGroup, ui_HiddenFavPrevBtn);
+
+    // Assign group to default input device (e.g., encoder or keyboard)
+    lv_indev_t * indev = lv_indev_get_next(NULL);
+    if(indev) {
+        lv_indev_set_group(indev, FavPrevGroup);
+    }
 }
