@@ -13,6 +13,7 @@ extern "C" {
 #endif
 // SCREEN: ui_EndGong1
 void ui_EndGong1_screen_init(void);
+static void btn_event_cb(lv_event_t * e);
 extern lv_obj_t *ui_EndGong1;
 extern lv_obj_t *ui_startBtnBox;
 extern lv_obj_t *ui_startLabel;
@@ -27,6 +28,7 @@ extern lv_obj_t *ui_RightBt;
 extern lv_obj_t *ui_midLeftTune;
 extern lv_obj_t *ui_midRightHeart;
 extern lv_obj_t *ui_midGong;
+extern lv_obj_t *ui_HiddenEndGongBtn;
 extern lv_group_t *EndGongGroup;
 // CUSTOM VARIABLES
 

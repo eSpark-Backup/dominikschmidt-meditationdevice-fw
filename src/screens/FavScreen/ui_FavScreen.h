@@ -50,6 +50,8 @@ extern lv_obj_t * ui_FavLabel;
 extern lv_obj_t * ui_FavStartBtnBox;
 extern lv_obj_t * ui_FavStartLabel;
 extern lv_obj_t * ui_FavStartIcon;
+extern lv_obj_t * ui_HiddenFavScrBtn;
+extern lv_group_t *FavScrGroup;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

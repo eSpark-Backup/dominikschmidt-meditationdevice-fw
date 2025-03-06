@@ -20,7 +20,7 @@ const int brightness = 512;   // 8-bit resolution (0-255)
 #define TFT_HOR_RES   360
 #define TFT_VER_RES   360
 #define TFT_ROTATION  LV_DISPLAY_ROTATION_270
-#define DRAW_BUF_SIZE (TFT_HOR_RES * 40)
+#define DRAW_BUF_SIZE (TFT_HOR_RES * TFT_HOR_RES)
 // #define DRAW_BUF_SIZE (TFT_HOR_RES * TFT_HOR_RES * 2)
 
 #if LV_USE_LOG != 0
@@ -42,7 +42,7 @@ static uint32_t my_tick(void)
 
 void setup()
 {
-    Serial.begin( 115200 );
+    Serial.begin(115200);
 
     // Turn on the back-light LED & set brightness 50%
     ledcAttach(pwmPin, pwmFrequency, pwmResolution);
@@ -68,7 +68,7 @@ void setup()
 #if LV_USE_TFT_ESPI
     /*TFT_eSPI can be enabled lv_conf.h to initialize the display in a simple way*/
     disp = lv_tft_espi_create(TFT_HOR_RES, TFT_VER_RES, buf0, NULL, size_in_px, LV_DISPLAY_RENDER_MODE_PARTIAL);
-    lv_display_set_rotation(disp, TFT_ROTATION);
+    // lv_display_set_rotation(disp, TFT_ROTATION);
 
 #else
     /*Else create a display yourself*/
@@ -81,7 +81,6 @@ void setup()
     lv_indev_t * indev = lv_indev_create();
     lv_indev_set_type(indev, LV_INDEV_TYPE_KEYPAD);
     lv_indev_set_read_cb(indev, System::ButtonReadStatic);
-    lv_obj_set_style_transform_pivot_x(lv_screen_active(), true, 0);
     
     
     // lv_obj_clean(lv_screen_active());

@@ -48,8 +48,8 @@ void System::initScreens()
     ScreenGroup[0] = NULL;
     ScreenGroup[1] = NULL;
     ScreenGroup[2] = EndGongGroup;
-    ScreenGroup[3] = NULL;
-    ScreenGroup[4] = NULL;
+    ScreenGroup[3] = FavScrGroup;
+    ScreenGroup[4] = FavEditGroup;
     ScreenGroup[5] = NULL;
     ScreenGroup[6] = NULL;
     ScreenGroup[7] = NULL;
@@ -91,10 +91,11 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     if (Btn_A.State == BUTTON_SINGLE_CLICK || Btn_A.State == BUTTON_DOUBLE_CLICK) {
         NavigateScreens(Btn_A);
     } 
-    // if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_DOUBLE_CLICK) {
-    //      NavigateScreens(Btn_B);
-    // } 
-    data->state = LV_INDEV_STATE_RELEASED; // No need to pass a key, just release
+    else if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_DOUBLE_CLICK) {
+         NavigateScreens(Btn_B);
+    } 
+    else 
+        data->state = LV_INDEV_STATE_RELEASED; // No need to pass a key, just release
 }
 
 void System::NavigateScreens(ButtonData btnData)
@@ -105,13 +106,14 @@ void System::NavigateScreens(ButtonData btnData)
 
     if (btnData.ID == B) // Handle Button B for selection mode
     {
-        if (btnData.State == BUTTON_DOUBLE_CLICK) {
-            navigatingWidgets = false; // Exit widget navigation mode
-            Serial.println("Widget Navigation Mode Deactivated");
+        if (btnData.State == BUTTON_SINGLE_CLICK) {  ///for testing changed to SINGLE else DOUBLE
+            navigatingWidgets = !navigatingWidgets; // Exit widget navigation mode
+            Serial.printf("Widget Navigation Mode %s\n", navigatingWidgets?"Activated":"Deactivated");
+            navigateWidgets(BUTTON_NONE, screenCount, navigatingWidgets);
         }
         else if (btnData.State == BUTTON_SINGLE_CLICK) {
             navigatingWidgets = true; // Enter widget navigation mode
-            Serial.println("Widget Navigation Mode Activated");
+            Serial.println("BUTTON B_SINGLE_CLICK");
         } 
     }
 
@@ -147,7 +149,7 @@ void System::NavigateScreens(ButtonData btnData)
     }
 }
 
-void System::navigateWidgets(ButtonState state, int screenCount)
+void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
 {
     lv_group_t *currentGroup = ScreenGroup[screenCount];  // Get group for the active screen
     if (!currentGroup) return; // Safety check
@@ -159,6 +161,21 @@ void System::navigateWidgets(ButtonState state, int screenCount)
     else if (state == BUTTON_DOUBLE_CLICK) {
         lv_group_focus_prev(currentGroup); // Move focus to the previous widget
         Serial.println("Moved to Previous Widget");
+    }
+    else if(state == BUTTON_NONE)
+    {
+        if(focus)
+        {
+            lv_group_focus_obj(lv_group_get_obj_by_index(currentGroup, 0));
+        }
+        else
+        {
+            int count = lv_group_get_obj_count(currentGroup);
+            if (count > 0) {
+                lv_obj_t *lastObj = lv_group_get_obj_by_index(currentGroup, count - 1);
+                lv_group_focus_obj(lastObj);
+            }
+        }
     }
 }
 
