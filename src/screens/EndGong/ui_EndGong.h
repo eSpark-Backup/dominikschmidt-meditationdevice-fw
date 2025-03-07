@@ -13,7 +13,9 @@ extern "C" {
 #endif
 // SCREEN: ui_EndGong1
 void ui_EndGong1_screen_init(void);
-static void btn_event_cb(lv_event_t * e);
+void ui_event_onButton(lv_event_t * e);
+void ui_event_offButton(lv_event_t * e);
+void ui_event_startBtnBox(lv_event_t * e);
 extern lv_obj_t *ui_EndGong1;
 extern lv_obj_t *ui_startBtnBox;
 extern lv_obj_t *ui_startLabel;

@@ -75,7 +75,6 @@ void ui_EndGong1_screen_init(void)
     lv_obj_set_style_bg_opa(ui_onButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_onButton, lv_color_hex(0x94D28B), LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_bg_opa(ui_onButton, 255, LV_PART_MAIN | LV_STATE_CHECKED);
-    lv_obj_add_event_cb(ui_onButton, btn_event_cb, LV_EVENT_VALUE_CHANGED, NULL);
 
     ui_onBtnLabel = lv_label_create(ui_onButton);
     lv_obj_set_width(ui_onBtnLabel, LV_SIZE_CONTENT);   /// 1
@@ -95,6 +94,8 @@ void ui_EndGong1_screen_init(void)
     lv_obj_set_style_radius(ui_offButton, 15, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_offButton, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_offButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_offButton, lv_color_hex(0x94D28B), LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(ui_offButton, 255, LV_PART_MAIN | LV_STATE_CHECKED);
 
     ui_offBtnLabel = lv_label_create(ui_offButton);
     lv_obj_set_width(ui_offBtnLabel, LV_SIZE_CONTENT);   /// 1
@@ -276,13 +277,21 @@ void ui_EndGong1_screen_init(void)
     lv_obj_set_style_bg_color(ui_pg15, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_pg15, 250, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    //Events
+    lv_obj_add_event_cb(ui_onButton, ui_event_onButton, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_offButton, ui_event_offButton, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_startBtnBox, ui_event_startBtnBox, LV_EVENT_ALL, NULL);
+    
+    //Hidden Object to shift focus
     ui_HiddenEndGongBtn = lv_obj_create(ui_EndGong1);
     lv_obj_add_flag(ui_HiddenEndGongBtn, LV_OBJ_FLAG_HIDDEN);
-
+    
+    //Style of Focus
     lv_obj_add_style(ui_startBtnBox, &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_onButton, &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_offButton, &style_focus, LV_STATE_FOCUS_KEY);
     
+    //EngGOng Screen Group of objects for Focus and Events
     EndGongGroup = lv_group_create();
     lv_group_add_obj(EndGongGroup, ui_onButton);
     lv_group_add_obj(EndGongGroup, ui_offButton);
@@ -296,16 +305,33 @@ void ui_EndGong1_screen_init(void)
     }
 }
 
-static void btn_event_cb(lv_event_t * e)
-{
-    lv_obj_t * btn = lv_event_get_target(e);
-    lv_event_code_t code = lv_event_get_code(e);
 
-    if(code == LV_EVENT_VALUE_CHANGED) {
-        if(lv_obj_has_state(btn, LV_STATE_CHECKED)) {
-            lv_obj_set_style_bg_color(btn, lv_palette_main(LV_PALETTE_GREEN), 0); // Toggled ON
-        } else {
-            // lv_obj_set_style_bg_color(btn, lv_palette_main(LV_PALETTE_BLUE), 0);  // Toggled OFF
-        }
+///////////////////// EVENT FUNCTIONS ////////////////////
+void ui_event_onButton(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        _ui_state_modify(ui_onButton, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
+        _ui_state_modify(ui_offButton, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+    }
+}
+
+void ui_event_offButton(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        _ui_state_modify(ui_offButton, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
+        _ui_state_modify(ui_onButton, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+    }
+}
+
+void ui_event_startBtnBox(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        _ui_screen_change(&ui_MeditationScreen, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_MeditationScreen_screen_init);
     }
 }
