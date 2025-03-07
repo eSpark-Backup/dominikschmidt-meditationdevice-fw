@@ -14,6 +14,7 @@ extern "C" {
 
 // SCREEN: ui_BluetoothScreen
 void ui_BluetoothScreen_screen_init(void);
+void ui_event_btBtn(lv_event_t * e);
 extern lv_obj_t * ui_BluetoothScreen;
 extern lv_obj_t * ui_startBtnBox2;
 extern lv_obj_t * ui_startLabel2;

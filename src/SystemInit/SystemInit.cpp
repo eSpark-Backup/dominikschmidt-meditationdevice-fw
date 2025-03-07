@@ -137,7 +137,7 @@ void System::NavigateScreens(ButtonData btnData)
             }
         }
 
-        Serial.println("Wdiget Navigation deactivated, new screen group loaded");
+        Serial.println("Widget Navigation deactivated, new screen group loaded");
     }
     
     if (btnData.ID == B) // Handle Button B for selection mode

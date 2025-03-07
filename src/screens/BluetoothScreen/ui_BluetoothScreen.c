@@ -82,8 +82,10 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_align(ui_btBtnIcon, LV_ALIGN_CENTER);
     lv_obj_remove_flag(ui_btBtnIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_image_src(ui_btBtnIcon, &ui_img_30_blackbticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_image_recolor(ui_btBtnIcon, lv_color_hex(0x62DA41), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor(ui_btBtnIcon, lv_color_hex(0xFF0000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_btBtnIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor(ui_btBtnIcon, lv_color_hex(0x62DA41), LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_image_recolor_opa(ui_btBtnIcon, 255, LV_PART_MAIN | LV_STATE_CHECKED);
 
     ui_btBtnLabel = lv_label_create(ui_btBtn);
     lv_obj_set_width(ui_btBtnLabel, LV_SIZE_CONTENT);   /// 1
@@ -92,10 +94,12 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_y(ui_btBtnLabel, 20);
     lv_obj_set_align(ui_btBtnLabel, LV_ALIGN_CENTER);
     lv_label_set_text(ui_btBtnLabel, "Bluetooth Connected");
-    lv_obj_set_style_text_color(ui_btBtnLabel, lv_color_hex(0x62DA41), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_btBtnLabel, lv_color_hex(0xFF0000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_btBtnLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_btBtnLabel, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
-
+    lv_obj_set_style_text_color(ui_btBtnLabel, lv_color_hex(0x62DA41), LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_text_opa(ui_btBtnLabel, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+    
     ui_btLabel2 = lv_label_create(ui_BluetoothScreen);
     lv_obj_set_width(ui_btLabel2, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_btLabel2, LV_SIZE_CONTENT);    /// 1
@@ -227,12 +231,19 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_bg_color(ui_pg15, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_pg15, 250, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    //Events
+    lv_obj_add_event_cb(ui_btBtn, ui_event_btBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_startBtnBox2, ui_event_startBtnBox, LV_EVENT_ALL, NULL);
+
+    //Hidden Object to shift focus
     ui_HiddenBTScrBtn = lv_obj_create(ui_BluetoothScreen);
     lv_obj_add_flag(ui_HiddenBTScrBtn, LV_OBJ_FLAG_HIDDEN);
     
+    //Style of Focus
     lv_obj_add_style(ui_startBtnBox2, &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_btBtn, &style_focus, LV_STATE_FOCUS_KEY);
     
+    //Bluetooth Screen Group of objects for Focus and Events
     BTGroup = lv_group_create();
     lv_group_add_obj(BTGroup, ui_btBtn);
     lv_group_add_obj(BTGroup, ui_startBtnBox2);
@@ -241,5 +252,15 @@ void ui_BluetoothScreen_screen_init(void)
     lv_indev_t * indev = lv_indev_get_next(NULL);
     if(indev) {
         lv_indev_set_group(indev, BTGroup);
+    }
+}
+
+void ui_event_btBtn(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        _ui_state_modify(ui_btBtnIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
+        _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
     }
 }

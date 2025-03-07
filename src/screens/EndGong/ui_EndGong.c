@@ -291,14 +291,13 @@ void ui_EndGong1_screen_init(void)
     lv_obj_add_style(ui_onButton, &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_offButton, &style_focus, LV_STATE_FOCUS_KEY);
     
-    //EngGOng Screen Group of objects for Focus and Events
+    //EngGong Screen Group of objects for Focus and Events
     EndGongGroup = lv_group_create();
     lv_group_add_obj(EndGongGroup, ui_onButton);
     lv_group_add_obj(EndGongGroup, ui_offButton);
     lv_group_add_obj(EndGongGroup, ui_startBtnBox);
     lv_group_add_obj(EndGongGroup, ui_HiddenEndGongBtn);
 
-    // Assign group to default input device (e.g., encoder or keyboard)
     lv_indev_t * indev = lv_indev_get_next(NULL);
     if(indev) {
         lv_indev_set_group(indev, EndGongGroup);
