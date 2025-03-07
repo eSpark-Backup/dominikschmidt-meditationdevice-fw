@@ -40,14 +40,14 @@ void System::initScreens(void)
 void System::InitializeScreen(void)
 {
     lv_obj_clean(lv_screen_active());
-    ui_EndGong1_screen_init();
-    ui_MeditationScreen_screen_init();
-    ui_BluetoothScreen_screen_init();
     ui_SetTimerScr_screen_init();
     ui_SoundScreen_screen_init();
+    ui_EndGong1_screen_init();
     ui_FavScreen_screen_init();
     ui_FavEditScreen_screen_init();
     ui_FavPreview_screen_init();
+    ui_BluetoothScreen_screen_init();
+    ui_MeditationScreen_screen_init();
 }
 
 void System::loadScreens(void)
@@ -65,7 +65,7 @@ void System::loadScreens(void)
 
 void System::loadScreenGroups(void)
 {
-    ScreenGroup[0] = NULL;
+    ScreenGroup[0] = TimerScrGroup;
     ScreenGroup[1] = SoundGroup;
     ScreenGroup[2] = EndGongGroup;
     ScreenGroup[3] = FavScrGroup;
@@ -192,11 +192,11 @@ void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
 
     if (state == BUTTON_SINGLE_CLICK) {
         lv_group_focus_next(currentGroup); // Move focus to the next widget
-        // Serial.println("Moved to Next Widget");
+        Serial.println("Moved to Next Widget");
     } 
     else if (state == BUTTON_DOUBLE_CLICK) {
         lv_group_focus_prev(currentGroup); // Move focus to the previous widget
-        // Serial.println("Moved to Previous Widget");
+        Serial.println("Moved to Previous Widget");
     }
     else if(state == BUTTON_NONE)
     {

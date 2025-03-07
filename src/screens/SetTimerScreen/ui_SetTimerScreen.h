@@ -14,6 +14,12 @@ extern "C" {
 
 // SCREEN: ui_SetTimerScreen
 void ui_SetTimerScr_screen_init(void);
+void ui_event_clkHr(lv_event_t * e);
+void ui_event_hrRoller(lv_event_t * e);
+void ui_event_clkMin(lv_event_t * e);
+void ui_event_minRoller(lv_event_t * e);
+void ui_event_clkSec(lv_event_t * e);
+void ui_event_secRoller(lv_event_t * e);
 extern lv_obj_t *ui_SetTimerScreen;
 extern lv_obj_t *ui_startBtnBox1;
 extern lv_obj_t *ui_startLabel1;
@@ -36,6 +42,8 @@ extern lv_obj_t *ui_pg3;
 extern lv_obj_t *ui_pg4;
 extern lv_obj_t *ui_pg5;
 extern lv_obj_t *ui_pgSlider;
+extern lv_obj_t *ui_HiddenTimerScrBtn;
+extern lv_group_t *TimerScrGroup;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus
