@@ -14,6 +14,8 @@ extern "C" {
 
 // SCREEN: ui_FavEditScreen
 void ui_FavEditScreen_screen_init(void);
+void ui_event_EditBtn(lv_event_t * e);
+void ui_event_DeleteBtn(lv_event_t * e);
 extern lv_obj_t * ui_FavEditScreen;
 extern lv_obj_t * ui_FavEditLabel;
 extern lv_obj_t * ui_EditBtn;

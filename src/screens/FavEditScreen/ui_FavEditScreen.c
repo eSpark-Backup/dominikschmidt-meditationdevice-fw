@@ -114,12 +114,19 @@ void ui_FavEditScreen_screen_init(void)
     lv_obj_set_style_bg_image_recolor(ui_DeleteBtnIcon, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_DeleteBtnIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    //Events
+    lv_obj_add_event_cb(ui_EditBtn, ui_event_EditBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_DeleteBtn, ui_event_DeleteBtn, LV_EVENT_ALL, NULL);
+
+    //Hidden Object to shift focus
     ui_HiddenBtn = lv_obj_create(ui_FavEditScreen);
     lv_obj_add_flag(ui_HiddenBtn, LV_OBJ_FLAG_HIDDEN);
 
+    //Style of Focus
     lv_obj_add_style(ui_EditBtn, &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_DeleteBtn, &style_focus, LV_STATE_FOCUS_KEY);
     
+    //FavEdit Screen Group of objects for Focus and Events
     FavEditGroup = lv_group_create();
     lv_group_add_obj(FavEditGroup, ui_EditBtn);
     lv_group_add_obj(FavEditGroup, ui_DeleteBtn);
@@ -128,5 +135,22 @@ void ui_FavEditScreen_screen_init(void)
     lv_indev_t * indev = lv_indev_get_next(NULL);
     if(indev) {
         lv_indev_set_group(indev, FavEditGroup);
+    }
+}
+
+void ui_event_EditBtn(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        _ui_screen_change(&ui_FavPreviewScreen, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_FavPreview_screen_init);
+    }
+}
+
+void ui_event_DeleteBtn(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
     }
 }
