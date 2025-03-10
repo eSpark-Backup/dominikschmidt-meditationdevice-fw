@@ -14,12 +14,12 @@ extern "C" {
 
 // SCREEN: ui_MeditationScreen
 void ui_MeditationScreen_screen_init(void);
+void ui_event_medPauseBtn(lv_event_t * e);
 extern lv_obj_t *ui_MeditationScreen;
 extern lv_obj_t *ui_meditationTimer;
 extern lv_obj_t *ui_ArcOverlay;
 extern lv_obj_t *ui_medTimeRemain;
 extern lv_obj_t *ui_medTimePassed;
-void ui_event_medPauseBtn(lv_event_t *e);
 extern lv_obj_t *ui_medPauseBtn;
 extern lv_obj_t *ui_HiddenMedScrBtn;
 extern lv_group_t *MeditationGroup;

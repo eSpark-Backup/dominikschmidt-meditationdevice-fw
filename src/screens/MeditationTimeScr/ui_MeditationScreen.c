@@ -15,15 +15,6 @@ lv_obj_t *ui_medPauseBtn;
 lv_obj_t *ui_HiddenMedScrBtn;
 lv_group_t *MeditationGroup;
 
-void ui_event_medPauseBtn(lv_event_t *e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if (event_code == LV_EVENT_CLICKED)
-    {
-        _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-    }
-}
 
 void ui_MeditationScreen_screen_init(void)
 {
@@ -94,17 +85,27 @@ void ui_MeditationScreen_screen_init(void)
     lv_obj_set_x(ui_medPauseBtn, 0);
     lv_obj_set_y(ui_medPauseBtn, 91);
     lv_obj_set_align(ui_medPauseBtn, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_medPauseBtn, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_add_flag(ui_medPauseBtn, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_remove_flag(ui_medPauseBtn, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_medPauseBtn, 100, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_medPauseBtn, lv_color_hex(0xEF1212), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_medPauseBtn, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_medPauseBtn, &ui_img_80_pauseicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_medPauseBtn, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(ui_medPauseBtn, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_image_src(ui_medPauseBtn, &ui_img_playbutton_png, LV_PART_MAIN | LV_STATE_CHECKED);
+    
+    //Events
+    lv_obj_add_event_cb(ui_medPauseBtn, ui_event_medPauseBtn, LV_EVENT_ALL, NULL);
 
+    //Hidden Object to shift focus
     ui_HiddenMedScrBtn = lv_obj_create(ui_MeditationScreen);
     lv_obj_add_flag(ui_HiddenMedScrBtn, LV_OBJ_FLAG_HIDDEN);
 
+    //Style of Focus
     lv_obj_add_style(ui_medPauseBtn, &style_focus, LV_STATE_FOCUS_KEY);
     
+    //Meditation Screen Group of objects for Focus and Events
     MeditationGroup = lv_group_create();
     lv_group_add_obj(MeditationGroup, ui_medPauseBtn);
     lv_group_add_obj(MeditationGroup, ui_HiddenMedScrBtn);
@@ -112,5 +113,14 @@ void ui_MeditationScreen_screen_init(void)
     lv_indev_t * indev = lv_indev_get_next(NULL);
     if(indev) {
         lv_indev_set_group(indev, MeditationGroup);
+    }
+}
+
+void ui_event_medPauseBtn(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
     }
 }
