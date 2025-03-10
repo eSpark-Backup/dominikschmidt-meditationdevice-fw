@@ -5,6 +5,7 @@
         "ui_meditationscreen.h": "c",
         "ui_helpers.h": "c",
         "ui_favpreviewscreen.h": "c",
-        "ui_soundscreen.h": "c"
+        "ui_soundscreen.h": "c",
+        "ui_faveditscreen.h": "c"
     }
 }

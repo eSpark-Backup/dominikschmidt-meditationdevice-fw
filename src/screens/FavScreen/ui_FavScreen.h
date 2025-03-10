@@ -14,6 +14,9 @@ extern "C" {
 
 // SCREEN: ui_FavScreen
 void ui_FavScreen_screen_init(void);
+void ui_event_toggleFavPanelGroup(lv_event_t * e);
+void ui_event_favEditScreen(lv_event_t * e);
+int get_focused_obj_index(lv_group_t *group);
 extern lv_obj_t * ui_FavScreen;
 extern lv_obj_t * ui_FavsPanel;
 extern lv_obj_t * ui_Fav1;

@@ -143,7 +143,7 @@ void System::NavigateScreens(ButtonData btnData)
     {
         if (btnData.State == BUTTON_DOUBLE_CLICK) {  ///for testing changed to SINGLE else DOUBLE
             navigatingWidgets = !navigatingWidgets; // Exit widget navigation mode
-            Serial.printf("Widget Navigation Mode %s\n", navigatingWidgets?"Activated":"Deactivated");
+            // Serial.printf("Widget Navigation Mode %s\n", navigatingWidgets?"Activated":"Deactivated");
             sendEvents(BUTTON_NONE, -1);
             navigateWidgets(BUTTON_NONE, screenCount, navigatingWidgets);
         }
@@ -192,11 +192,9 @@ void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
 
     if (state == BUTTON_SINGLE_CLICK) {
         lv_group_focus_next(currentGroup); // Move focus to the next widget
-        Serial.println("Moved to Next Widget");
     } 
     else if (state == BUTTON_DOUBLE_CLICK) {
         lv_group_focus_prev(currentGroup); // Move focus to the previous widget
-        Serial.println("Moved to Previous Widget");
     }
     else if(state == BUTTON_NONE)
     {
@@ -229,12 +227,10 @@ void System::sendEvents(ButtonState state, int screenCount)
     }
     else if(state == BUTTON_SINGLE_CLICK && screenCount < TotalScreens)
     {
-        Serial.println("LV_EVENT_PRESSED SENT");
         event_code = LV_EVENT_PRESSED;
     }
     else if(state == BUTTON_NONE && screenCount == -1)
     {
-        Serial.println("EVENT CANCEL SENT");
         event_code = LV_EVENT_CANCEL;
     }
     else

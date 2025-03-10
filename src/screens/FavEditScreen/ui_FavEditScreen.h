@@ -24,6 +24,7 @@ extern lv_obj_t * ui_DeleteBtnLabel;
 extern lv_obj_t * ui_DeleteBtnIcon;
 extern lv_obj_t * ui_HiddenBtn;
 extern lv_group_t *FavEditGroup;
+extern char FavEditLblBuffer[20];
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus
