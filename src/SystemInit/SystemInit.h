@@ -8,7 +8,6 @@
 #include "../Button/Button.h"
 #include "../screens/screens.h"
 
-#define TotalScreens 8
 
 typedef enum ButtonID
 {
@@ -46,5 +45,4 @@ class System
 };
 
 extern System Core;
-extern lv_group_t *ScreenGroup[TotalScreens];
 #endif /*SYSTEMINIT_H */

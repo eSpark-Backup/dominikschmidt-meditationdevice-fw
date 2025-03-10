@@ -229,6 +229,7 @@ void System::sendEvents(ButtonState state, int screenCount)
     }
     else if(state == BUTTON_SINGLE_CLICK && screenCount < TotalScreens)
     {
+        Serial.println("LV_EVENT_PRESSED SENT");
         event_code = LV_EVENT_PRESSED;
     }
     else if(state == BUTTON_NONE && screenCount == -1)

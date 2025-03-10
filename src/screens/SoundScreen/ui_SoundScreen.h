@@ -15,6 +15,11 @@ extern "C" {
 // SCREEN: ui_SoundScreen
 void ui_SoundScreen_screen_init(void);
 void ui_event_toggleSoundPanelGroup(lv_event_t * e);
+void ui_event_NoSoundBtn(lv_event_t * e);
+void ui_event_NatureSoundBtn(lv_event_t * e);
+void ui_event_WhiteNoiseBtn(lv_event_t * e);
+void ui_event_BinauralBeatBtn(lv_event_t * e);
+void ui_event_SingingBowlsBtn(lv_event_t * e);
 extern lv_obj_t * ui_SoundScreen;
 extern lv_obj_t * ui_SoundPanel;
 extern lv_obj_t * ui_NoSoundBtn;
@@ -23,7 +28,7 @@ extern lv_obj_t * ui_NoSoundIcon;
 extern lv_obj_t * ui_NoSoundLabel;
 extern lv_obj_t * ui_NatureSoundBtn;
 extern lv_obj_t * ui_NatureSoundCb;
-extern lv_obj_t * ui_NatureSounIcon;
+extern lv_obj_t * ui_NatureSoundIcon;
 extern lv_obj_t * ui_NatureSoundLbl;
 extern lv_obj_t * ui_WhiteNoiseBtn;
 extern lv_obj_t * ui_WhiteNoiseCb;

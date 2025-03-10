@@ -11,6 +11,7 @@ extern "C" {
 #endif
 
 #include "../screens.h"
+#define TotalScreens 8
 
 #define _UI_TEMPORARY_STRING_BUFFER_SIZE 32
 #define _UI_BAR_PROPERTY_VALUE 0
@@ -141,6 +142,9 @@ void _ui_switch_theme(int val)
 ;
 
 extern lv_style_t style_focus;
+extern lv_group_t *ScreenGroup[TotalScreens];
+extern lv_group_t *currentGroup;
+
 void setFocusStyle(void);
 
 #ifdef __cplusplus
