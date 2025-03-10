@@ -14,6 +14,7 @@ extern "C" {
 
 // SCREEN: ui_SoundScreen
 void ui_SoundScreen_screen_init(void);
+void ui_event_toggleSoundPanelGroup(lv_event_t * e);
 extern lv_obj_t * ui_SoundScreen;
 extern lv_obj_t * ui_SoundPanel;
 extern lv_obj_t * ui_NoSoundBtn;

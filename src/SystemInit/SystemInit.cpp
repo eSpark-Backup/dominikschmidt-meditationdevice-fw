@@ -12,7 +12,6 @@ static int numButtons;
 static esp_timer_handle_t button_timer;   
 
 /// Screens and Screen Groups
-#define TotalScreens 8
 lv_obj_t *Screen[TotalScreens];
 lv_group_t *ScreenGroup[TotalScreens];
 lv_group_t *currentGroup = NULL;
@@ -101,7 +100,7 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     if (Btn_A.State == BUTTON_SINGLE_CLICK || Btn_A.State == BUTTON_DOUBLE_CLICK) {
         NavigateScreens(Btn_A);
     } 
-    else if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_DOUBLE_CLICK) {
+    else if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_DOUBLE_CLICK || Btn_B.State == BUTTON_LONG_HOLD) {
          NavigateScreens(Btn_B);
     } 
     else 
@@ -145,9 +144,10 @@ void System::NavigateScreens(ButtonData btnData)
         if (btnData.State == BUTTON_DOUBLE_CLICK) {  ///for testing changed to SINGLE else DOUBLE
             navigatingWidgets = !navigatingWidgets; // Exit widget navigation mode
             Serial.printf("Widget Navigation Mode %s\n", navigatingWidgets?"Activated":"Deactivated");
+            sendEvents(BUTTON_NONE, -1);
             navigateWidgets(BUTTON_NONE, screenCount, navigatingWidgets);
         }
-        else if (btnData.State == BUTTON_SINGLE_CLICK) {
+        else if (btnData.State == BUTTON_SINGLE_CLICK || (btnData.State == BUTTON_LONG_HOLD)) {
             sendEvents(btnData.State, screenCount);
         } 
     }
@@ -221,7 +221,26 @@ void System::sendEvents(ButtonState state, int screenCount)
 
     lv_obj_t *focusedObj = lv_group_get_focused(currentGroup); // Get the currently focused object
     if (!focusedObj) return; // If no object is focused, exit
-    lv_obj_send_event(focusedObj, LV_EVENT_PRESSED, NULL);
+
+    lv_event_code_t event_code;
+    if(state == BUTTON_LONG_HOLD && screenCount < TotalScreens)
+    {
+        event_code = LV_EVENT_LONG_PRESSED;
+    }
+    else if(state == BUTTON_SINGLE_CLICK && screenCount < TotalScreens)
+    {
+        event_code = LV_EVENT_PRESSED;
+    }
+    else if(state == BUTTON_NONE && screenCount == -1)
+    {
+        Serial.println("EVENT CANCEL SENT");
+        event_code = LV_EVENT_CANCEL;
+    }
+    else
+    {
+        return;
+    }
+    lv_obj_send_event(focusedObj, event_code, NULL);
 }
 
 

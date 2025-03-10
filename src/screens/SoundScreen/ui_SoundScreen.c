@@ -564,9 +564,20 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_set_style_text_align(ui_SoundLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_SoundLabel, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    //Events
+    lv_obj_add_event_cb(ui_SoundPanel, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_NoSoundBtn, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_NatureSoundBtn, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_WhiteNoiseBtn, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_BinauralBeatBtn, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_SingingBowlsBtn, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_SoundStartBtnBox, ui_event_startBtnBox, LV_EVENT_PRESSED, NULL);
+    
+    //Hidden Object to shift focus
     ui_HiddenSoundBtn = lv_obj_create(ui_SoundScreen);
     lv_obj_add_flag(ui_HiddenSoundBtn, LV_OBJ_FLAG_HIDDEN);
-
+    
+    //Style of Focus
     lv_obj_add_style(ui_SoundPanel,       &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_NoSoundBtn,       &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_NatureSoundBtn,   &style_focus, LV_STATE_FOCUS_KEY);
@@ -575,19 +586,63 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_add_style(ui_SingingBowlsBtn,  &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_SoundStartBtnBox, &style_focus, LV_STATE_FOCUS_KEY);
     
+    //Sound Screen Group of objects for Focus and Events
     SoundGroup = lv_group_create();
     lv_group_add_obj(SoundGroup, ui_SoundPanel);
-    lv_group_add_obj(SoundGroup, ui_NoSoundBtn);
-    lv_group_add_obj(SoundGroup, ui_NatureSoundBtn);
-    lv_group_add_obj(SoundGroup, ui_WhiteNoiseBtn);
-    lv_group_add_obj(SoundGroup, ui_BinauralBeatBtn);
-    lv_group_add_obj(SoundGroup, ui_SingingBowlsBtn);
     lv_group_add_obj(SoundGroup, ui_SoundStartBtnBox);
     lv_group_add_obj(SoundGroup, ui_HiddenSoundBtn);
 
-    // Assign group to default input device (e.g., encoder or keyboard)
     lv_indev_t * indev = lv_indev_get_next(NULL);
     if(indev) {
         lv_indev_set_group(indev, SoundGroup);
+    }
+}
+
+void ui_event_toggleSoundPanelGroup(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    static bool panelActive = false;
+    static lv_group_t *SoundPanelGroup = NULL;
+
+    if(event_code == LV_EVENT_LONG_PRESSED || event_code == LV_EVENT_CANCEL) {
+        lv_indev_t * indev = lv_indev_get_next(NULL);
+        
+        if (!panelActive && event_code != LV_EVENT_CANCEL) {
+
+            // Create a new focus group for the panel
+            SoundPanelGroup = lv_group_create();
+            lv_group_add_obj(SoundPanelGroup, ui_NoSoundBtn);
+            lv_group_add_obj(SoundPanelGroup, ui_NatureSoundBtn);
+            lv_group_add_obj(SoundPanelGroup, ui_WhiteNoiseBtn);
+            lv_group_add_obj(SoundPanelGroup, ui_BinauralBeatBtn);
+            lv_group_add_obj(SoundPanelGroup, ui_SingingBowlsBtn);
+
+            // Switch focus to the panel group
+            if (indev) lv_indev_set_group(indev, SoundPanelGroup);
+            ScreenGroup[1] = SoundPanelGroup;
+
+            panelActive = true;
+        } 
+        else
+        {
+            // Switch back to the previous focus group
+            if (indev) {
+                lv_indev_set_group(indev, SoundGroup);
+            }
+
+            // Delete the SoundPanelGroup to free memory
+            if (SoundPanelGroup) {
+                lv_group_del(SoundPanelGroup);
+                SoundPanelGroup = NULL;
+            }
+            ScreenGroup[1] = SoundGroup;
+
+            if(event_code == LV_EVENT_LONG_PRESSED)
+                lv_group_focus_obj(ui_SoundPanel);
+            else if(event_code == LV_EVENT_CANCEL)
+                lv_group_focus_obj(ui_HiddenSoundBtn);
+
+            panelActive = false;
+        }
     }
 }
