@@ -19,7 +19,7 @@ lv_obj_t *ui_FavEditTuneIconLbl;
 lv_obj_t *ui_FavEditTuneLbl;
 lv_obj_t *ui_FavEditSoundInfo;
 lv_obj_t *ui_FavEditSoundIcon;
-lv_obj_t *ui_FavEditSoundIconLvl;
+lv_obj_t *ui_FavEditSoundIconLbl;
 lv_obj_t *ui_FavEditSoundLvl;
 lv_obj_t *ui_FavEditGongInfo;
 lv_obj_t *ui_FavEditGongIcon;
@@ -56,7 +56,7 @@ void ui_FavPreview_screen_init(void)
     ui_FavEditTimeInfo = lv_obj_create(ui_FavPreviewScreen);
     lv_obj_remove_style_all(ui_FavEditTimeInfo);
     lv_obj_set_width(ui_FavEditTimeInfo, 100);
-    lv_obj_set_height(ui_FavEditTimeInfo, 64);
+    lv_obj_set_height(ui_FavEditTimeInfo, 65);
     lv_obj_set_x(ui_FavEditTimeInfo, -82);
     lv_obj_set_y(ui_FavEditTimeInfo, -40);
     lv_obj_set_align(ui_FavEditTimeInfo, LV_ALIGN_CENTER);
@@ -104,7 +104,7 @@ void ui_FavPreview_screen_init(void)
     ui_FavEditSoundTypeInfo = lv_obj_create(ui_FavPreviewScreen);
     lv_obj_remove_style_all(ui_FavEditSoundTypeInfo);
     lv_obj_set_width(ui_FavEditSoundTypeInfo, 166);
-    lv_obj_set_height(ui_FavEditSoundTypeInfo, 51);
+    lv_obj_set_height(ui_FavEditSoundTypeInfo, 65);
     lv_obj_set_x(ui_FavEditSoundTypeInfo, 83);
     lv_obj_set_y(ui_FavEditSoundTypeInfo, -40);
     lv_obj_set_align(ui_FavEditSoundTypeInfo, LV_ALIGN_CENTER);
@@ -126,10 +126,10 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_style_bg_image_recolor_opa(ui_FavEditTuneIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_FavEditTuneIconLbl = lv_label_create(ui_FavEditSoundTypeInfo);
-    lv_obj_set_width(ui_FavEditTuneIconLbl, 110);
-    lv_obj_set_height(ui_FavEditTuneIconLbl, 20);
+    lv_obj_set_width(ui_FavEditTuneIconLbl, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_FavEditTuneIconLbl, LV_SIZE_CONTENT);
     lv_obj_set_x(ui_FavEditTuneIconLbl, 16);
-    lv_obj_set_y(ui_FavEditTuneIconLbl, -13);
+    lv_obj_set_y(ui_FavEditTuneIconLbl, -14);
     lv_obj_set_align(ui_FavEditTuneIconLbl, LV_ALIGN_CENTER);
     lv_label_set_text(ui_FavEditTuneIconLbl, "Type of Sound");
     lv_obj_set_style_text_color(ui_FavEditTuneIconLbl, lv_color_hex(0xA6A6A6), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -150,7 +150,7 @@ void ui_FavPreview_screen_init(void)
     ui_FavEditSoundInfo = lv_obj_create(ui_FavPreviewScreen);
     lv_obj_remove_style_all(ui_FavEditSoundInfo);
     lv_obj_set_width(ui_FavEditSoundInfo, 174);
-    lv_obj_set_height(ui_FavEditSoundInfo, 51);
+    lv_obj_set_height(ui_FavEditSoundInfo, 65);
     lv_obj_set_x(ui_FavEditSoundInfo, -81);
     lv_obj_set_y(ui_FavEditSoundInfo, 41);
     lv_obj_set_align(ui_FavEditSoundInfo, LV_ALIGN_CENTER);
@@ -171,18 +171,18 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_style_bg_image_recolor(ui_FavEditSoundIcon, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_FavEditSoundIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_FavEditSoundIconLvl = lv_label_create(ui_FavEditSoundInfo);
-    lv_obj_set_width(ui_FavEditSoundIconLvl, 106);
-    lv_obj_set_height(ui_FavEditSoundIconLvl, 20);
-    lv_obj_set_x(ui_FavEditSoundIconLvl, 8);
-    lv_obj_set_y(ui_FavEditSoundIconLvl, -12);
-    lv_obj_set_align(ui_FavEditSoundIconLvl, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_FavEditSoundIconLvl, "Sound Number:");
-    lv_obj_set_style_text_color(ui_FavEditSoundIconLvl, lv_color_hex(0xA6A6A6), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_FavEditSoundIconLvl, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_letter_space(ui_FavEditSoundIconLvl, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_line_space(ui_FavEditSoundIconLvl, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_FavEditSoundIconLvl, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_FavEditSoundIconLbl = lv_label_create(ui_FavEditSoundInfo);
+    lv_obj_set_width(ui_FavEditSoundIconLbl, LV_SIZE_CONTENT);
+    lv_obj_set_height(ui_FavEditSoundIconLbl, LV_SIZE_CONTENT);
+    lv_obj_set_x(ui_FavEditSoundIconLbl, 8);
+    lv_obj_set_y(ui_FavEditSoundIconLbl, -13);
+    lv_obj_set_align(ui_FavEditSoundIconLbl, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_FavEditSoundIconLbl, "Sound Number:");
+    lv_obj_set_style_text_color(ui_FavEditSoundIconLbl, lv_color_hex(0xA6A6A6), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_FavEditSoundIconLbl, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_letter_space(ui_FavEditSoundIconLbl, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_FavEditSoundIconLbl, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_FavEditSoundIconLbl, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_FavEditSoundLvl = lv_label_create(ui_FavEditSoundInfo);
     lv_obj_set_width(ui_FavEditSoundLvl, 154);
@@ -198,7 +198,7 @@ void ui_FavPreview_screen_init(void)
     ui_FavEditGongInfo = lv_obj_create(ui_FavPreviewScreen);
     lv_obj_remove_style_all(ui_FavEditGongInfo);
     lv_obj_set_width(ui_FavEditGongInfo, 107);
-    lv_obj_set_height(ui_FavEditGongInfo, 55);
+    lv_obj_set_height(ui_FavEditGongInfo, 65);
     lv_obj_set_x(ui_FavEditGongInfo, 84);
     lv_obj_set_y(ui_FavEditGongInfo, 37);
     lv_obj_set_align(ui_FavEditGongInfo, LV_ALIGN_CENTER);
@@ -273,19 +273,72 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_align(ui_FavEditStartBtnIcon, LV_ALIGN_CENTER);
     lv_obj_remove_flag(ui_FavEditStartBtnIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_image_src(ui_FavEditStartBtnIcon, &ui_img_31_blackstarticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+    
+    //Events
+    lv_obj_add_event_cb(ui_FavEditTimeIconLbl,  ui_event_FavEditTimeEvent,  LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_FavEditTuneIconLbl,  ui_event_FavEditTuneEvent,  LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_FavEditSoundIconLbl, ui_event_FavEditSoundEvent, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_FavEditGongIconLbl,  ui_event_FavEditGongEvent,  LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_FavEditStartBtn,     ui_event_startBtnBox,       LV_EVENT_PRESSED, NULL);
 
+    //Hidden Object to shift focus
     ui_HiddenFavPrevBtn = lv_obj_create(ui_FavPreviewScreen);
     lv_obj_add_flag(ui_HiddenFavPrevBtn, LV_OBJ_FLAG_HIDDEN);
-
-    lv_obj_add_style(ui_FavEditStartBtn, &style_focus, LV_STATE_FOCUS_KEY);
     
+    //Style of Focus
+    lv_obj_add_style(ui_FavEditTimeIconLbl,  &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_FavEditTuneIconLbl,  &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_FavEditSoundIconLbl, &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_FavEditGongIconLbl,  &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_FavEditStartBtn,     &style_focus, LV_STATE_FOCUS_KEY);
+    
+    //FavEdit Screen Group of objects for Focus and Events
     FavPrevGroup = lv_group_create();
+    lv_group_add_obj(FavPrevGroup, ui_FavEditTimeIconLbl);
+    lv_group_add_obj(FavPrevGroup, ui_FavEditTuneIconLbl);
+    lv_group_add_obj(FavPrevGroup, ui_FavEditSoundIconLbl);
+    lv_group_add_obj(FavPrevGroup, ui_FavEditGongIconLbl);
     lv_group_add_obj(FavPrevGroup, ui_FavEditStartBtn);
     lv_group_add_obj(FavPrevGroup, ui_HiddenFavPrevBtn);
 
-    // Assign group to default input device (e.g., encoder or keyboard)
     lv_indev_t * indev = lv_indev_get_next(NULL);
     if(indev) {
         lv_indev_set_group(indev, FavPrevGroup);
+    }
+}
+
+void ui_event_FavEditTimeEvent(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        _ui_screen_change(&ui_SetTimerScreen, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_SetTimerScr_screen_init);
+    }
+}
+
+void ui_event_FavEditTuneEvent(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        _ui_screen_change(&ui_SoundScreen, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_SoundScreen_screen_init);
+    }
+}
+
+void ui_event_FavEditSoundEvent(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        // _ui_screen_change(&ui_SoundScreen, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_SoundScreen_screen_init);
+    }
+}
+
+void ui_event_FavEditGongEvent(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        _ui_screen_change(&ui_EndGong1, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_EndGong1_screen_init);
     }
 }
