@@ -144,6 +144,7 @@ void _ui_switch_theme(int val)
 extern lv_style_t style_focus;
 extern lv_group_t *ScreenGroup[TotalScreens];
 extern lv_group_t *currentGroup;
+extern bool navigatingWidgets;
 
 void setFocusStyle(void);
 

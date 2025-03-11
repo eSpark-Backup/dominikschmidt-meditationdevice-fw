@@ -17,7 +17,7 @@ extern "C"
 #include "FavScreen/ui_FavScreen.h"
 #include "FavEditScreen/ui_FavEditScreen.h"
 #include "FavPreviewScreen/ui_FavPreviewScreen.h"
-
+#include <Arduino.h>
 
 
 typedef struct screenMenu

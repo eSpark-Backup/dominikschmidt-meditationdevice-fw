@@ -4,7 +4,6 @@
 // Project name: EndGongSquareLine_Project
 
 #include "ui_MeditationScreen.h"
-#include <Arduino.h>
 
 #define MIN_TO_SEC(x)           (x*60)
 #define HRS_TO_SEC(x)           (x*60*MIN_TO_SEC(x))
@@ -19,18 +18,19 @@ lv_obj_t *ui_MeditationScreen;
 lv_obj_t *ui_meditationTimer;
 lv_obj_t *ui_ArcOverlay;
 lv_obj_t *ui_medTimeRemain;
+lv_obj_t *ui_medTimeIsUpLbl;
 lv_obj_t *ui_medTimePassed;
 lv_obj_t *ui_medPauseBtn;
 lv_obj_t *ui_HiddenMedScrBtn;
 lv_group_t *MeditationGroup;
 lv_timer_t *meditation_timer = NULL;
-int maxArcValue = 3;
+int maxArcValue = 10;
 int setArcValue = 0;     // Countdown progress
 unsigned long startTime = 0;
 unsigned long pausedTime = 0;
 bool timerRunning = false;
-char timeRemainStr[8] = "03:00";
-char timePassedStr[8] = "- 00:00";
+char timeRemainStr[8];
+char timePassedStr[8];
 uint32_t arcTimeInSec = 0;
 uint32_t totalTimeInSec = 0;
 
@@ -98,6 +98,19 @@ void ui_MeditationScreen_screen_init(void)
     lv_obj_set_style_text_font(ui_medTimeRemain, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_transform_scale(ui_medTimeRemain, 360, LV_PART_MAIN | LV_STATE_DEFAULT);
     setTimeLabels(totalTimeInSec, arcTimeInSec);
+
+    ui_medTimeIsUpLbl = lv_label_create(ui_MeditationScreen);
+    lv_obj_set_width(ui_medTimeIsUpLbl, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_medTimeIsUpLbl, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_medTimeIsUpLbl, 0);
+    lv_obj_set_y(ui_medTimeIsUpLbl, -5);
+    lv_obj_set_align(ui_medTimeIsUpLbl, LV_ALIGN_CENTER);
+    _ui_flag_modify(ui_medTimeIsUpLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+    lv_label_set_text(ui_medTimeIsUpLbl, "Time Is Up!");
+    lv_obj_set_style_text_color(ui_medTimeIsUpLbl, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_medTimeIsUpLbl, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_medTimeIsUpLbl, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_letter_space(ui_medTimeIsUpLbl, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
     
     ui_medPauseBtn = lv_obj_create(ui_MeditationScreen);
     lv_obj_remove_style_all(ui_medPauseBtn);
@@ -117,7 +130,8 @@ void ui_MeditationScreen_screen_init(void)
     lv_obj_set_style_bg_image_src(ui_medPauseBtn, &ui_img_80_pauseicon_png, LV_PART_MAIN | LV_STATE_CHECKED);
 
     //Events
-    lv_obj_add_event_cb(ui_medPauseBtn, ui_event_medPauseBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_MeditationScreen, ui_event_medScreenEvent, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_medPauseBtn,      ui_event_medPauseBtn,    LV_EVENT_ALL, NULL);
 
     //Hidden Object to shift focus
     ui_HiddenMedScrBtn = lv_obj_create(ui_MeditationScreen);
@@ -151,7 +165,6 @@ void resetTimerParams(void)
     setTimeLabels(totalTimeInSec, arcTimeInSec);
     lv_arc_set_value(ui_meditationTimer, setArcValue);
     _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
-    printf("reset Timer\n");
 }
 
 void ui_event_medPauseBtn(lv_event_t * e)
@@ -167,13 +180,12 @@ void ui_event_medPauseBtn(lv_event_t * e)
             // Create LVGL timer to update every second
             if (!meditation_timer) {  // Avoid multiple timers
                 meditation_timer = lv_timer_create(updateTimer, 1000, NULL);
-                printf("Timer created\n");
             }
             else
             {
                 lv_timer_resume(meditation_timer);
-                printf("Timer Resumed\n");    
             }
+            timerIsUp(true, true);
         } else {
             timerRunning = false;
             
@@ -181,12 +193,15 @@ void ui_event_medPauseBtn(lv_event_t * e)
             if (meditation_timer) {
                 lv_timer_pause(meditation_timer);
                 pausedTime = TIME_IN_SEC - startTime;
-                printf("Timer Paused\n");
             }
         }
     }
     else if (event_code == LV_EVENT_LONG_PRESSED) {
         resetTimerParams();
+        timerIsUp(true, true);
+    }
+    else{
+        return;
     }
 }
 
@@ -202,6 +217,19 @@ void setTimeLabels(uint32_t remainingTime, uint32_t passedTime)
     sprintf(timePassedStr, "- %02d:%02d", min, sec);
     lv_label_set_text(ui_medTimePassed, timePassedStr);
 }
+
+void timerIsUp(bool isFalse, bool navTrue)
+{
+    _ui_flag_modify(ui_medTimeRemain,  LV_OBJ_FLAG_HIDDEN, isFalse);
+    _ui_flag_modify(ui_medTimePassed,  LV_OBJ_FLAG_HIDDEN, isFalse);
+    _ui_flag_modify(ui_medPauseBtn,    LV_OBJ_FLAG_HIDDEN, isFalse);
+    _ui_flag_modify(ui_medTimeIsUpLbl, LV_OBJ_FLAG_HIDDEN, !isFalse);
+    lv_arc_set_value(ui_meditationTimer, isFalse ? 0 : totalTimeInSec);
+    navigatingWidgets = navTrue;
+    if(!navTrue)lv_group_focus_obj(ui_HiddenMedScrBtn);
+}
+
+
 void updateTimer()
 {
     if (!timerRunning) return;
@@ -219,6 +247,16 @@ void updateTimer()
         if (arcTimeInSec >= totalTimeInSec) {
             timerRunning = false;  // Stop when countdown ends
             resetTimerParams();
+            timerIsUp(false, false);
         }
     }
+}
+
+
+void ui_event_medScreenEvent(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    if (event_code == LV_EVENT_CANCEL) {
+        timerIsUp(true, false);
+    }  
 }

@@ -15,6 +15,7 @@ static esp_timer_handle_t button_timer;
 lv_obj_t *Screen[TotalScreens];
 lv_group_t *ScreenGroup[TotalScreens];
 lv_group_t *currentGroup = NULL;
+bool navigatingWidgets = false;  // Tracks whether we are navigating widgets or screens
 
 /// Create system initializer object
 System Core;
@@ -110,7 +111,6 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
 void System::NavigateScreens(ButtonData btnData)
 {
     static int screenCount = 0;
-    static bool navigatingWidgets = false;  // Tracks whether we are navigating widgets or screens
     bool screenChanged = false;
     static lv_obj_t *lastScreen = lv_screen_active();
 
@@ -179,6 +179,7 @@ void System::NavigateScreens(ButtonData btnData)
                 lv_indev_t *indev = lv_indev_get_next(NULL);
                 if (indev && ScreenGroup[screenCount]) {
                     lv_indev_set_group(indev, ScreenGroup[screenCount]);
+                    lv_obj_send_event(Screen[screenCount], LV_EVENT_CANCEL, NULL);
                 }
             }
         }

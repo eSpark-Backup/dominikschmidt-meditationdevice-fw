@@ -20,6 +20,7 @@ void ui_event_clkMin(lv_event_t * e);
 void ui_event_minRoller(lv_event_t * e);
 void ui_event_clkSec(lv_event_t * e);
 void ui_event_secRoller(lv_event_t * e);
+void ui_event_resetSetTimerEvent(lv_event_t * e);
 extern lv_obj_t *ui_SetTimerScreen;
 extern lv_obj_t *ui_startBtnBox1;
 extern lv_obj_t *ui_startLabel1;

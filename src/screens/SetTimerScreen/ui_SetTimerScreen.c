@@ -409,13 +409,14 @@ void ui_SetTimerScr_screen_init(void)
                                                                                                lv_obj_get_style_pad_right(ui_pgSlider, LV_PART_MAIN) + 1, LV_PART_MAIN);
 
     //Events
-    lv_obj_add_event_cb(ui_hrRoller,        ui_event_hrRoller,      LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_clkHr,           ui_event_clkHr,         LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_minRoller,       ui_event_minRoller,     LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_clkMin,          ui_event_clkMin,        LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_secRoller,       ui_event_secRoller,     LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_clkSec,          ui_event_clkSec,        LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_startBtnBox1,    ui_event_startBtnBox,   LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_SetTimerScreen,  ui_event_resetSetTimerEvent,LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_hrRoller,        ui_event_hrRoller,          LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_clkHr,           ui_event_clkHr,             LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_minRoller,       ui_event_minRoller,         LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_clkMin,          ui_event_clkMin,            LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_secRoller,       ui_event_secRoller,         LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_clkSec,          ui_event_clkSec,            LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_startBtnBox1,    ui_event_startBtnBox,       LV_EVENT_ALL, NULL);
 
     //Hidden Object to shift focus
     ui_HiddenTimerScrBtn = lv_obj_create(ui_SetTimerScreen);
@@ -448,6 +449,20 @@ void ui_SetTimerScr_screen_init(void)
     }
 }
 
+
+void ui_event_resetSetTimerEvent(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    
+    if(event_code == LV_EVENT_CANCEL) {
+        _ui_flag_modify(ui_clkHr,       LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        _ui_flag_modify(ui_hrRoller,    LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        _ui_flag_modify(ui_clkMin,      LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        _ui_flag_modify(ui_minRoller,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        _ui_flag_modify(ui_clkSec,      LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        _ui_flag_modify(ui_secRoller,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+    }
+}
 
 void ui_event_clkHr(lv_event_t * e)
 {
