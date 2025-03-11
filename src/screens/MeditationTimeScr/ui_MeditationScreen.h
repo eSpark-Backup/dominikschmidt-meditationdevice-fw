@@ -15,6 +15,8 @@ extern "C" {
 // SCREEN: ui_MeditationScreen
 void ui_MeditationScreen_screen_init(void);
 void ui_event_medPauseBtn(lv_event_t * e);
+void updateTimer();
+void setTimeLabels(uint32_t remainingTime, uint32_t passedTime);
 extern lv_obj_t *ui_MeditationScreen;
 extern lv_obj_t *ui_meditationTimer;
 extern lv_obj_t *ui_ArcOverlay;
