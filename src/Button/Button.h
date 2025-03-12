@@ -6,7 +6,6 @@
  ***************************/
 
 #include <Arduino.h>
-#include "esp_timer.h"
 
 #define DEBOUNCE_TIME 30      // Debounce time in ms
 #define DOUBLE_CLICK_TIME 300 // Max time between two clicks

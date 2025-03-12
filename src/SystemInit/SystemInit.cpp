@@ -8,8 +8,13 @@ Button button1(Button1_Pin);
 Button button2(Button2_Pin);
 
 Button *buttons[] = {&button1, &button2};
-static int numButtons;                    
-static esp_timer_handle_t button_timer;   
+static int numButtons;
+
+//Rotary Encoder
+#define ENC_CHA 25 // Encoder's CLK pin
+#define ENC_CHB 26 // Encoder's DT pin
+RotaryEncoder Enc(ENC_CHA, ENC_CHB);
+static esp_timer_handle_t enc_timer;
 
 /// Screens and Screen Groups
 lv_obj_t *Screen[TotalScreens];
@@ -22,12 +27,11 @@ System Core;
 
 void System::Initialize(void)
 {
-    numButtons = sizeof(buttons) / sizeof(buttons[0]); // Store safely
-    // ButtonsInit();                                     // No need to pass as argument
+    numButtons = sizeof(buttons) / sizeof(buttons[0]);
+    EncoderInit();
     setFocusStyle();
     initScreens();
 }
-
 
 void System::initScreens(void)
 {
@@ -35,6 +39,26 @@ void System::initScreens(void)
     loadScreens();
     loadScreenGroups();
     Serial.println("Screens initialized successfully\n\n");
+}
+
+void IRAM_ATTR System::checkEncoder(void* arg)
+{
+    Enc.checkEncoderState();
+}
+
+void System::EncoderInit()
+{
+    esp_timer_create_args_t timer_args = {
+        .callback = &checkEncoder,
+        .arg = NULL,
+        .dispatch_method = ESP_TIMER_TASK,
+        .name = "enc_timer"};
+
+    esp_err_t ret = esp_timer_create(&timer_args, &enc_timer);
+    ret |= esp_timer_start_periodic(enc_timer, POLL_INTERVAL * 1000); // Convert ms to µs
+
+    if (ret == ESP_OK)
+        Serial.println("enc_timer initialized");
 }
 
 void System::InitializeScreen(void)
@@ -60,7 +84,6 @@ void System::loadScreens(void)
     Screen[5] = ui_FavPreviewScreen;
     Screen[6] = ui_BluetoothScreen;
     Screen[7] = ui_MeditationScreen;
-
 }
 
 void System::loadScreenGroups(void)
@@ -73,7 +96,6 @@ void System::loadScreenGroups(void)
     ScreenGroup[5] = FavPrevGroup;
     ScreenGroup[6] = BTGroup;
     ScreenGroup[7] = MeditationGroup;
-
 }
 
 
@@ -85,12 +107,6 @@ void IRAM_ATTR System::checkButtons(void)
         buttons[i]->checkState();
     }
 }
-
-void System::ButtonsInit(void)
-{
-    Serial.println("Buttons initialized");
-}
-
 
 void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
 {    
@@ -240,7 +256,6 @@ void System::sendEvents(ButtonState state, int screenCount)
     }
     lv_obj_send_event(focusedObj, event_code, NULL);
 }
-
 
 void System::ButtonReadStatic(lv_indev_t * indev, lv_indev_data_t * data) {
     Core.ButtonRead(indev, data);

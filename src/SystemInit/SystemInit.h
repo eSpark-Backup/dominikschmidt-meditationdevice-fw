@@ -6,8 +6,9 @@
  ***************************/
 #include "lvgl.h"
 #include "../Button/Button.h"
+#include "../RotaryEncoder/RotaryEncoder.h"
 #include "../screens/screens.h"
-
+#include "esp_timer.h"
 
 typedef enum ButtonID
 {
@@ -37,8 +38,9 @@ class System
         void InitializeScreen(void);
         void loadScreens(void);
         void loadScreenGroups(void);
-        void ButtonsInit(void);
+        void EncoderInit(void);
         void IRAM_ATTR checkButtons(void);
+        static void IRAM_ATTR checkEncoder(void* arg);
         void NavigateScreens(ButtonData btnData);
         void navigateWidgets(ButtonState state, int screenCount, bool focus = false);
         void sendEvents(ButtonState state, int screenCount);
