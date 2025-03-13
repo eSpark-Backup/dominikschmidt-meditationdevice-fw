@@ -35,6 +35,7 @@ lv_obj_t *ui_HiddenTimerScrBtn;
 lv_group_t *TimerScrGroup;
 lv_obj_t* roller = NULL;
 bool roller_selected = false;
+int storedValue[3] = {1, 1, 1};
 
 void ui_SetTimerScr_screen_init(void)
 {
@@ -78,7 +79,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_clkTopLabel, 1);
     lv_obj_set_y(ui_clkTopLabel, -50);
     lv_obj_set_align(ui_clkTopLabel, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_clkTopLabel, "HR          	             MIN             	      SEC");
+    lv_label_set_text(ui_clkTopLabel, "HR          	            MIN             	      SEC");
     lv_obj_set_style_text_color(ui_clkTopLabel, lv_color_hex(0x787478), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_clkTopLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_clkTopLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -90,7 +91,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_clkBtmLabel, 3);
     lv_obj_set_y(ui_clkBtmLabel, 43);
     lv_obj_set_align(ui_clkBtmLabel, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_clkBtmLabel, "HR          	             MIN             	      SEC");
+    lv_label_set_text(ui_clkBtmLabel, "HR          	            MIN             	      SEC");
     lv_obj_set_style_text_color(ui_clkBtmLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_clkBtmLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_clkBtmLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -103,7 +104,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_y(ui_clkHr, -12);
     lv_obj_set_align(ui_clkHr, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_clkHr, LV_OBJ_FLAG_CLICKABLE);     /// Flags
-    lv_label_set_text(ui_clkHr, "01");
+    lv_label_set_text(ui_clkHr, labelString(storedValue[0]));
     lv_obj_set_style_text_color(ui_clkHr, lv_color_hex(0x6A696A), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_clkHr, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_clkHr, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -111,8 +112,8 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_style_transform_scale(ui_clkHr, 360, LV_PART_MAIN | LV_STATE_DEFAULT);
     
     ui_hrRoller = lv_roller_create(ui_SetTimerScreen);
-    lv_roller_set_options(ui_hrRoller, "01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12", LV_ROLLER_MODE_INFINITE);
-    lv_roller_set_selected(ui_hrRoller, 10, LV_ANIM_OFF);
+    lv_roller_set_options(ui_hrRoller, setRollerOptions(12), LV_ROLLER_MODE_INFINITE);
+    lv_roller_set_selected(ui_hrRoller, 00, LV_ANIM_OFF);
     lv_obj_set_height(ui_hrRoller, 136);
     lv_obj_set_width(ui_hrRoller, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_x(ui_hrRoller, -111);
@@ -144,11 +145,11 @@ void ui_SetTimerScr_screen_init(void)
     ui_clkMin = lv_label_create(ui_SetTimerScreen);
     lv_obj_set_width(ui_clkMin, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_clkMin, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_clkMin, -2);
+    lv_obj_set_x(ui_clkMin, -5);
     lv_obj_set_y(ui_clkMin, -12);
     lv_obj_set_align(ui_clkMin, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_clkMin, LV_OBJ_FLAG_CLICKABLE);     /// Flags
-    lv_label_set_text(ui_clkMin, "37");
+    lv_label_set_text(ui_clkMin, labelString(storedValue[1]));
     lv_obj_set_style_text_color(ui_clkMin, lv_color_hex(0x6A696A), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_clkMin, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_clkMin, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -156,11 +157,11 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_style_transform_scale(ui_clkMin, 360, LV_PART_MAIN | LV_STATE_DEFAULT);
     
     ui_minRoller = lv_roller_create(ui_SetTimerScreen);
-    lv_roller_set_options(ui_minRoller, "01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12", LV_ROLLER_MODE_INFINITE);
-    lv_roller_set_selected(ui_minRoller, 10, LV_ANIM_OFF);
+    lv_roller_set_options(ui_minRoller, setRollerOptions(60), LV_ROLLER_MODE_INFINITE);
+    lv_roller_set_selected(ui_minRoller, 00, LV_ANIM_OFF);
     lv_obj_set_height(ui_minRoller, 136);
     lv_obj_set_width(ui_minRoller, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_x(ui_minRoller, 10);
+    lv_obj_set_x(ui_minRoller, 5);
     lv_obj_set_y(ui_minRoller, -12);
     lv_obj_set_align(ui_minRoller, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_minRoller, LV_OBJ_FLAG_HIDDEN);     /// Flags
@@ -193,7 +194,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_y(ui_clkSec, -12);
     lv_obj_set_align(ui_clkSec, LV_ALIGN_CENTER);
     lv_obj_add_flag(ui_clkSec, LV_OBJ_FLAG_CLICKABLE); 
-    lv_label_set_text(ui_clkSec, "00");
+    lv_label_set_text(ui_clkSec, labelString(storedValue[2]));
     lv_obj_set_style_text_color(ui_clkSec, lv_color_hex(0x6A696A), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_clkSec, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_clkSec, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -201,8 +202,8 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_style_transform_scale(ui_clkSec, 360, LV_PART_MAIN | LV_STATE_DEFAULT);
     
     ui_secRoller = lv_roller_create(ui_SetTimerScreen);
-    lv_roller_set_options(ui_secRoller, "01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12", LV_ROLLER_MODE_INFINITE);
-    lv_roller_set_selected(ui_secRoller, 10, LV_ANIM_OFF);
+    lv_roller_set_options(ui_secRoller, setRollerOptions(60), LV_ROLLER_MODE_INFINITE);
+    lv_roller_set_selected(ui_secRoller, 00, LV_ANIM_OFF);
     lv_obj_set_height(ui_secRoller, 136);
     lv_obj_set_width(ui_secRoller, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_x(ui_secRoller, 119);
@@ -451,6 +452,25 @@ void ui_SetTimerScr_screen_init(void)
     }
 }
 
+char* labelString(int num)
+{
+    static char buf[3]; // Allocate buffer for string conversion
+    sprintf(buf, "%02d", num); // Convert integer to string
+    return buf;
+}
+
+void setRollersValue()
+{
+    // int selectedIndex = lv_roller_get_selected(ui_secRoller);
+    storedValue[0] = lv_roller_get_selected(ui_hrRoller) + 1;  // Convert index to actual number
+    storedValue[1] = lv_roller_get_selected(ui_minRoller) + 1;  // Convert index to actual number
+    storedValue[2] = lv_roller_get_selected(ui_secRoller) + 1;  // Convert index to actual number
+    // printf("Selected time: %dHr : %dMin : %dSec\n", storedValue[0], storedValue[1], storedValue[2]);
+    lv_label_set_text(ui_clkHr,  labelString(storedValue[0]));
+    lv_label_set_text(ui_clkMin, labelString(storedValue[1]));
+    lv_label_set_text(ui_clkSec, labelString(storedValue[2]));
+}
+
 
 void ui_event_resetSetTimerEvent(lv_event_t * e)
 {
@@ -492,6 +512,7 @@ void ui_event_hrRoller(lv_event_t * e)
             roller = NULL;
             roller_selected = false;  // Reset selection mode
         }
+        setRollersValue();
     }
 }
 
@@ -521,6 +542,7 @@ void ui_event_minRoller(lv_event_t * e)
             roller = NULL;
             roller_selected = false;
         }
+        setRollersValue();
     }
 }
 
@@ -550,6 +572,7 @@ void ui_event_secRoller(lv_event_t * e)
             roller = NULL;
             roller_selected = false;
         }
+        setRollersValue();
     }
 }
 
@@ -558,4 +581,18 @@ void rotateRoller(int diff)
     if (diff != 0) {
         lv_roller_set_selected(roller, lv_roller_get_selected(roller) + diff, LV_ANIM_ON);
     } 
+}
+
+char* setRollerOptions(int maxRange)
+{
+    static char secOptions[256]; // Ensure enough space
+    secOptions[0] = '\0'; // Initialize empty string
+    
+    for (int i = 1; i <= maxRange; i++) {
+        char buffer[4]; // Temporary buffer for each number
+        snprintf(buffer, sizeof(buffer), i < maxRange? "%02d\n":"%02d", i); // Format number as "01", "02", ..., "60"
+        strcat(secOptions, buffer); // Append to options string
+    }
+    
+    return secOptions;
 }

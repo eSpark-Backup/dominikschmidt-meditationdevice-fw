@@ -104,9 +104,9 @@ void loop()
 
 void memLog()
 {
-  Serial.printf("Free heap: %d\n", esp_get_free_heap_size());
-  Serial.printf("Largest block: %d\n", heap_caps_get_largest_free_block(MALLOC_CAP_8BIT));
   Serial.printf(
+  "  FREE_HEAP            %7zu bytes\n"
+  "  LARGEST_BLOCK        %7zu bytes\n"
   "  MALLOC_CAP_8BIT      %7zu bytes\n"
   "  MALLOC_CAP_DMA       %7zu bytes\n"
   "  MALLOC_CAP_SPIRAM    %7zu bytes\n"
@@ -114,6 +114,8 @@ void memLog()
   "  MALLOC_CAP_DEFAULT   %7zu bytes\n"
   "  MALLOC_CAP_IRAM_8BIT %7zu bytes\n"
   "  MALLOC_CAP_RETENTION %7zu bytes\n",
+  esp_get_free_heap_size(),
+  heap_caps_get_largest_free_block(MALLOC_CAP_8BIT),
   heap_caps_get_free_size(MALLOC_CAP_8BIT),
   heap_caps_get_free_size(MALLOC_CAP_DMA),
   heap_caps_get_free_size(MALLOC_CAP_SPIRAM),
