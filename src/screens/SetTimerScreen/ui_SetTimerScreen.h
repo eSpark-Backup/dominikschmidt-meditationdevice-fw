@@ -54,6 +54,7 @@ extern lv_obj_t *ui_HiddenTimerScrBtn;
 extern lv_group_t *TimerScrGroup;
 extern lv_obj_t* roller;
 extern bool roller_selected;
+extern int storedValue[3];
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

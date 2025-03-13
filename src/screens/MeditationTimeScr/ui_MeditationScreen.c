@@ -36,7 +36,7 @@ uint32_t totalTimeInSec = 0;
 
 void ui_MeditationScreen_screen_init(void)
 {
-    totalTimeInSec = MIN_TO_SEC(maxArcValue);
+    totalTimeInSec = HRS_TO_SEC(storedValue[0]) + MIN_TO_SEC(storedValue[1]) + storedValue[2];
     
     ui_MeditationScreen = lv_obj_create(NULL);
     lv_obj_remove_flag(ui_MeditationScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
