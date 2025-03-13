@@ -44,6 +44,7 @@ class System
         void NavigateScreens(ButtonData btnData);
         void navigateWidgets(ButtonState state, int screenCount, bool focus = false);
         void sendEvents(ButtonState state, int screenCount);
+        void sendRollerAnimation(void);
 };
 
 extern System Core;

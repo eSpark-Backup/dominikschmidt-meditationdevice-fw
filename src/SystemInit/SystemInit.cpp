@@ -41,11 +41,6 @@ void System::initScreens(void)
     Serial.println("Screens initialized successfully\n\n");
 }
 
-void IRAM_ATTR System::checkEncoder(void* arg)
-{
-    Enc.checkEncoderState();
-}
-
 void System::EncoderInit()
 {
     esp_timer_create_args_t timer_args = {
@@ -97,7 +92,6 @@ void System::loadScreenGroups(void)
     ScreenGroup[6] = BTGroup;
     ScreenGroup[7] = MeditationGroup;
 }
-
 
 // Function to read the button state for all buttons
 void IRAM_ATTR System::checkButtons(void)
@@ -234,9 +228,11 @@ void System::sendEvents(ButtonState state, int screenCount)
 {
     if (!currentGroup) return;  // Ensure the group exists
 
+    static lv_obj_t *previousFocused = NULL;
     lv_obj_t *focusedObj = lv_group_get_focused(currentGroup); // Get the currently focused object
     if (!focusedObj) return; // If no object is focused, exit
 
+    
     lv_event_code_t event_code;
     if(state == BUTTON_LONG_HOLD && screenCount < TotalScreens)
     {
@@ -254,9 +250,40 @@ void System::sendEvents(ButtonState state, int screenCount)
     {
         return;
     }
+    if(previousFocused && previousFocused != focusedObj)
+    {
+        lv_obj_send_event(previousFocused, LV_EVENT_DEFOCUSED, NULL);
+    }
+
     lv_obj_send_event(focusedObj, event_code, NULL);
+    
+    previousFocused = focusedObj;
 }
 
 void System::ButtonReadStatic(lv_indev_t * indev, lv_indev_data_t * data) {
     Core.ButtonRead(indev, data);
+}
+
+void System::sendRollerAnimation(void)
+{
+    if (roller == NULL) return;
+    
+    EncoderState enc;
+    enc = Enc.getEncoderState();
+    static int last_encoder_counter = 0;
+    int newCounter = enc.counter;  // Get the updated encoder count
+    int difference = newCounter - last_encoder_counter;  // Check how much the counter changed
+    
+    rotateRoller(difference);
+    
+    last_encoder_counter = newCounter;  // Update the previous counter value
+}
+
+void IRAM_ATTR System::checkEncoder(void* arg)
+{
+    Enc.checkEncoderState();
+    if (roller_selected)  // Only update if roller is in selection mode
+    {
+        Core.sendRollerAnimation();
+    }
 }

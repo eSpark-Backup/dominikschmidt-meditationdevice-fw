@@ -33,6 +33,8 @@ lv_obj_t *ui_pg5;
 lv_obj_t *ui_pgSlider;
 lv_obj_t *ui_HiddenTimerScrBtn;
 lv_group_t *TimerScrGroup;
+lv_obj_t* roller = NULL;
+bool roller_selected = false;
 
 void ui_SetTimerScr_screen_init(void)
 {
@@ -135,7 +137,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_style_text_color(ui_hrRoller, lv_color_hex(0x94D28B), LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_hrRoller, 255, LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_hrRoller, LV_TEXT_ALIGN_CENTER, LV_PART_SELECTED | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_hrRoller, &lv_font_montserrat_48, LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_hrRoller, &lv_font_montserrat_72, LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_hrRoller, lv_color_hex(0x000000), LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_hrRoller, 255, LV_PART_SELECTED | LV_STATE_DEFAULT);
     
@@ -180,7 +182,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_style_text_color(ui_minRoller, lv_color_hex(0x94D28B), LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_minRoller, 255, LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_minRoller, LV_TEXT_ALIGN_CENTER, LV_PART_SELECTED | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_minRoller, &lv_font_montserrat_48, LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_minRoller, &lv_font_montserrat_72, LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_minRoller, lv_color_hex(0x000000), LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_minRoller, 255, LV_PART_SELECTED | LV_STATE_DEFAULT);
     
@@ -225,7 +227,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_style_text_color(ui_secRoller, lv_color_hex(0x94D28B), LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_secRoller, 255, LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_secRoller, LV_TEXT_ALIGN_CENTER, LV_PART_SELECTED | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_secRoller, &lv_font_montserrat_48, LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_secRoller, &lv_font_montserrat_72, LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_secRoller, lv_color_hex(0x000000), LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_secRoller, 255, LV_PART_SELECTED | LV_STATE_DEFAULT);
     
@@ -432,7 +434,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_add_style(ui_startBtnBox1,   &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_minRoller,      &style_focus, LV_STATE_FOCUS_KEY);
     
-    //Bluetooth Screen Group of objects for Focus and Events
+    //Set Timer Screen Group of objects for Focus and Events
     TimerScrGroup = lv_group_create();
     lv_group_add_obj(TimerScrGroup, ui_clkHr);
     lv_group_add_obj(TimerScrGroup, ui_hrRoller);
@@ -472,6 +474,8 @@ void ui_event_clkHr(lv_event_t * e)
         _ui_flag_modify(ui_clkHr, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_hrRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         lv_group_focus_obj(ui_hrRoller);
+        roller = ui_hrRoller;
+        roller_selected = true;  // Enable selection mode
     }
 }
 
@@ -479,10 +483,15 @@ void ui_event_hrRoller(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     
-    if(event_code == LV_EVENT_PRESSED) {
+    if (event_code == LV_EVENT_PRESSED || event_code == LV_EVENT_DEFOCUSED) {
         _ui_flag_modify(ui_clkHr, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         _ui_flag_modify(ui_hrRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-        lv_group_focus_obj(ui_clkHr);
+        if (event_code == LV_EVENT_PRESSED)
+        {
+            lv_group_focus_obj(ui_clkHr);
+            roller = NULL;
+            roller_selected = false;  // Reset selection mode
+        }
     }
 }
 
@@ -494,6 +503,8 @@ void ui_event_clkMin(lv_event_t * e)
         _ui_flag_modify(ui_clkMin, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_minRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         lv_group_focus_obj(ui_minRoller);
+        roller = ui_minRoller;
+        roller_selected = true;
     }
 }
 
@@ -501,13 +512,18 @@ void ui_event_minRoller(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     
-    if(event_code == LV_EVENT_PRESSED) {
+    if(event_code == LV_EVENT_PRESSED || event_code == LV_EVENT_DEFOCUSED) {
         _ui_flag_modify(ui_clkMin, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         _ui_flag_modify(ui_minRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-        lv_group_focus_obj(ui_clkMin);
+        if (event_code == LV_EVENT_PRESSED)
+        {
+            lv_group_focus_obj(ui_clkMin);
+            roller = NULL;
+            roller_selected = false;
+        }
     }
-    
 }
+
 void ui_event_clkSec(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -516,6 +532,8 @@ void ui_event_clkSec(lv_event_t * e)
         _ui_flag_modify(ui_clkSec, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_secRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         lv_group_focus_obj(ui_secRoller);
+        roller = ui_secRoller;
+        roller_selected = true;
     }
 }
 
@@ -523,9 +541,21 @@ void ui_event_secRoller(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     
-    if(event_code == LV_EVENT_PRESSED) {
+    if(event_code == LV_EVENT_PRESSED || event_code == LV_EVENT_DEFOCUSED) {
         _ui_flag_modify(ui_clkSec, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         _ui_flag_modify(ui_secRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-        lv_group_focus_obj(ui_clkSec);
+        if (event_code == LV_EVENT_PRESSED)
+        {
+            lv_group_focus_obj(ui_clkSec);
+            roller = NULL;
+            roller_selected = false;
+        }
     }
+}
+
+void rotateRoller(int diff)
+{
+    if (diff != 0) {
+        lv_roller_set_selected(roller, lv_roller_get_selected(roller) + diff, LV_ANIM_ON);
+    } 
 }
