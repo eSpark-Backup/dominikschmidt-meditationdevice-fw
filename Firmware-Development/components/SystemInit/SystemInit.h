@@ -4,13 +4,13 @@
 /***************************
  *Initialize system core components
  ***************************/
+#include "Button.hpp"
 #include "lvgl.h"
-#include "Button.h"
 #include "RotaryEncoder.h"
+#include "A2dpSource.hpp"
 #include "screens.h"
 #include "esp_timer.h"
 #include "driver/ledc.h"
-
 
 typedef enum
 {
@@ -44,7 +44,7 @@ class System
     void loadScreenGroups(void);
     void EncoderInit(void);
     void IRAM_ATTR checkButtons(void);
-    static void IRAM_ATTR checkEncoder(void* arg);
+    static void checkEncoder(void* arg);
     void NavigateScreens(ButtonData btnData);
     void navigateWidgets(ButtonState state, int screenCount, bool focus = false);
     void sendEvents(ButtonState state, int screenCount);

@@ -259,6 +259,12 @@ void System::sendEvents(ButtonState state, int screenCount)
     else if(state == BUTTON_SINGLE_CLICK && screenCount < TotalScreens)
     {
         event_code = LV_EVENT_PRESSED;
+        if(screenCount == 6)
+        {
+            ESP_LOGI(TAG, "startA2dpService");
+            startA2dpService();
+        }
+
     }
     else if(state == BUTTON_NONE && screenCount == -1)
     {
@@ -297,7 +303,7 @@ void System::sendRollerAnimation(void)
     last_encoder_counter = newCounter;  // Update the previous counter value
 }
 
-void IRAM_ATTR System::checkEncoder(void* arg)
+void System::checkEncoder(void* arg)
 {
     Enc.checkEncoderState();
 }

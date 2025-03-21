@@ -17,9 +17,11 @@
 #define LONG_HOLD_TIME 2000   // Long press-hold duration
 #define POLL_INTERVAL 10      // Timer interval in milliseconds
 
-
+// #ifdef __cplusplus
+// extern "C" {
+// #endif
 // Enum for button states
-enum ButtonState {
+typedef enum {
     BUTTON_NONE,
     BUTTON_PRESS,
     BUTTON_RELEASE,
@@ -27,7 +29,8 @@ enum ButtonState {
     BUTTON_LONG_HOLD,
     BUTTON_SINGLE_CLICK,
     BUTTON_DOUBLE_CLICK
-};
+}   ButtonState;
+
 
 
 class Button
@@ -52,5 +55,7 @@ class Button
         ButtonState getState();
 
 };
-
+// #ifdef __cplusplus
+// }
+// #endif
 #endif /*BUTTON_H */

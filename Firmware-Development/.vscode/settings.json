@@ -4,7 +4,10 @@
     "idf.toolsPathWin": "c:\\Users\\eSpark\\esp\\v4.4.6\\.espressif",
     "idf.pythonInstallPath": "c:\\Users\\eSpark\\esp\\v4.4.6\\.espressif\\tools\\idf-python\\3.8.7\\python.exe",
     "files.associations": {
-        "button.h": "c"
+        "button.h": "c",
+        "audio_event_iface.h": "c",
+        "freertos.h": "c",
+        "gpio.h": "c"
     },
     "idf.flashType": "UART",
     "idf.portWin": "COM19"
