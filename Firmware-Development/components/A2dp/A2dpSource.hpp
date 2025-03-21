@@ -20,7 +20,13 @@
 #include "fatfs_stream.h"
 #include <dirent.h>
 
-void startA2dpService(void);
+// void startA2dpService(void);
+
+void A2dpServiceInit();
+void A2dpAudioStart(char *filepath);
+void A2dpAudioStop();
+void bluetooth_monitor_task(void *param);
+bool isAudioStarted();
 
 
 #endif /*A2DPSOURCE_H */
