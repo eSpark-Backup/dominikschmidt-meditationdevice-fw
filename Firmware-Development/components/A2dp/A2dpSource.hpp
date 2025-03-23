@@ -20,13 +20,25 @@
 #include "fatfs_stream.h"
 #include <dirent.h>
 
-// void startA2dpService(void);
 
-void A2dpServiceInit();
-void A2dpAudioStart(char *filepath);
-void A2dpAudioStop();
-void bluetooth_monitor_task(void *param);
-bool isAudioStarted();
+class A2DP
+{
+    public:
+        void A2dpServiceInit();
+        void A2dpAudioStart(char *filepath);
+        void A2dpAudioStop();
+        bool isAudioStarted();
+        
+    private:
+        static void bluetooth_monitor_task(void *param);
+        static void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param);
+        static void filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param);
+        static bool get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len);
+        static char *bda2str(esp_bd_addr_t bda, char *str, size_t size);
+
+};
+
+extern A2DP btAudio;
 
 
 #endif /*A2DPSOURCE_H */

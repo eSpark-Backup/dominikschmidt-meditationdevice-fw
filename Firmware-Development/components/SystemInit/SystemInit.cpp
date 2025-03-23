@@ -41,7 +41,7 @@ void System::Initialize(void)
     EncoderInit();
     setFocusStyle();
     initScreens();
-    A2dpServiceInit();
+    btAudio.A2dpServiceInit();
 }
 
 void System::initScreens(void)
@@ -166,9 +166,9 @@ void System::NavigateScreens(ButtonData btnData)
 
         // ESP_LOGI(TAG, "Widget Navigation deactivated, new screen group loaded");
     }
-    if(isAudioStarted() && screenCount != 6)
+    if(btAudio.isAudioStarted() && screenCount != 6)
     {
-        A2dpAudioStop();
+        btAudio.A2dpAudioStop();
     }
     if (btnData.ID == B) // Handle Button B for selection mode
     {
@@ -266,7 +266,7 @@ void System::sendEvents(ButtonState state, int screenCount)
         if(screenCount == 6)
         {
             ESP_LOGI(TAG, "startA2dpService");
-            A2dpAudioStart("/sdcard/converted/Stream 1.wav");
+            btAudio.A2dpAudioStart("/sdcard/converted/Stream 1.wav");
         }
     }
     else if(state == BUTTON_NONE && screenCount == -1)

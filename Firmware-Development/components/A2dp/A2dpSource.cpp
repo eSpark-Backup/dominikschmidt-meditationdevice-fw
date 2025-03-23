@@ -28,7 +28,7 @@ esp_periph_handle_t bt_periph;
 audio_event_iface_handle_t evt;
 TaskHandle_t xBtTaskHandler;
 bool AudioPlaying = false;
-
+A2DP btAudio;
 
 void list_sdcard_files(const char *path) {
     DIR *dir = opendir(path);
@@ -47,7 +47,7 @@ void list_sdcard_files(const char *path) {
     closedir(dir);
 }
 
-static char *bda2str(esp_bd_addr_t bda, char *str, size_t size)
+char *A2DP::bda2str(esp_bd_addr_t bda, char *str, size_t size)
 {
     if (bda == NULL || str == NULL || size < 18) {
         return NULL;
@@ -59,7 +59,7 @@ static char *bda2str(esp_bd_addr_t bda, char *str, size_t size)
     return str;
 }
 
-static bool get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len)
+bool A2DP::get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len)
 {
     uint8_t *rmt_bdname = NULL;
     uint8_t rmt_bdname_len = 0;
@@ -91,7 +91,7 @@ static bool get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len
     return false;
 }
 
-static void filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param)
+void A2DP::filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param)
 {
     char bda_str[18];
     uint32_t cod = 0;
@@ -139,7 +139,7 @@ static void filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param)
     }
 }
 
-static void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param)
+void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param)
 {
     switch (event) {
         case ESP_BT_GAP_DISC_RES_EVT: {
@@ -182,7 +182,7 @@ static void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *pa
 }
 
 
-void A2dpServiceInit()
+void A2DP::A2dpServiceInit()
 {
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
@@ -211,7 +211,7 @@ void A2dpServiceInit()
     esp_periph_start(set, bt_periph);
 }
 
-void A2dpAudioStart(char *filepath)
+void A2DP::A2dpAudioStart(char *filepath)
 {
     ESP_LOGI(TAG, "[ 4 ] Create audio pipeline");
     audio_pipeline_cfg_t pipeline_cfg = DEFAULT_AUDIO_PIPELINE_CONFIG();
@@ -275,7 +275,7 @@ void A2dpAudioStart(char *filepath)
 
     // Ensure BT never disconnects
     xTaskCreatePinnedToCore(
-        bluetooth_monitor_task,
+        btAudio.bluetooth_monitor_task,
         "BT_Monitor",
         4096,
         NULL,
@@ -287,7 +287,7 @@ void A2dpAudioStart(char *filepath)
 
 }
 
-void bluetooth_monitor_task(void *param)
+void A2DP::bluetooth_monitor_task(void *param)
 {
     AudioPlaying = true;
     while (1) {
@@ -306,12 +306,12 @@ void bluetooth_monitor_task(void *param)
 }
 
 
-bool isAudioStarted()
+bool A2DP::isAudioStarted()
 {
     return AudioPlaying;
 }
 
-void A2dpAudioStop()
+void A2DP::A2dpAudioStop()
 {
     ESP_LOGI(TAG, "[ 7 ] Stop audio_pipeline");
     if (xBtTaskHandler != NULL) {
@@ -346,7 +346,7 @@ void A2dpAudioStop()
 }
 
 
-// void startA2dpService()
+// void A2DP::startA2dpService()
 // {
 //     audio_pipeline_handle_t pipeline;
 //     audio_element_handle_t fatfs_stream_reader, bt_stream_writer, music_decoder;
