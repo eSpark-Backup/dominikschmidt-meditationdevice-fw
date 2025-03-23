@@ -265,8 +265,17 @@ void System::sendEvents(ButtonState state, int screenCount)
         event_code = LV_EVENT_PRESSED;
         if(screenCount == 6)
         {
-            ESP_LOGI(TAG, "startA2dpService");
-            btAudio.A2dpAudioStart("/sdcard/converted/Stream 1.wav");
+            static int countStart = 0; // testcode
+            ESP_LOGE(TAG, "startA2dpService : %d", countStart);
+                 if(countStart == 0)     btAudio.A2dpAudioStart("/sdcard/converted/test.mp3");
+            else if(countStart == 1)     btAudio.A2dpAudioStart("/sdcard/converted/Stream 1.wav");
+            else if(countStart == 2)     btAudio.A2dpAudioStart("/sdcard/converted/Birds 2.wav");
+            else if(countStart == 3)     btAudio.A2dpAudioStart("/sdcard/converted/Stream 2.wav");
+            else if(countStart == 4)     btAudio.A2dpAudioStart("/sdcard/converted/Thunder 1.wav");
+            else if(countStart == 5)     btAudio.A2dpAudioStart("/sdcard/converted/Birds 1.wav");
+            else                         btAudio.A2dpAudioStart("/sdcard/converted/Thunder 2.wav");
+            countStart++;
+            if(countStart>=6) countStart = 0;
         }
     }
     else if(state == BUTTON_NONE && screenCount == -1)

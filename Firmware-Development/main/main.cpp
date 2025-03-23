@@ -44,7 +44,7 @@ static uint32_t my_tick(void)
 
 extern "C" void app_main(void)
 {
-    xTaskCreatePinnedToCore( lvglTask,"LVGL Task", 8192, NULL, 1, NULL, 0);
+    xTaskCreatePinnedToCore( lvglTask,"LVGL Task", 8192, NULL, 5, NULL, 1);
     return;
 }
 
