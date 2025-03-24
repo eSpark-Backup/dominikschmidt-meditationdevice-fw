@@ -22,6 +22,7 @@
 
 
 /*Set to your screen resolution and rotation*/
+static const char *TAG = "MAIN";
 #define TFT_HOR_RES   360
 #define TFT_VER_RES   360
 #define TFT_ROTATION  LV_DISPLAY_ROTATION_270
@@ -44,7 +45,27 @@ static uint32_t my_tick(void)
 
 extern "C" void app_main(void)
 {
+    btAudio.mountSDcard();
     xTaskCreatePinnedToCore( lvglTask,"LVGL Task", 8192, NULL, 5, NULL, 1);
+    
+    //testing reading and writing to sdcard
+    // Create favourites
+    Favourite fav1 = {10, "Nature Sounds", "Rain On Leaves", true};
+    Favourite fav2 = {15, "White Noise", "Ocean Waves", false};
+
+    // Save favourites in JSON
+    storagCard.save_favourite_to_json("Favourite 1", fav1);
+    storagCard.save_favourite_to_json("Favourite 2", fav2);
+
+    // Read a favourite from JSON
+    Favourite loadedFav;
+    if (storagCard.read_favourite_from_json("Favourite 1", &loadedFav)) {
+        ESP_LOGI(TAG, "Successfully loaded Favourite 1");
+    } else {
+        ESP_LOGE(TAG, "Favourite not found!");
+    }
+ 
+
     return;
 }
 

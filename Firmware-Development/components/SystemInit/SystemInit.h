@@ -8,6 +8,7 @@
 #include "lvgl.h"
 #include "RotaryEncoder.h"
 #include "A2dpSource.hpp"
+#include "SdCard.hpp"
 #include "screens.h"
 #include "esp_timer.h"
 #include "driver/ledc.h"

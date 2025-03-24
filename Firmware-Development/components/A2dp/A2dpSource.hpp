@@ -25,6 +25,7 @@ class A2DP
 {
     public:
         void A2dpServiceInit();
+        void mountSDcard();
         void A2dpAudioStart(char *filepath);
         void A2dpAudioStop();
         bool isAudioStarted();

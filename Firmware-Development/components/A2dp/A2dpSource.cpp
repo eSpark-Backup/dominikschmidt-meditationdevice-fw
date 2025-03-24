@@ -20,7 +20,6 @@ static esp_peer_bdname_t remote_bt_device_name;
 static bool device_found = false;
 static esp_bd_addr_t remote_bd_addr = {0};
 
-#define MOUNT_POINT "/sdcard/sdcard"
 audio_pipeline_handle_t pipeline;
 audio_element_handle_t fatfs_stream_reader, bt_stream_writer, music_decoder;
 esp_periph_set_handle_t set;
@@ -184,17 +183,6 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
 
 void A2DP::A2dpServiceInit()
 {
-    esp_err_t err = nvs_flash_init();
-    if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        err = nvs_flash_init();
-    }
-    
-    ESP_LOGI(TAG, "[ 1 ] Mount sdcard");
-    esp_periph_config_t periph_cfg = DEFAULT_ESP_PERIPH_SET_CONFIG();
-    set = esp_periph_set_init(&periph_cfg);
-    audio_board_sdcard_init(set, SD_MODE_SPI);
-
     ESP_LOGI(TAG, "[ 2 ] Bluetooth setup");
     esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_BLE));
@@ -265,6 +253,19 @@ void A2DP::A2dpServiceInit()
 
 }
 
+void A2DP::mountSDcard()
+{
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+    
+    ESP_LOGI(TAG, "[ 1 ] Mount sdcard");
+    esp_periph_config_t periph_cfg = DEFAULT_ESP_PERIPH_SET_CONFIG();
+    set = esp_periph_set_init(&periph_cfg);
+    audio_board_sdcard_init(set, SD_MODE_SPI);
+}
 void A2DP::A2dpAudioStart(char *filepath)
 {
     static bool startedOnce = false;
