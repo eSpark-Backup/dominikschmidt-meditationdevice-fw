@@ -48,22 +48,37 @@ extern "C" void app_main(void)
     btAudio.mountSDcard();
     xTaskCreatePinnedToCore( lvglTask,"LVGL Task", 8192, NULL, 5, NULL, 1);
     
-    //testing reading and writing to sdcard
-    // Create favourites
-    Favourite fav1 = {10, "Nature Sounds", "Rain On Leaves", true};
-    Favourite fav2 = {15, "White Noise", "Ocean Waves", false};
+    // //testing reading and writing to sdcard
+    // // Create favourites
+    // Favourite fav1 = {1500, "Nature Sounds", "Waves", true}; // 25:03
+    // Favourite fav2 = {220, "Nature Sounds", "Thunder", true}; // 3:50
+    // Favourite fav3 = {170, "Nature Sounds", "Garden Rain", true}; // 3:00
+    // Favourite fav4 = {115, "Nature Sounds", "Streams", false}; // 2:02
+    // Favourite fav5 = {145, "Nature Sounds", "Forest Rain", false}; // 2:32
+    // Favourite fav6 = {145, "Nature Sounds", "Birds", false}; //2:30
 
-    // Save favourites in JSON
-    storagCard.save_favourite_to_json("Favourite 1", fav1);
-    storagCard.save_favourite_to_json("Favourite 2", fav2);
+    // // Save favourites in JSON
+    // storagCard.save_favourite_to_json("Favourite 1", fav1);
+    // storagCard.save_favourite_to_json("Favourite 2", fav2);
+    // storagCard.save_favourite_to_json("Favourite 3", fav3);
+    // storagCard.save_favourite_to_json("Favourite 4", fav4);
+    // storagCard.save_favourite_to_json("Favourite 5", fav5);
+    // storagCard.save_favourite_to_json("Favourite 6", fav6);
 
     // Read a favourite from JSON
     Favourite loadedFav;
-    if (storagCard.read_favourite_from_json("Favourite 1", &loadedFav)) {
-        ESP_LOGI(TAG, "Successfully loaded Favourite 1");
-    } else {
-        ESP_LOGE(TAG, "Favourite not found!");
-    }
+    storagCard.read_favourite_from_json("Favourite 1", &loadedFav);
+    storagCard.read_favourite_from_json("Favourite 2", &loadedFav);
+    storagCard.read_favourite_from_json("Favourite 3", &loadedFav);
+    storagCard.read_favourite_from_json("Favourite 4", &loadedFav);
+    storagCard.read_favourite_from_json("Favourite 5", &loadedFav);
+    storagCard.read_favourite_from_json("Favourite 6", &loadedFav);
+
+    // if (storagCard.read_favourite_from_json("Favourite 1", &loadedFav)) {
+    //     ESP_LOGI(TAG, "Successfully loaded Favourite 1");
+    // } else {
+    //     ESP_LOGE(TAG, "Favourite not found!");
+    // }
  
 
     return;

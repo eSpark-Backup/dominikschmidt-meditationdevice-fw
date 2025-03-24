@@ -270,10 +270,10 @@ void System::sendEvents(ButtonState state, int screenCount)
             static int countStart = 0; // testcode
             ESP_LOGE(TAG, "startA2dpService : %d", countStart);
                  if(countStart == 0)     btAudio.A2dpAudioStart("/sdcard/converted/test.mp3");
-            else if(countStart == 1)     btAudio.A2dpAudioStart("/sdcard/converted/Stream 1.wav");
-            else if(countStart == 2)     btAudio.A2dpAudioStart("/sdcard/converted/Birds 2.wav");
-            else if(countStart == 3)     btAudio.A2dpAudioStart("/sdcard/converted/Stream 2.wav");
-            else if(countStart == 4)     btAudio.A2dpAudioStart("/sdcard/converted/Thunder 1.wav");
+            else if(countStart == 1)     btAudio.A2dpAudioStart("/sdcard/converted/Stream 1.wav", 300);
+            else if(countStart == 2)     btAudio.A2dpAudioStart("/sdcard/converted/Birds 2.wav", 100);
+            else if(countStart == 3)     btAudio.A2dpAudioStart("/sdcard/converted/Stream 2.wav", 50);
+            else if(countStart == 4)     btAudio.A2dpAudioStart("/sdcard/converted/Thunder 1.wav", 450);
             else if(countStart == 5)     btAudio.A2dpAudioStart("/sdcard/converted/Birds 1.wav");
             else                         btAudio.A2dpAudioStart("/sdcard/converted/Thunder 2.wav");
             countStart++;

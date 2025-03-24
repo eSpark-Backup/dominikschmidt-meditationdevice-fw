@@ -7,10 +7,19 @@
 
 #include "images.h"
 #include "ScreenHelpers/ui_helpers.h"
+#include <stdio.h>
+#include <string.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef struct {
+    int timer;
+    char soundType[50];
+    char soundNumber[50];
+    bool endGong;
+} FavLbl;
 
 // SCREEN: ui_FavPreviewScreen
 void ui_FavPreview_screen_init(void);
@@ -18,6 +27,7 @@ void ui_event_FavEditTimeEvent(lv_event_t * e);
 void ui_event_FavEditTuneEvent(lv_event_t * e);
 void ui_event_FavEditSoundEvent(lv_event_t * e);
 void ui_event_FavEditGongEvent(lv_event_t * e);
+void loadReadData(FavLbl data, int favCount);
 extern lv_obj_t *ui_FavPreviewScreen;
 extern lv_obj_t *ui_FavPreviewLabel;
 extern lv_obj_t *ui_FavEditTimeInfo;
@@ -41,6 +51,7 @@ extern lv_obj_t *ui_FavEditStartBtnLbl;
 extern lv_obj_t *ui_FavEditStartBtnIcon;
 extern lv_obj_t *ui_HiddenFavPrevBtn;
 extern lv_group_t *FavPrevGroup;
+extern FavLbl loadFav;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

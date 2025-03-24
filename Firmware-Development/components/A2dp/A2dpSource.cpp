@@ -18,6 +18,7 @@ typedef uint8_t esp_peer_bdname_t[ESP_BT_GAP_MAX_BDNAME_LEN + 1];
 static const char *TAG = "BLUETOOTH_A2DP";
 static esp_peer_bdname_t remote_bt_device_name;
 static bool device_found = false;
+static bool deviceConnected = false;
 static esp_bd_addr_t remote_bd_addr = {0};
 
 audio_pipeline_handle_t pipeline;
@@ -151,8 +152,16 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
                         ESP_LOGI(TAG, "Device discovery stopped.");
                         ESP_LOGI(TAG, "a2dp connecting to peer: %s", remote_bt_device_name);
                         device_found = false;
-                        esp_a2d_source_connect(remote_bd_addr);
-                    } else {
+                        if(esp_a2d_source_connect(remote_bd_addr) == ESP_OK)
+                        {
+                            deviceConnected = true;
+                        }
+                        else
+                        {
+                            deviceConnected = false;
+                        }
+                    } else if(deviceConnected)
+                    {
                         // not discovered, continue to discover
                         ESP_LOGI(TAG, "Device discovery failed, continue to discover...");
                         esp_bt_gap_start_discovery(ESP_BT_INQ_MODE_GENERAL_INQUIRY, 10, 0);
@@ -191,8 +200,25 @@ void A2DP::A2dpServiceInit()
     ESP_ERROR_CHECK(esp_bluedroid_init());
     ESP_ERROR_CHECK(esp_bluedroid_enable());
 
-    esp_bt_dev_set_device_name("ESP_SOURCE_STREAM_DEMO");
+    
+    const char *remote_name = NULL;
+    remote_name = "RONIN (R-140)"; // CONFIG_BT_REMOTE_NAME;
+    if (remote_name) {
+        memcpy(&remote_bt_device_name, remote_name, strlen(remote_name) + 1);
+    } else {
+        memcpy(&remote_bt_device_name, "RONIN (R-140)", ESP_BT_GAP_MAX_BDNAME_LEN);
+    }
+    
+    a2dp_stream_config_t a2dp_config = {
+        .type = AUDIO_STREAM_WRITER,
+        .user_callback = {0},
+    };
+    bt_stream_writer = a2dp_stream_init(&a2dp_config);
+    // esp_bt_dev_set_device_name("ESP_SOURCE_STREAM_DEMO");
     esp_bt_gap_register_callback(bt_app_gap_cb);
+    
+    esp_bt_gap_start_discovery(ESP_BT_INQ_MODE_GENERAL_INQUIRY, 10, 0);
+    esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
     
     ESP_LOGI(TAG, "[ 3 ] Create bt peripheral");
     bt_periph = bt_create_periph();
@@ -216,23 +242,6 @@ void A2DP::A2dpServiceInit()
     }
     mem_assert(music_decoder);
 
-
-    const char *remote_name = NULL;
-    remote_name = "RONIN (R-140)"; // CONFIG_BT_REMOTE_NAME;
-    if (remote_name) {
-        memcpy(&remote_bt_device_name, remote_name, strlen(remote_name) + 1);
-    } else {
-        memcpy(&remote_bt_device_name, "RONIN (R-140)", ESP_BT_GAP_MAX_BDNAME_LEN);
-    }
-        
-    a2dp_stream_config_t a2dp_config = {
-        .type = AUDIO_STREAM_WRITER,
-        .user_callback = {0},
-    };
-    bt_stream_writer = a2dp_stream_init(&a2dp_config);
-    
-    esp_bt_gap_start_discovery(ESP_BT_INQ_MODE_GENERAL_INQUIRY, 10, 0);
-    esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
 
     
     ESP_LOGI(TAG, "[ 5 ] Register pipeline elements");
@@ -266,62 +275,114 @@ void A2DP::mountSDcard()
     set = esp_periph_set_init(&periph_cfg);
     audio_board_sdcard_init(set, SD_MODE_SPI);
 }
-void A2DP::A2dpAudioStart(char *filepath)
+
+void A2DP::A2dpAudioStart(char *filepath, int play_time_sec) 
 {
     static bool startedOnce = false;
-    if(startedOnce)
-    {
-        if(AudioPlaying) A2dpAudioStop(); // Stop and clean up previous audio playback
 
-        ESP_LOGW(TAG, "[Restarting] Setting new file: %s", filepath);
-    
-        // Reinitialize elements
-        fatfs_stream_cfg_t fatfs_cfg = FATFS_STREAM_CFG_DEFAULT();
-        fatfs_cfg.type = AUDIO_STREAM_READER;
-        fatfs_stream_reader = fatfs_stream_init(&fatfs_cfg);
+    if (startedOnce)
+    {
+        if (AudioPlaying) A2dpAudioStop(); // Stop previous playback
         
-        if (strstr(filepath, ".mp3")) {
-            mp3_decoder_cfg_t mp3_cfg = DEFAULT_MP3_DECODER_CONFIG();
-            music_decoder = mp3_decoder_init(&mp3_cfg);
-        } else {
-            wav_decoder_cfg_t wav_cfg = DEFAULT_WAV_DECODER_CONFIG();
-            music_decoder = wav_decoder_init(&wav_cfg);
-        }
-    
-        a2dp_stream_config_t a2dp_config = {
-            .type = AUDIO_STREAM_WRITER,
-            .user_callback = {0},
-        };
-        bt_stream_writer = a2dp_stream_init(&a2dp_config);
-    
-        // Re-register elements
-        audio_pipeline_register(pipeline, fatfs_stream_reader, "file");
-        audio_pipeline_register(pipeline, music_decoder, "dec");
-        audio_pipeline_register(pipeline, bt_stream_writer, "bt");
-    
-        const char *link_tag[3] = {"file", "dec", "bt"};
-        audio_pipeline_link(pipeline, &link_tag[0], 3);
-    
-        // Set new file and start playback
-        audio_element_set_uri(fatfs_stream_reader, filepath);
+        ESP_LOGW(TAG, "[Playing] Setting new file: %s for %d seconds", filepath, play_time_sec);
+
+    // Initialize elements
+    fatfs_stream_cfg_t fatfs_cfg = FATFS_STREAM_CFG_DEFAULT();
+    fatfs_cfg.type = AUDIO_STREAM_READER;
+    fatfs_stream_reader = fatfs_stream_init(&fatfs_cfg);
+
+    if (strstr(filepath, ".mp3")) {
+        mp3_decoder_cfg_t mp3_cfg = DEFAULT_MP3_DECODER_CONFIG();
+        music_decoder = mp3_decoder_init(&mp3_cfg);
+    } else {
+        wav_decoder_cfg_t wav_cfg = DEFAULT_WAV_DECODER_CONFIG();
+        music_decoder = wav_decoder_init(&wav_cfg);
     }
+
+    a2dp_stream_config_t a2dp_config = {
+        .type = AUDIO_STREAM_WRITER,
+        .user_callback = {0},
+    };
+    bt_stream_writer = a2dp_stream_init(&a2dp_config);
+
+    // Register elements
+    audio_pipeline_register(pipeline, fatfs_stream_reader, "file");
+    audio_pipeline_register(pipeline, music_decoder, "dec");
+    audio_pipeline_register(pipeline, bt_stream_writer, "bt");
+    
+    const char *link_tag[3] = {"file", "dec", "bt"};
+    audio_pipeline_link(pipeline, &link_tag[0], 3);
+    
+    // Set file URI
+    audio_element_set_uri(fatfs_stream_reader, filepath);
+    }
+    else
+    {
+        esp_bt_gap_cancel_discovery();
+    }
+    
+    // Start playback
     audio_pipeline_run(pipeline);
     AudioPlaying = true;
     startedOnce = true;
 
-
-    // // Ensure BT never disconnects
-    // xTaskCreatePinnedToCore(
-    //     btAudio.bluetooth_monitor_task,
-    //     "BT_Monitor",
-    //     4096,
-    //     NULL,
-    //     5,
-    //     &xBtTaskHandler,
-    //     1);
-
-    
+    // if(play_time_sec > 10)
+    // {
+    //     // Allocate memory for task arguments
+    //     AudioTaskArgs* taskArgs = new AudioTaskArgs();
+    //     taskArgs->instance = this;
+    //     taskArgs->start_time = esp_timer_get_time();  // Get current time
+    //     taskArgs->play_time_us = (int64_t)play_time_sec * 1000000; // Convert seconds to microseconds
+        
+    //     // Create task for monitoring playback
+    //     xTaskCreatePinnedToCore(loopAudioTask, "BT_Monitor", 4096, taskArgs, 5, &xBtTaskHandler, 1);
+    // }
 }
+
+// Static function to be used with FreeRTOS task
+void A2DP::loopAudioTask(void *param)
+{
+    // Extract parameters
+    AudioTaskArgs *args = (AudioTaskArgs *)param;
+    A2DP* self = args->instance;
+    int64_t start_time = args->start_time;
+    int64_t play_time_us = args->play_time_us;
+    delete args; // Free memory after extracting values
+
+    ESP_LOGI(TAG, "loopAudioTask started");
+
+    while (AudioPlaying) 
+    {
+        audio_event_iface_msg_t msg;
+        esp_err_t ret = audio_event_iface_listen(evt, &msg, 1000); // Listen for events
+
+        if (ret == ESP_OK) 
+        {
+            if (msg.source_type == AUDIO_ELEMENT_TYPE_ELEMENT && msg.cmd == AEL_MSG_CMD_REPORT_STATUS) 
+            {
+                // Check if play time is exceeded
+                if ((int64_t)(esp_timer_get_time() - start_time) >= play_time_us) 
+                {
+                    ESP_LOGW(TAG, "[Stopping] Playback time reached");
+                    self->A2dpAudioStop();
+                    break;
+                }
+
+                // Restart audio when it finishes playing
+                if (msg.source == (void *)fatfs_stream_reader && msg.cmd == AEL_MSG_CMD_REPORT_STATUS) 
+                {
+                    ESP_LOGE(TAG, "[Looping] Restarting audio...");
+                    // audio_pipeline_stop(pipeline);
+                    // audio_pipeline_wait_for_stop(pipeline);
+                    audio_pipeline_run(pipeline);
+                }
+            }
+        }
+    }
+
+    vTaskDelete(NULL); // Delete the task when done
+}
+
 
 void A2DP::bluetooth_monitor_task(void *param)
 {

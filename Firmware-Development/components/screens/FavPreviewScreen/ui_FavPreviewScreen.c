@@ -30,6 +30,11 @@ lv_obj_t *ui_FavEditStartBtnLbl;
 lv_obj_t *ui_FavEditStartBtnIcon;
 lv_obj_t *ui_HiddenFavPrevBtn;
 lv_group_t *FavPrevGroup;
+FavLbl loadFav;
+char globalTimeLbl[20] = "10 min";
+char globalGongLbl[4] = "On";
+char soundType[50];
+char soundNumber[50];
 // CUSTOM VARIABLES
 
 
@@ -77,6 +82,7 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_style_bg_image_recolor(ui_FavEditTimeIcon, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_FavEditTimeIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+
     ui_FavEditTimeIconLbl = lv_label_create(ui_FavEditTimeInfo);
     lv_obj_set_width(ui_FavEditTimeIconLbl, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_FavEditTimeIconLbl, LV_SIZE_CONTENT);    /// 1
@@ -96,7 +102,7 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_x(ui_FavEditTimeLbl, 2);
     lv_obj_set_y(ui_FavEditTimeLbl, 10);
     lv_obj_set_align(ui_FavEditTimeLbl, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_FavEditTimeLbl, "10 min");
+    lv_label_set_text(ui_FavEditTimeLbl, globalTimeLbl);
     lv_obj_set_style_text_color(ui_FavEditTimeLbl, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_FavEditTimeLbl, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_FavEditTimeLbl, &lv_font_montserrat_28, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -142,7 +148,7 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_x(ui_FavEditTuneLbl, 4);
     lv_obj_set_y(ui_FavEditTuneLbl, 15);
     lv_obj_set_align(ui_FavEditTuneLbl, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_FavEditTuneLbl, "Nature Sounds");
+    lv_label_set_text(ui_FavEditTuneLbl, loadFav.soundType);
     lv_obj_set_style_text_color(ui_FavEditTuneLbl, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_FavEditTuneLbl, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_FavEditTuneLbl, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -190,7 +196,7 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_x(ui_FavEditSoundLvl, -1);
     lv_obj_set_y(ui_FavEditSoundLvl, 15);
     lv_obj_set_align(ui_FavEditSoundLvl, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_FavEditSoundLvl, "Rain on Leaves");
+    lv_label_set_text(ui_FavEditSoundLvl, loadFav.soundNumber);
     lv_obj_set_style_text_color(ui_FavEditSoundLvl, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_FavEditSoundLvl, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_FavEditSoundLvl, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -236,7 +242,7 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_x(ui_FavEditGongStatus, -1);
     lv_obj_set_y(ui_FavEditGongStatus, 15);
     lv_obj_set_align(ui_FavEditGongStatus, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_FavEditGongStatus, "On");
+    lv_label_set_text(ui_FavEditGongStatus, globalGongLbl);
     lv_obj_set_style_text_color(ui_FavEditGongStatus, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_FavEditGongStatus, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_FavEditGongStatus, &lv_font_montserrat_28, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -273,6 +279,8 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_align(ui_FavEditStartBtnIcon, LV_ALIGN_CENTER);
     lv_obj_remove_flag(ui_FavEditStartBtnIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_image_src(ui_FavEditStartBtnIcon, &ui_img_31_blackstarticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // storagCard.read_favourite_from_json("Favourite 1", &loadFav);
+    loadReadData(loadFav, 1);
     
     //Events
     lv_obj_add_event_cb(ui_FavEditTimeIconLbl,  ui_event_FavEditTimeEvent,  LV_EVENT_ALL, NULL);
@@ -341,4 +349,75 @@ void ui_event_FavEditGongEvent(lv_event_t * e)
     if(event_code == LV_EVENT_PRESSED) {
         _ui_screen_change(&ui_EndGong1, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_EndGong1_screen_init);
     }
+}
+
+
+void loadReadData(FavLbl data, int favCount)
+{
+    // // Convert timer to "min:sec" format
+    // int minutes = data.timer / 60;
+    // int seconds = data.timer % 60;
+    // char timeLbl[10];  // Buffer for "min:sec"
+    // snprintf(timeLbl, sizeof(timeLbl), "%02d:%02d", minutes, seconds);
+
+    // // Convert endGong to "On" or "Off"
+    // char GongLbl[5];  // Buffer for "On" or "Off"
+    // strcpy(GongLbl, data.endGong ? "On" : "Off");
+
+    // // Print results (for debugging)
+    // printf("Time: %s\n", timeLbl);
+    // printf("Gong: %s\n", GongLbl);
+
+    // // Assign to your global or UI variables if needed
+    // // Example:
+    // strcpy(globalTimeLbl, timeLbl);
+    // strcpy(globalGongLbl, GongLbl);
+
+    // Favourite fav1 = {1500, "Nature Sounds", "Waves", true}; // 25:03
+    // Favourite fav2 = {220, "Nature Sounds", "Thunder", true}; // 3:50
+    // Favourite fav3 = {170, "Nature Sounds", "Garden Rain", true}; // 3:00
+    // Favourite fav4 = {115, "Nature Sounds", "Streams", false}; // 2:02
+    // Favourite fav5 = {145, "Nature Sounds", "Forest Rain", false}; // 2:32
+    // Favourite fav6 = {145, "Nature Sounds", "Birds", false}; //2:30
+
+    strcpy(soundNumber, "Nature Sounds");
+    strcpy(globalGongLbl, favCount < 4 ? "On" : "Off");
+    if(favCount == 1)
+    {
+        strcpy(soundType, "Waves");
+        strcpy(globalTimeLbl, "25 min");
+    }
+    else if(favCount == 2)
+    {
+        strcpy(soundType, "Thunder");
+        strcpy(globalTimeLbl, "3 min 40s");
+    }
+    else if(favCount == 3)
+    {
+        strcpy(soundType, "Garder Rain");
+        strcpy(globalTimeLbl, "2 min 50s");
+    }
+    else if(favCount == 4)
+    {
+        strcpy(soundType, "Streams");
+        strcpy(globalTimeLbl, "2 min");
+    }
+    else if(favCount == 5)
+    {
+        strcpy(soundType, "Forest Rain");
+        strcpy(globalTimeLbl, "2 min 30s");
+    }
+    else if(favCount == 6)
+    {
+        strcpy(soundType, "Birds");
+        strcpy(globalTimeLbl, "2 min 20s");
+    }
+
+    lv_label_set_text(ui_FavEditTimeLbl, globalTimeLbl);
+    lv_obj_set_align(ui_FavEditTuneLbl, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_FavEditTuneLbl, soundNumber);
+    lv_obj_set_align(ui_FavEditSoundLvl, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_FavEditSoundLvl, soundType);
+    lv_label_set_text(ui_FavEditGongStatus, globalGongLbl); 
+
 }

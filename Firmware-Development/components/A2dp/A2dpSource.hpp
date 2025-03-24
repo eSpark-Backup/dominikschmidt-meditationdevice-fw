@@ -21,23 +21,33 @@
 #include <dirent.h>
 
 
+
+
 class A2DP
 {
     public:
         void A2dpServiceInit();
         void mountSDcard();
-        void A2dpAudioStart(char *filepath);
+        void A2dpAudioStart(char *filepath, int play_time_sec = 0);
         void A2dpAudioStop();
         bool isAudioStarted();
         
     private:
         static void bluetooth_monitor_task(void *param);
+        static void loopAudioTask(void *param);
         static void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param);
         static void filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param);
         static bool get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len);
         static char *bda2str(esp_bd_addr_t bda, char *str, size_t size);
 
 };
+
+// Structure to pass data to the task
+typedef struct {
+    A2DP* instance;    // Pointer to A2DP instance
+    int64_t start_time;
+    int64_t play_time_us;
+} AudioTaskArgs;
 
 extern A2DP btAudio;
 
