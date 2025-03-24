@@ -22,7 +22,10 @@ void RotaryEncoder::checkEncoderState()
             _encoder.counter--;
             _encoder.direction = DIRECTION_CCW;
         }
-        // printf("Encoder value: %d - %d\n", _encoder.counter, _encoder.direction);
+    }
+    else
+    {
+        _encoder.direction = DIRECTION_NONE;
     }
     _prev_CLK_state = CLK_state;
 }

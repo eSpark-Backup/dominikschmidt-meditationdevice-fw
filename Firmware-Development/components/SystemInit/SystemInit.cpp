@@ -18,6 +18,7 @@ static int numButtons;
 #define ENC_CHB GPIO_NUM_26 // Encoder's DT pin
 RotaryEncoder Enc(ENC_CHA, ENC_CHB);
 static esp_timer_handle_t enc_timer;
+int encDiff = 0;
 
 /// Screens and Screen Groups
 lv_obj_t *Screen[TotalScreens];
@@ -117,26 +118,38 @@ void IRAM_ATTR System::checkButtons(void)
 
 void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
 {    
-    if (roller_selected)  // Only update if roller is in selection mode
-    {
-        Core.sendRollerAnimation();
-    }
-    checkButtons();
-    ButtonData Btn_A = {A, button1.getState()};
-    ButtonData Btn_B = {B, button2.getState()};
+    static int last_encoder_counter = 0;
+    EncoderState enc = Enc.getEncoderState();
+    ButtonData Btn_A, Btn_B;
+    int newCounter = enc.counter;
+    encDiff = newCounter - last_encoder_counter;
     
-    if (Btn_A.State == BUTTON_SINGLE_CLICK || Btn_A.State == BUTTON_DOUBLE_CLICK) {
-        // ESP_LOGI(TAG, "Button A event");
-        NavigateScreens(Btn_A);
-    } 
-    else if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_DOUBLE_CLICK || Btn_B.State == BUTTON_LONG_HOLD) {
-         NavigateScreens(Btn_B);
-    } 
-    else 
+    last_encoder_counter = newCounter;
+    if (roller_selected && roller != NULL)  // Only update if roller is in selection mode
+    {
+        rotateRoller(encDiff);
+    }
+    if(encDiff != 0 && !navigatingWidgets) {
+        NavigateScreens(Btn_A, encDiff);
+    }
+    else
+    {
+        checkButtons();
+        Btn_A = {A, button1.getState()};
+        Btn_B = {B, button2.getState()};
+        
+        if (Btn_A.State == BUTTON_SINGLE_CLICK || Btn_A.State == BUTTON_DOUBLE_CLICK) {
+            NavigateScreens(Btn_A, encDiff);
+        } 
+        else if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_DOUBLE_CLICK || Btn_B.State == BUTTON_LONG_HOLD) {
+            NavigateScreens(Btn_B, encDiff);
+        } 
+        else 
         data->state = LV_INDEV_STATE_RELEASED; // No need to pass a key, just release
+    }
 }
 
-void System::NavigateScreens(ButtonData btnData)
+void System::NavigateScreens(ButtonData btnData, int encData)
 {
     static int screenCount = 0;
     bool screenChanged = false;
@@ -163,18 +176,35 @@ void System::NavigateScreens(ButtonData btnData)
                 }
             }
         }
-
-        // ESP_LOGI(TAG, "Widget Navigation deactivated, new screen group loaded");
     }
     if(btAudio.isAudioStarted() && screenCount != 6)
     {
         btAudio.A2dpAudioStop();
     }
-    if (btnData.ID == B) // Handle Button B for selection mode
+    if(encDiff != 0)
+    {
+        // Normal screen navigation
+        screenCount += encDiff;
+        screenChanged = true;
+
+        if (screenCount > 7) screenCount = 0;
+        if (screenCount < 0) screenCount = 7;
+
+        if (screenChanged) {
+            lv_disp_load_scr(Screen[screenCount]); // Load new screen
+            lastScreen = lv_screen_active();
+            
+            lv_indev_t *indev = lv_indev_get_next(NULL);
+            if (indev && ScreenGroup[screenCount]) {
+                lv_indev_set_group(indev, ScreenGroup[screenCount]);
+                lv_obj_send_event(Screen[screenCount], LV_EVENT_CANCEL, NULL);
+            }
+        }
+    }
+    else if (btnData.ID == B) // Handle Button B for selection mode
     {
         if (btnData.State == BUTTON_DOUBLE_CLICK) {  ///for testing changed to SINGLE else DOUBLE
             navigatingWidgets = !navigatingWidgets; // Exit widget navigation mode
-            // Serial.printf("Widget Navigation Mode %s\n", navigatingWidgets?"Activated":"Deactivated");
             sendEvents(BUTTON_NONE, -1);
             navigateWidgets(BUTTON_NONE, screenCount, navigatingWidgets);
         }
@@ -182,38 +212,10 @@ void System::NavigateScreens(ButtonData btnData)
             sendEvents(btnData.State, screenCount);
         } 
     }
-    
-    if (btnData.ID == A)
+    else if (btnData.ID == A)
     {
-        // ESP_LOGI(TAG, "Button A condition");
         if (navigatingWidgets) {
             navigateWidgets(btnData.State, screenCount);  // Call a new function to navigate widgets
-        }
-        else {
-            // Normal screen navigation
-            if (btnData.State == BUTTON_DOUBLE_CLICK) {
-                screenCount--;
-                screenChanged = true;
-            }
-            else if (btnData.State == BUTTON_SINGLE_CLICK) {
-                screenCount++;
-                screenChanged = true;
-            }
-            
-            // Wrap around
-            if (screenCount > 7) screenCount = 0;
-            if (screenCount < 0) screenCount = 7;
-            
-            if (screenChanged) {
-                lv_disp_load_scr(Screen[screenCount]); // Load new screen
-                lastScreen = lv_screen_active();
-                
-                lv_indev_t *indev = lv_indev_get_next(NULL);
-                if (indev && ScreenGroup[screenCount]) {
-                    lv_indev_set_group(indev, ScreenGroup[screenCount]);
-                    lv_obj_send_event(Screen[screenCount], LV_EVENT_CANCEL, NULL);
-                }
-            }
         }
     }
 }
@@ -298,21 +300,6 @@ void System::sendEvents(ButtonState state, int screenCount)
 
 void System::ButtonReadStatic(lv_indev_t * indev, lv_indev_data_t * data) {
     Core.ButtonRead(indev, data);
-}
-
-void System::sendRollerAnimation(void)
-{
-    if (roller == NULL) return;
-    
-    EncoderState enc;
-    enc = Enc.getEncoderState();
-    static int last_encoder_counter = 0;
-    int newCounter = enc.counter;  // Get the updated encoder count
-    int difference = newCounter - last_encoder_counter;  // Check how much the counter changed
-    
-    rotateRoller(difference);
-    
-    last_encoder_counter = newCounter;  // Update the previous counter value
 }
 
 void System::checkEncoder(void* arg)

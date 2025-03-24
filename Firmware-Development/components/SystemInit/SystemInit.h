@@ -45,10 +45,9 @@ class System
     void EncoderInit(void);
     void IRAM_ATTR checkButtons(void);
     static void checkEncoder(void* arg);
-    void NavigateScreens(ButtonData btnData);
+    void NavigateScreens(ButtonData btnData, int encData);
     void navigateWidgets(ButtonState state, int screenCount, bool focus = false);
     void sendEvents(ButtonState state, int screenCount);
-    void sendRollerAnimation(void);
 };
 
 extern System Core;
