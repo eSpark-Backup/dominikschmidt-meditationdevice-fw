@@ -18,7 +18,7 @@ typedef uint8_t esp_peer_bdname_t[ESP_BT_GAP_MAX_BDNAME_LEN + 1];
 static const char *TAG = "BLUETOOTH_A2DP";
 static esp_peer_bdname_t remote_bt_device_name;
 static bool device_found = false;
-static bool deviceConnected = false;
+bool deviceConnected = false;
 static esp_bd_addr_t remote_bd_addr = {0};
 
 #define MAX_SCANNED_DEVICES 6
@@ -199,18 +199,40 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
     return;
 }
 
+void bt_app_a2d_cb(esp_a2d_cb_event_t event, esp_a2d_cb_param_t *param) {
+    switch (event) {
+        case ESP_A2D_CONNECTION_STATE_EVT:
+            if (param->conn_stat.state == ESP_A2D_CONNECTION_STATE_CONNECTED) {
+                ESP_LOGI(TAG, "A2DP Connected to: %02X:%02X:%02X:%02X:%02X:%02X",
+                         param->conn_stat.remote_bda[0], param->conn_stat.remote_bda[1],
+                         param->conn_stat.remote_bda[2], param->conn_stat.remote_bda[3],
+                         param->conn_stat.remote_bda[4], param->conn_stat.remote_bda[5]);
+                         deviceConnected = true;
+            } else if (param->conn_stat.state == ESP_A2D_CONNECTION_STATE_DISCONNECTED) {
+                ESP_LOGI(TAG, "A2DP Disconnected.");
+                deviceConnected = false;
+            }
+            break;
+        default:
+            break;
+    }
+}
 
 /* Starts Bluetooth scanning */
 void A2DP::start_bt_scan() {
     ESP_LOGI(TAG, "Starting Bluetooth scan...");
     scanned_device_count = 0;  // Reset scanned devices count
     memset(scanned_devices, 0, sizeof(scanned_devices));
+    esp_bt_gap_register_callback(bt_app_gap_cb);
+    esp_a2d_register_callback(bt_app_a2d_cb);
+
     esp_bt_gap_start_discovery(ESP_BT_INQ_MODE_GENERAL_INQUIRY, 5, 0);
     esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
 }
 
 /* Connects to a Bluetooth device by name */
-bool A2DP::connect_to_bt_device(const char *device_name) {
+bool A2DP::connect_to_bt_device(const char *device_name)
+{
     for (int i = 0; i < scanned_device_count; i++) {
         if (strcmp(scanned_devices[i].name, device_name) == 0) {
             char bda_str[18];
@@ -224,6 +246,7 @@ bool A2DP::connect_to_bt_device(const char *device_name) {
             }
         }
     }
+    memset(deviceName, 0, BUF_SIZE);
     ESP_LOGW(TAG, "Device %s not found.", device_name);
     return false;
 }
@@ -243,7 +266,6 @@ void A2DP::A2dpServiceInit()
         .user_callback = {0},
     };
     bt_stream_writer = a2dp_stream_init(&a2dp_config);
-    esp_bt_gap_register_callback(bt_app_gap_cb);
     
     esp_bd_addr_t device_address = {0x41, 0x42, 0x49, 0x86, 0x62, 0x57}; 
     esp_a2d_source_disconnect(device_address);

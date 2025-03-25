@@ -21,7 +21,7 @@ lv_obj_t *ui_btDropdownList;
 lv_obj_t *ui_HiddenBTScrBtn;
 lv_group_t *BTGroup;
 bool list_selected = false;
-char *option_str = "Option 1\nOption 2\nOption 3\nOption 4\nOption 5\nOption 6";
+char deviceName[BUF_SIZE] = {0};
 // CUSTOM VARIABLES
 
 void ui_BluetoothScreen_screen_init(void)
@@ -235,6 +235,7 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_bg_opa(ui_pg15, 250, LV_PART_MAIN | LV_STATE_DEFAULT);
     
     ui_btDropdownList = lv_dropdown_create(ui_BluetoothScreen);
+    char *option_str = "Option 1\nOption 2\nOption 3\nOption 4\nOption 5\nOption 6";
     lv_dropdown_set_options(ui_btDropdownList, option_str);
     // lv_dropdown_set_text(ui_btDropdownList, "Select Bluetooth Device");
     lv_obj_set_width(ui_btDropdownList, 310);
@@ -305,6 +306,7 @@ void ui_event_btBtn(lv_event_t * e)
         lv_group_focus_obj(ui_btDropdownList);
         lv_dropdown_open(ui_btDropdownList);
         list_selected = true;
+        memset(deviceName, 0, BUF_SIZE);
     }
 }
 
@@ -313,12 +315,13 @@ void ui_event_btDropdownList(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_PRESSED) {
-        printf("ui_event_btDropdownList pressed");
         lv_dropdown_close(ui_btDropdownList);
         _ui_flag_modify(ui_btBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         _ui_flag_modify(ui_btDropdownList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         lv_group_focus_obj(ui_btBtn);
         list_selected = false;
+        lv_dropdown_get_selected_str(ui_btDropdownList, deviceName, BUF_SIZE);
+        printf("deviceName: %s\n",deviceName);
     }
 }
 
@@ -326,11 +329,6 @@ void rotateDropdown(int diff)
 {
     if (diff != 0)
     {
-        if(diff == 100)
-        {
-            lv_group_focus_obj(ui_btDropdownList);
-        }
-        printf("rotateDropdown: %d\n", diff);
         // Get the current selected index
         int current_index = lv_dropdown_get_selected(ui_btDropdownList);
         
@@ -356,7 +354,6 @@ void rotateDropdown(int diff)
         
         // Set new selected index
         lv_dropdown_set_selected(ui_btDropdownList, new_index);
-        lv_group_focus_obj(ui_btDropdownList);
     } 
 }
 

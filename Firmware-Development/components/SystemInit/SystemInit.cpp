@@ -25,7 +25,7 @@ lv_obj_t *Screen[TotalScreens];
 lv_group_t *ScreenGroup[TotalScreens];
 lv_group_t *currentGroup = NULL;
 bool navigatingWidgets = false;  // Tracks whether we are navigating widgets or screens
-
+bool isScanned = false;
 
 // LEDC Configuration
 #define PWM_CHANNEL    LEDC_CHANNEL_0
@@ -152,6 +152,11 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
         else 
             data->state = LV_INDEV_STATE_RELEASED; // No need to pass a key, just release
     }
+    if(deviceConnected)
+    {
+        _ui_state_modify(ui_btBtnIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+        _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+    }
 }
 
 void System::NavigateScreens(ButtonData btnData, int encData)
@@ -208,6 +213,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
         if(screenCount == 6)
         {
             btAudio.start_bt_scan();
+            isScanned = true;
         }
     }
     else if (btnData.ID == B) // Handle Button B for selection mode
@@ -219,6 +225,16 @@ void System::NavigateScreens(ButtonData btnData, int encData)
         }
         else if (btnData.State == BUTTON_SINGLE_CLICK || (btnData.State == BUTTON_LONG_HOLD)) {
             sendEvents(btnData.State, screenCount);
+
+            if(deviceName[0] != '\0' && isScanned)
+            {
+                if(btAudio.connect_to_bt_device(deviceName) || deviceConnected)
+                {
+                    _ui_state_modify(ui_btBtnIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+                    _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+                }
+                isScanned = false;
+            }
         } 
     }
     else if (btnData.ID == A)

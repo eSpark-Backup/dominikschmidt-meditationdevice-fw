@@ -11,8 +11,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+    
 // SCREEN: ui_BluetoothScreen
+#define BUF_SIZE  50
 void ui_BluetoothScreen_screen_init(void);
 void ui_event_btBtn(lv_event_t * e);
 void ui_event_btDropdownList(lv_event_t * e);
@@ -32,6 +33,7 @@ extern lv_obj_t * ui_btDropdownList;
 extern lv_obj_t * ui_HiddenBTScrBtn;
 extern lv_group_t * BTGroup;
 extern bool list_selected;
+extern char deviceName[BUF_SIZE];
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

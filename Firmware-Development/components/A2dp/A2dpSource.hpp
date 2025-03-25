@@ -9,6 +9,8 @@
 #include "esp_wifi.h"
 #include "sdkconfig.h"
 #include "esp_peripherals.h"
+#include "esp_bt_device.h"
+#include "esp_bt_main.h"
 #include "esp_gap_bt_api.h"
 
 #include "nvs_flash.h"
@@ -56,6 +58,6 @@ typedef struct {
 } AudioTaskArgs;
 
 extern A2DP btAudio;
-
+extern bool deviceConnected;
 
 #endif /*A2DPSOURCE_H */
