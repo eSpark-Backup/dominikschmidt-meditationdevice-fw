@@ -49,6 +49,7 @@ class System
     void NavigateScreens(ButtonData btnData, int encData);
     void navigateWidgets(ButtonState state, int screenCount, bool focus = false);
     void sendEvents(ButtonState state, int screenCount);
+    void loadAudio();
 };
 
 extern System Core;

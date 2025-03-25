@@ -32,6 +32,7 @@ extern lv_obj_t *ui_midRightHeart;
 extern lv_obj_t *ui_midGong;
 extern lv_obj_t *ui_HiddenEndGongBtn;
 extern lv_group_t *EndGongGroup;
+extern bool startMeditation;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

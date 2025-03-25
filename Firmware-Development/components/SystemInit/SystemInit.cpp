@@ -124,6 +124,11 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     int newCounter = enc.counter;
     encDiff = newCounter - last_encoder_counter;
     last_encoder_counter = newCounter;
+
+    if(startMeditation)
+    {   loadAudio();
+        startMeditation = false;
+    }
     
     if(encDiff != 0)
     {
@@ -154,6 +159,8 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     }
     if(deviceConnected)
     {
+        static bool Once = false;
+        if(!Once) {btAudio.A2dpAudioStart("/sdcard/converted/Birds 1.wav", 145); Once = true;}
         _ui_state_modify(ui_btBtnIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
         _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
     }
@@ -187,10 +194,10 @@ void System::NavigateScreens(ButtonData btnData, int encData)
             }
         }
     }
-    if(btAudio.isAudioStarted() && screenCount != 6)
-    {
-        btAudio.A2dpAudioStop();
-    }
+    // if(btAudio.isAudioStarted() && screenCount != 6)
+    // {
+    //     btAudio.A2dpAudioStop();
+    // }
     if(encDiff != 0 && !navigatingWidgets)
     {
         // Normal screen navigation
@@ -397,4 +404,36 @@ void memLog()
         heap_caps_get_free_size(MALLOC_CAP_INTERNAL),
         heap_caps_get_free_size(MALLOC_CAP_DEFAULT),
         getCurrentDuty());    
+    }
+    
+void System::loadAudio()
+{
+    if (strcmp(soundNumber, "Waves") == 0) {
+        btAudio.A2dpAudioStart("/sdcard/converted/Waves 1.wav", 1500);
+    }
+    else if (strcmp(soundNumber, "Thunder") == 0) {
+        btAudio.A2dpAudioStart("/sdcard/converted/Thunder 1.wav", 220);
+    }
+    else if (strcmp(soundNumber, "Garden Rain") == 0) {
+        btAudio.A2dpAudioStart("/sdcard/converted/Garden Rain 1.mp3", 170);
+    }
+    else if (strcmp(soundNumber, "Streams") == 0) {
+        btAudio.A2dpAudioStart("/sdcard/converted/Streams 1.wav", 115);
+    }
+    else if (strcmp(soundNumber, "Forest Rain") == 0) {
+        btAudio.A2dpAudioStart("/sdcard/converted/Forest Rain 1.mp3", 145);
+    }
+    else if (strcmp(soundNumber, "Birds") == 0) {
+        btAudio.A2dpAudioStart("/sdcard/converted/Birds 1.wav", 145);
+    }
+
+    
+    // Favourite fav1 = {1500, "Nature Sounds", "Waves", true}; // 25:03
+    // Favourite fav2 = {220, "Nature Sounds", "Thunder", true}; // 3:50
+    // Favourite fav3 = {170, "Nature Sounds", "Garden Rain", true}; // 3:00
+    // Favourite fav4 = {115, "Nature Sounds", "Streams", false}; // 2:02
+    // Favourite fav5 = {145, "Nature Sounds", "Forest Rain", false}; // 2:32
+    // Favourite fav6 = {145, "Nature Sounds", "Birds", false}; //2:30                     btAudio.A2dpAudioStart("/sdcard/converted/Thunder 2.wav");
+
 }
+    

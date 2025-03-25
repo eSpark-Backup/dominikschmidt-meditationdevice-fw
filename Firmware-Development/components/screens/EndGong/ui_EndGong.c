@@ -21,6 +21,7 @@ lv_obj_t *ui_midRightHeart;
 lv_obj_t *ui_midGong;
 lv_obj_t *ui_HiddenEndGongBtn;
 lv_group_t *EndGongGroup;
+bool startMeditation = false;
 
 void ui_EndGong1_screen_init(void)
 {
@@ -332,5 +333,6 @@ void ui_event_startBtnBox(lv_event_t * e)
 
     if(event_code == LV_EVENT_PRESSED) {
         _ui_screen_change(&ui_MeditationScreen, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_MeditationScreen_screen_init);
+        startMeditation = true;
     }
 }

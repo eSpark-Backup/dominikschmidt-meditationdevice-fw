@@ -52,6 +52,8 @@ extern lv_obj_t *ui_FavEditStartBtnIcon;
 extern lv_obj_t *ui_HiddenFavPrevBtn;
 extern lv_group_t *FavPrevGroup;
 extern FavLbl loadFav;
+extern char soundType[50];
+extern char soundNumber[50];
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

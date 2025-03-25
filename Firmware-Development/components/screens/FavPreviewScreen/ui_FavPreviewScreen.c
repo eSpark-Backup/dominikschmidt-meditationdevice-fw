@@ -394,7 +394,7 @@ void loadReadData(FavLbl data, int favCount)
     }
     else if(favCount == 3)
     {
-        strcpy(soundNumber, "Garder Rain");
+        strcpy(soundNumber, "Garden Rain");
         strcpy(globalTimeLbl, "2 min 50s");
     }
     else if(favCount == 4)
