@@ -129,7 +129,7 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     {
         rotateRoller(encDiff);
     }
-    if(encDiff != 0 && !navigatingWidgets) {
+    if (encDiff != 0) {
         NavigateScreens(Btn_A, encDiff);
     }
     else
@@ -181,7 +181,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
     {
         btAudio.A2dpAudioStop();
     }
-    if(encDiff != 0)
+    if(encDiff != 0 && !navigatingWidgets)
     {
         // Normal screen navigation
         screenCount += encDiff;

@@ -202,7 +202,7 @@ void A2DP::A2dpServiceInit()
 
     
     const char *remote_name = NULL;
-    remote_name = "RONIN (R-140)"; // CONFIG_BT_REMOTE_NAME;
+    remote_name = "F9"; // CONFIG_BT_REMOTE_NAME;
     if (remote_name) {
         memcpy(&remote_bt_device_name, remote_name, strlen(remote_name) + 1);
     } else {

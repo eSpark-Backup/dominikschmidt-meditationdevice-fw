@@ -148,7 +148,7 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_x(ui_FavEditTuneLbl, 4);
     lv_obj_set_y(ui_FavEditTuneLbl, 15);
     lv_obj_set_align(ui_FavEditTuneLbl, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_FavEditTuneLbl, loadFav.soundType);
+    lv_label_set_text(ui_FavEditTuneLbl, soundType);
     lv_obj_set_style_text_color(ui_FavEditTuneLbl, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_FavEditTuneLbl, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_FavEditTuneLbl, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -191,12 +191,12 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_style_text_font(ui_FavEditSoundIconLbl, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_FavEditSoundLvl = lv_label_create(ui_FavEditSoundInfo);
-    lv_obj_set_width(ui_FavEditSoundLvl, 154);
+    lv_obj_set_width(ui_FavEditSoundLvl, LV_SIZE_CONTENT);
     lv_obj_set_height(ui_FavEditSoundLvl, 30);
     lv_obj_set_x(ui_FavEditSoundLvl, -1);
     lv_obj_set_y(ui_FavEditSoundLvl, 15);
     lv_obj_set_align(ui_FavEditSoundLvl, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_FavEditSoundLvl, loadFav.soundNumber);
+    lv_label_set_text(ui_FavEditSoundLvl, soundNumber);
     lv_obj_set_style_text_color(ui_FavEditSoundLvl, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_FavEditSoundLvl, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_FavEditSoundLvl, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -380,44 +380,46 @@ void loadReadData(FavLbl data, int favCount)
     // Favourite fav5 = {145, "Nature Sounds", "Forest Rain", false}; // 2:32
     // Favourite fav6 = {145, "Nature Sounds", "Birds", false}; //2:30
 
-    strcpy(soundNumber, "Nature Sounds");
+    strcpy(soundType, "Nature Sounds");
     strcpy(globalGongLbl, favCount < 4 ? "On" : "Off");
     if(favCount == 1)
     {
-        strcpy(soundType, "Waves");
+        strcpy(soundNumber, "Waves");
         strcpy(globalTimeLbl, "25 min");
     }
     else if(favCount == 2)
     {
-        strcpy(soundType, "Thunder");
+        strcpy(soundNumber, "Thunder");
         strcpy(globalTimeLbl, "3 min 40s");
     }
     else if(favCount == 3)
     {
-        strcpy(soundType, "Garder Rain");
+        strcpy(soundNumber, "Garder Rain");
         strcpy(globalTimeLbl, "2 min 50s");
     }
     else if(favCount == 4)
     {
-        strcpy(soundType, "Streams");
+        strcpy(soundNumber, "Streams");
         strcpy(globalTimeLbl, "2 min");
     }
     else if(favCount == 5)
     {
-        strcpy(soundType, "Forest Rain");
+        strcpy(soundNumber, "Forest Rain");
         strcpy(globalTimeLbl, "2 min 30s");
     }
     else if(favCount == 6)
     {
-        strcpy(soundType, "Birds");
+        strcpy(soundNumber, "Birds");
         strcpy(globalTimeLbl, "2 min 20s");
     }
-
+    
     lv_label_set_text(ui_FavEditTimeLbl, globalTimeLbl);
+    if(favCount != 1 && favCount != 4) lv_obj_set_style_text_font(ui_FavEditTimeLbl, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    else lv_obj_set_style_text_font(ui_FavEditTimeLbl, &lv_font_montserrat_28, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_align(ui_FavEditTuneLbl, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_FavEditTuneLbl, soundNumber);
+    lv_label_set_text(ui_FavEditTuneLbl, soundType);
     lv_obj_set_align(ui_FavEditSoundLvl, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_FavEditSoundLvl, soundType);
+    lv_label_set_text(ui_FavEditSoundLvl, soundNumber);
     lv_label_set_text(ui_FavEditGongStatus, globalGongLbl); 
 
 }
