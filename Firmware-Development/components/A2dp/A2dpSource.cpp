@@ -444,3 +444,32 @@ void A2DP::A2dpAudioStop()
     // esp_bt_controller_deinit();
     // esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT);
 }
+
+
+void A2DP::update_dropdown_options(lv_obj_t *dropdown, char **options, int option_count)
+{
+    // Calculate required buffer size
+    size_t total_length = 1; // Start with 1 for null terminator
+
+    for (int i = 0; i < option_count; i++) {
+        total_length += strlen(options[i]) + 1; // +1 for '\n'
+    }
+
+    // Allocate memory
+    char *option_str = (char *)malloc(total_length);
+    if (option_str == NULL) return; // Handle memory allocation failure
+
+    option_str[0] = '\0'; // Initialize empty string
+
+    // Build the options string
+    for (int i = 0; i < option_count; i++) {
+        strcat(option_str, options[i]);
+        if (i < option_count - 1) strcat(option_str, "\n"); // Add '\n' between options
+    }
+
+    // Set dropdown options
+    lv_dropdown_set_options(dropdown, option_str);
+
+    // Free allocated memory
+    free(option_str);
+}

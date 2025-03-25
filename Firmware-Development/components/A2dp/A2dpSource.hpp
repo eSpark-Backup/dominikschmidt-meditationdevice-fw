@@ -2,6 +2,8 @@
 #define A2DPSOURCE_H
 
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <inttypes.h>
 #include "esp_log.h"
 #include "esp_wifi.h"
@@ -19,7 +21,7 @@
 #include "a2dp_stream.h"
 #include "fatfs_stream.h"
 #include <dirent.h>
-
+#include "screens.h"
 
 
 
@@ -31,6 +33,7 @@ class A2DP
         void A2dpAudioStart(char *filepath, int play_time_sec = 0);
         void A2dpAudioStop();
         bool isAudioStarted();
+        void update_dropdown_options(lv_obj_t *dropdown, char **options, int option_count);
         
     private:
         static void bluetooth_monitor_task(void *param);

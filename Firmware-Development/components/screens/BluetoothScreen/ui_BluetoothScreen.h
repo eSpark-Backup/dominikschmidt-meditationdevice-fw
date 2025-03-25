@@ -15,6 +15,8 @@ extern "C" {
 // SCREEN: ui_BluetoothScreen
 void ui_BluetoothScreen_screen_init(void);
 void ui_event_btBtn(lv_event_t * e);
+void ui_event_btDropdownList(lv_event_t * e);
+void rotateDropdown(int diff);
 extern lv_obj_t * ui_BluetoothScreen;
 extern lv_obj_t * ui_startBtnBox2;
 extern lv_obj_t * ui_startLabel2;
@@ -26,8 +28,10 @@ extern lv_obj_t * ui_btLabel2;
 extern lv_obj_t * ui_leftGong2;
 extern lv_obj_t * ui_midLeftHeart;
 extern lv_obj_t * ui_midBt;
-extern lv_obj_t *ui_HiddenBTScrBtn;
-extern lv_group_t *BTGroup;
+extern lv_obj_t * ui_btDropdownList;
+extern lv_obj_t * ui_HiddenBTScrBtn;
+extern lv_group_t * BTGroup;
+extern bool list_selected;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus
