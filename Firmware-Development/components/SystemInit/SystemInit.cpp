@@ -123,15 +123,19 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     ButtonData Btn_A, Btn_B;
     int newCounter = enc.counter;
     encDiff = newCounter - last_encoder_counter;
-    
     last_encoder_counter = newCounter;
-    if ((roller_selected && roller != NULL) || list_selected)  // Only update if roller is in selection mode
+    
+    if(encDiff != 0)
     {
-        if (roller_selected)        rotateRoller(encDiff);
-        else if (list_selected)     rotateDropdown(encDiff);
-    }
-    if (encDiff != 0) {
-        NavigateScreens(Btn_A, encDiff);
+        if ((roller_selected && roller != NULL) || list_selected)  // Only update if roller is in selection mode
+        {
+            if (roller_selected)        {rotateRoller(encDiff);return;}
+            else if (list_selected)     {rotateDropdown(encDiff);return;}
+        }
+        if (!roller_selected || !list_selected) {
+            Btn_A.ID = UNDEFINED;
+            NavigateScreens(Btn_A, encDiff);
+        }
     }
     else
     {
@@ -146,7 +150,7 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
             NavigateScreens(Btn_B, encDiff);
         } 
         else 
-        data->state = LV_INDEV_STATE_RELEASED; // No need to pass a key, just release
+            data->state = LV_INDEV_STATE_RELEASED; // No need to pass a key, just release
     }
 }
 
@@ -200,6 +204,10 @@ void System::NavigateScreens(ButtonData btnData, int encData)
                 lv_indev_set_group(indev, ScreenGroup[screenCount]);
                 lv_obj_send_event(Screen[screenCount], LV_EVENT_CANCEL, NULL);
             }
+        }
+        if(screenCount == 6)
+        {
+            btAudio.start_bt_scan();
         }
     }
     else if (btnData.ID == B) // Handle Button B for selection mode

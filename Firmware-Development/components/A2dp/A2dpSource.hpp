@@ -34,6 +34,8 @@ class A2DP
         void A2dpAudioStop();
         bool isAudioStarted();
         void update_dropdown_options(lv_obj_t *dropdown, char **options, int option_count);
+        void start_bt_scan();
+        bool connect_to_bt_device(const char *device_name);
         
     private:
         static void bluetooth_monitor_task(void *param);
@@ -42,6 +44,7 @@ class A2DP
         static void filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param);
         static bool get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len);
         static char *bda2str(esp_bd_addr_t bda, char *str, size_t size);
+        static void update_bt_dropdown(lv_obj_t *dropdown);
 
 };
 

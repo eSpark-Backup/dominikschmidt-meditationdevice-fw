@@ -236,7 +236,7 @@ void ui_BluetoothScreen_screen_init(void)
     
     ui_btDropdownList = lv_dropdown_create(ui_BluetoothScreen);
     lv_dropdown_set_options(ui_btDropdownList, option_str);
-    lv_dropdown_set_text(ui_btDropdownList, "Select Bluetooth Device");
+    // lv_dropdown_set_text(ui_btDropdownList, "Select Bluetooth Device");
     lv_obj_set_width(ui_btDropdownList, 310);
     lv_obj_set_height(ui_btDropdownList, LV_SIZE_CONTENT);    /// 54
     lv_obj_set_x(ui_btDropdownList, -1);
@@ -254,12 +254,16 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_btDropdownList), lv_color_hex(0x424242),  LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_btDropdownList), 255,  LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_set_style_text_color(lv_dropdown_get_list(ui_btDropdownList), lv_color_hex(0x00FF6D),
+    lv_obj_set_style_text_color(lv_dropdown_get_list(ui_btDropdownList), lv_color_hex(0x000000),
                                 LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(lv_dropdown_get_list(ui_btDropdownList), 255,  LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_btDropdownList), lv_color_hex(0x424242),
                               LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_btDropdownList), 255,  LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_btDropdownList), lv_color_hex(0x424242),
+                              LV_PART_SELECTED | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_btDropdownList), 255,  LV_PART_SELECTED | LV_STATE_CHECKED);
+
 
 
     //Events
@@ -295,7 +299,7 @@ void ui_event_btBtn(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     
-    if(event_code == LV_EVENT_PRESSED) {
+    if(event_code == LV_EVENT_LONG_PRESSED) {
         _ui_flag_modify(ui_btBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_btDropdownList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         lv_group_focus_obj(ui_btDropdownList);
@@ -320,33 +324,40 @@ void ui_event_btDropdownList(lv_event_t * e)
 
 void rotateDropdown(int diff)
 {
-    if (diff == 0) return;
-    printf("rotateDropdown: %d\n", diff);
-    // Get the current selected index
-    int current_index = lv_dropdown_get_selected(ui_btDropdownList);
-
-    // Get the total number of options
-    const char *options = lv_dropdown_get_options(ui_btDropdownList);
-    int total_options = 0;
-
-    // Count the number of options by counting '\n' occurrences
-    for (const char *p = options; *p; p++)
+    if (diff != 0)
     {
-        if (*p == '\n') total_options++;
-    }
-    total_options++; // Add one for the last option (no '\n' at the end)
-
-    // Update index based on rotation direction
-    int new_index = current_index + diff;
-
-    // Ensure index stays within valid bounds
-    if (new_index < 0) 
+        if(diff == 100)
+        {
+            lv_group_focus_obj(ui_btDropdownList);
+        }
+        printf("rotateDropdown: %d\n", diff);
+        // Get the current selected index
+        int current_index = lv_dropdown_get_selected(ui_btDropdownList);
+        
+        // Get the total number of options
+        const char *options = lv_dropdown_get_options(ui_btDropdownList);
+        int total_options = 0;
+        
+        // Count the number of options by counting '\n' occurrences
+        for (const char *p = options; *p; p++)
+        {
+            if (*p == '\n') total_options++;
+        }
+        total_options++; // Add one for the last option (no '\n' at the end)
+        
+        // Update index based on rotation direction
+        int new_index = current_index + diff;
+        
+        // Ensure index stays within valid bounds
+        if (new_index < 0) 
         new_index = total_options - 1; // Wrap around to the last item
-    else if (new_index >= total_options) 
+        else if (new_index >= total_options) 
         new_index = 0; // Wrap around to the first item
-
-    // Set new selected index
-    lv_dropdown_set_selected(ui_btDropdownList, new_index);
+        
+        // Set new selected index
+        lv_dropdown_set_selected(ui_btDropdownList, new_index);
+        lv_group_focus_obj(ui_btDropdownList);
+    } 
 }
 
 

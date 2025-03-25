@@ -21,6 +21,18 @@ static bool device_found = false;
 static bool deviceConnected = false;
 static esp_bd_addr_t remote_bd_addr = {0};
 
+#define MAX_SCANNED_DEVICES 6
+
+typedef struct {
+    char name[ESP_BT_GAP_MAX_BDNAME_LEN + 1];
+    esp_bd_addr_t bda;
+} ScannedDevice;
+
+static ScannedDevice scanned_devices[MAX_SCANNED_DEVICES];
+static int scanned_device_count = 0;
+// bool deviceConnected = false;
+
+
 audio_pipeline_handle_t pipeline;
 audio_element_handle_t fatfs_stream_reader, bt_stream_writer, music_decoder;
 esp_periph_set_handle_t set;
@@ -91,16 +103,28 @@ bool A2DP::get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len)
     return false;
 }
 
-void A2DP::filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param)
-{
+void A2DP::filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param) {
+    if (scanned_device_count >= MAX_SCANNED_DEVICES) return;  // Stop if array is full
+
     char bda_str[18];
+    esp_peer_bdname_t peer_bdname;
+    uint8_t *eir = NULL;
+    esp_bt_gap_dev_prop_t *p;
     uint32_t cod = 0;
     int32_t rssi = -129; /* invalid value */
-    uint8_t *eir = NULL;
-    esp_peer_bdname_t peer_bdname;
-    esp_bt_gap_dev_prop_t *p;
+    bool name_found = false;
 
     ESP_LOGI(TAG, "Scanned device: %s", bda2str(param->disc_res.bda, bda_str, 18));
+
+    // Check if device already exists
+    for (int i = 0; i < scanned_device_count; i++) {
+        if (memcmp(scanned_devices[i].bda, param->disc_res.bda, ESP_BD_ADDR_LEN) == 0) {
+            ESP_LOGI(TAG, "Device %s already scanned, skipping.", bda_str);
+            return;  // ✅ Skip duplicate device
+        }
+    }
+
+    // Extract device properties
     for (int i = 0; i < param->disc_res.num_prop; i++) {
         p = param->disc_res.prop + i;
         switch (p->type) {
@@ -114,28 +138,31 @@ void A2DP::filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param)
                 break;
             case ESP_BT_GAP_DEV_PROP_EIR:
                 eir = (uint8_t *)(p->val);
-                get_name_from_eir(eir, (uint8_t *)&peer_bdname, NULL);
-                ESP_LOGI(TAG, "--Name: %s", peer_bdname);
+                if (get_name_from_eir(eir, (uint8_t *)&peer_bdname, NULL)) {
+                    name_found = true;
+                    ESP_LOGI(TAG, "--Name: %s", peer_bdname);
+                }
                 break;
             case ESP_BT_GAP_DEV_PROP_BDNAME:
+                // Alternative method to extract name
+                strncpy((char *)peer_bdname, (char *)p->val, ESP_BT_GAP_MAX_BDNAME_LEN);
+                peer_bdname[ESP_BT_GAP_MAX_BDNAME_LEN] = '\0';
+                name_found = true;
+                ESP_LOGI(TAG, "--Name (BDNAME): %s", peer_bdname);
+                break;
             default:
                 break;
         }
     }
 
-    ESP_LOGI(TAG, "need device name %s", (uint8_t *)remote_bt_device_name);
-    /* search for device named "peer_bdname" in its extended inquiry response */
-    if (eir) {
-        get_name_from_eir(eir, (uint8_t *)&peer_bdname, NULL);
-        if (strcmp((char *)peer_bdname, (char *)remote_bt_device_name) != 0) {
-            return;
-        }
-
-        ESP_LOGI(TAG, "Found a target device, address %s, name %s", bda_str, (uint8_t *)peer_bdname);
-        device_found = true;
-        memcpy(&remote_bd_addr, param->disc_res.bda, ESP_BD_ADDR_LEN);
-        ESP_LOGI(TAG, "Cancel device discovery ...");
-        esp_bt_gap_cancel_discovery();
+    // ✅ Store device only if it has a name
+    if (name_found && scanned_device_count < MAX_SCANNED_DEVICES) {
+        strncpy(scanned_devices[scanned_device_count].name, (char *)peer_bdname, ESP_BT_GAP_MAX_BDNAME_LEN);
+        memcpy(scanned_devices[scanned_device_count].bda, param->disc_res.bda, ESP_BD_ADDR_LEN);
+        scanned_device_count++;
+        ESP_LOGI(TAG, "✅ Stored device: %s", peer_bdname);
+    } else {
+        ESP_LOGW(TAG, "⚠ Skipping device without name.");
     }
 }
 
@@ -147,41 +174,24 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
                 break;
             }
         case ESP_BT_GAP_DISC_STATE_CHANGED_EVT: {
-                if (param->disc_st_chg.state == ESP_BT_GAP_DISCOVERY_STOPPED) {
-                    if (device_found) {
-                        ESP_LOGI(TAG, "Device discovery stopped.");
-                        ESP_LOGI(TAG, "a2dp connecting to peer: %s", remote_bt_device_name);
-                        device_found = false;
-                        if(esp_a2d_source_connect(remote_bd_addr) == ESP_OK)
-                        {
-                            deviceConnected = true;
-                        }
-                        else
-                        {
-                            deviceConnected = false;
-                        }
-                    } else if(deviceConnected)
-                    {
-                        // not discovered, continue to discover
-                        ESP_LOGI(TAG, "Device discovery failed, continue to discover...");
-                        esp_bt_gap_start_discovery(ESP_BT_INQ_MODE_GENERAL_INQUIRY, 10, 0);
-                    }
-                } else if (param->disc_st_chg.state == ESP_BT_GAP_DISCOVERY_STARTED) {
-                    ESP_LOGI(TAG, "Discovery started.");
+            if (param->disc_st_chg.state == ESP_BT_GAP_DISCOVERY_STOPPED) {
+                ESP_LOGI(TAG, "Device discovery stopped. Found %d devices:", scanned_device_count);
+                for (int i = 0; i < scanned_device_count; i++) {
+                    ESP_LOGI(TAG, "[%d] Name: %s", i + 1, scanned_devices[i].name);
                 }
-                break;
+                update_bt_dropdown(ui_btDropdownList);
+            } else if (param->disc_st_chg.state == ESP_BT_GAP_DISCOVERY_STARTED) {
+                ESP_LOGI(TAG, "Discovery started.");
+                scanned_device_count = 0;  // Reset list on new scan
+            }
+            break;
             }
         case ESP_BT_GAP_PIN_REQ_EVT: {
-                ESP_LOGI(TAG, "ESP_BT_GAP_PIN_REQ_EVT min_16_digit:%d", param->pin_req.min_16_digit);
-                if (param->pin_req.min_16_digit) {
-                    ESP_LOGI(TAG, "Input pin code: 0000 0000 0000 0000");
-                    esp_bt_pin_code_t pin_code = {0};
-                    esp_bt_gap_pin_reply(param->pin_req.bda, true, 16, pin_code);
-                } else {
-                    esp_bt_pin_code_t pin_code = {'1', '2', '3', '4'};
-                    esp_bt_gap_pin_reply(param->pin_req.bda, true, 4, pin_code);
-                }
-                break;
+                // Fix: Wrap the declaration inside braces
+            ESP_LOGI(TAG, "ESP_BT_GAP_PIN_REQ_EVT min_16_digit:%d", param->pin_req.min_16_digit);
+            esp_bt_pin_code_t pin_code = {'1', '2', '3', '4'};
+            esp_bt_gap_pin_reply(param->pin_req.bda, true, 4, pin_code);
+            break;
             }
         default:
             break;
@@ -189,6 +199,34 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
     return;
 }
 
+
+/* Starts Bluetooth scanning */
+void A2DP::start_bt_scan() {
+    ESP_LOGI(TAG, "Starting Bluetooth scan...");
+    scanned_device_count = 0;  // Reset scanned devices count
+    memset(scanned_devices, 0, sizeof(scanned_devices));
+    esp_bt_gap_start_discovery(ESP_BT_INQ_MODE_GENERAL_INQUIRY, 5, 0);
+    esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
+}
+
+/* Connects to a Bluetooth device by name */
+bool A2DP::connect_to_bt_device(const char *device_name) {
+    for (int i = 0; i < scanned_device_count; i++) {
+        if (strcmp(scanned_devices[i].name, device_name) == 0) {
+            char bda_str[18];
+            ESP_LOGI(TAG, "Connecting to %s (%s)...", device_name, bda2str(scanned_devices[i].bda, bda_str, 18));
+            if (esp_a2d_source_connect(scanned_devices[i].bda) == ESP_OK) {
+                ESP_LOGI(TAG, "Connection successful.");
+                return true;
+            } else {
+                ESP_LOGE(TAG, "Connection failed.");
+                return false;
+            }
+        }
+    }
+    ESP_LOGW(TAG, "Device %s not found.", device_name);
+    return false;
+}
 
 void A2DP::A2dpServiceInit()
 {
@@ -199,27 +237,17 @@ void A2DP::A2dpServiceInit()
     ESP_ERROR_CHECK(esp_bt_controller_enable(ESP_BT_MODE_CLASSIC_BT));
     ESP_ERROR_CHECK(esp_bluedroid_init());
     ESP_ERROR_CHECK(esp_bluedroid_enable());
-
-    
-    const char *remote_name = NULL;
-    remote_name = "F9"; // CONFIG_BT_REMOTE_NAME;
-    if (remote_name) {
-        memcpy(&remote_bt_device_name, remote_name, strlen(remote_name) + 1);
-    } else {
-        memcpy(&remote_bt_device_name, "RONIN (R-140)", ESP_BT_GAP_MAX_BDNAME_LEN);
-    }
     
     a2dp_stream_config_t a2dp_config = {
         .type = AUDIO_STREAM_WRITER,
         .user_callback = {0},
     };
     bt_stream_writer = a2dp_stream_init(&a2dp_config);
-    // esp_bt_dev_set_device_name("ESP_SOURCE_STREAM_DEMO");
     esp_bt_gap_register_callback(bt_app_gap_cb);
     
-    esp_bt_gap_start_discovery(ESP_BT_INQ_MODE_GENERAL_INQUIRY, 10, 0);
-    esp_bt_gap_set_scan_mode(ESP_BT_CONNECTABLE, ESP_BT_GENERAL_DISCOVERABLE);
-    
+    esp_bd_addr_t device_address = {0x41, 0x42, 0x49, 0x86, 0x62, 0x57}; 
+    esp_a2d_source_disconnect(device_address);
+
     ESP_LOGI(TAG, "[ 3 ] Create bt peripheral");
     bt_periph = bt_create_periph();
     esp_periph_start(set, bt_periph);
@@ -445,6 +473,47 @@ void A2DP::A2dpAudioStop()
     // esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT);
 }
 
+void A2DP::update_bt_dropdown(lv_obj_t *dropdown)
+{
+    if (scanned_device_count == 0) {
+        ESP_LOGI(TAG, "No devices found.");
+        lv_dropdown_set_options(dropdown, "No Devices Found");
+        return;
+    }
+
+    size_t total_length = 1; // Start with 1 for null terminator
+    for (int i = 0; i < scanned_device_count; i++) {
+        total_length += strlen(scanned_devices[i].name) + 1;
+    }
+
+    char *dropdown_options = (char *)malloc(total_length);
+    if (dropdown_options == NULL) {
+        ESP_LOGE(TAG, "Memory allocation failed!");
+        return;
+    }
+
+    dropdown_options[0] = '\0';
+
+    ESP_LOGI(TAG, "Final device list for dropdown:");
+    for (int i = 0; i < scanned_device_count; i++) {
+        strcat(dropdown_options, scanned_devices[i].name);
+        if (i < scanned_device_count - 1) strcat(dropdown_options, "\n");
+        ESP_LOGI(TAG, "[%d] %s", i + 1, scanned_devices[i].name);
+    }
+
+    ESP_LOGI(TAG, "Dropdown string: %s", dropdown_options);
+
+    // ✅ Debug log before setting options
+    ESP_LOGI(TAG, "Updating dropdown with new options...");
+
+    lv_dropdown_set_options(ui_btDropdownList, dropdown_options);
+
+    // ✅ Force refresh the dropdown UI
+    lv_obj_invalidate(dropdown);
+    lv_obj_refresh_style(dropdown, LV_PART_MAIN, LV_STATE_DEFAULT);
+
+    free(dropdown_options);
+}
 
 void A2DP::update_dropdown_options(lv_obj_t *dropdown, char **options, int option_count)
 {
