@@ -51,7 +51,7 @@ void ui_FavPreview_screen_init(void)
     lv_obj_set_x(ui_FavPreviewLabel, 0);
     lv_obj_set_y(ui_FavPreviewLabel, -129);
     lv_obj_set_align(ui_FavPreviewLabel, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_FavPreviewLabel, "Favourite 1");
+    lv_label_set_text(ui_FavPreviewLabel, FavEditLblBuffer);
     lv_obj_set_style_text_color(ui_FavPreviewLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_FavPreviewLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui_FavPreviewLabel, -1, LV_PART_MAIN | LV_STATE_DEFAULT);

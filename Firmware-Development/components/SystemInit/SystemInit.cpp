@@ -157,13 +157,6 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
         else 
             data->state = LV_INDEV_STATE_RELEASED; // No need to pass a key, just release
     }
-    if(deviceConnected)
-    {
-        static bool Once = false;
-        if(!Once) {btAudio.A2dpAudioStart("/sdcard/converted/Birds 1.wav", 145); Once = true;}
-        _ui_state_modify(ui_btBtnIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-        _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-    }
 }
 
 void System::NavigateScreens(ButtonData btnData, int encData)
@@ -194,10 +187,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
             }
         }
     }
-    // if(btAudio.isAudioStarted() && screenCount != 6)
-    // {
-    //     btAudio.A2dpAudioStop();
-    // }
+
     if(encDiff != 0 && !navigatingWidgets)
     {
         // Normal screen navigation
@@ -297,20 +287,6 @@ void System::sendEvents(ButtonState state, int screenCount)
     else if(state == BUTTON_SINGLE_CLICK && screenCount < TotalScreens)
     {
         event_code = LV_EVENT_PRESSED;
-        // if(screenCount == 6)
-        // {
-        //     static int countStart = 0; // testcode
-        //     ESP_LOGE(TAG, "startA2dpService : %d", countStart);
-        //          if(countStart == 0)     btAudio.A2dpAudioStart("/sdcard/converted/test.mp3");
-        //     else if(countStart == 1)     btAudio.A2dpAudioStart("/sdcard/converted/Stream 1.wav", 300);
-        //     else if(countStart == 2)     btAudio.A2dpAudioStart("/sdcard/converted/Birds 2.wav", 100);
-        //     else if(countStart == 3)     btAudio.A2dpAudioStart("/sdcard/converted/Stream 2.wav", 50);
-        //     else if(countStart == 4)     btAudio.A2dpAudioStart("/sdcard/converted/Thunder 1.wav", 450);
-        //     else if(countStart == 5)     btAudio.A2dpAudioStart("/sdcard/converted/Birds 1.wav");
-        //     else                         btAudio.A2dpAudioStart("/sdcard/converted/Thunder 2.wav");
-        //     countStart++;
-        //     if(countStart>=6) countStart = 0;
-        // }
     }
     else if(state == BUTTON_NONE && screenCount == -1)
     {
@@ -418,7 +394,7 @@ void System::loadAudio()
         btAudio.A2dpAudioStart("/sdcard/converted/Garden Rain 1.mp3", 170);
     }
     else if (strcmp(soundNumber, "Streams") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/converted/Streams 1.wav", 115);
+        btAudio.A2dpAudioStart("/sdcard/converted/Stream 1.wav", 115);
     }
     else if (strcmp(soundNumber, "Forest Rain") == 0) {
         btAudio.A2dpAudioStart("/sdcard/converted/Forest Rain 1.mp3", 145);
@@ -433,7 +409,7 @@ void System::loadAudio()
     // Favourite fav3 = {170, "Nature Sounds", "Garden Rain", true}; // 3:00
     // Favourite fav4 = {115, "Nature Sounds", "Streams", false}; // 2:02
     // Favourite fav5 = {145, "Nature Sounds", "Forest Rain", false}; // 2:32
-    // Favourite fav6 = {145, "Nature Sounds", "Birds", false}; //2:30                     btAudio.A2dpAudioStart("/sdcard/converted/Thunder 2.wav");
+    // Favourite fav6 = {145, "Nature Sounds", "Birds", false}; //2:30
 
 }
     

@@ -595,6 +595,7 @@ void ui_event_favEditScreen(lv_event_t * e)
         loadReadData(loadFav, focused_index + 1);
         _ui_screen_change(&ui_FavEditScreen, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_FavEditScreen_screen_init);
         lv_label_set_text(ui_FavEditLabel, FavEditLblBuffer);
+        lv_label_set_text(ui_FavPreviewLabel, FavEditLblBuffer);
         lv_obj_t *focused_obj = lv_group_get_focused(currentGroup);
         lv_obj_send_event(focused_obj, LV_EVENT_CANCEL, NULL);
     }
