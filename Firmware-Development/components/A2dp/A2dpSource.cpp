@@ -11,7 +11,7 @@
 
 
 #define BT_CONNECT_TIMEOUT      20000
-const char *file_path = "/sdcard/converted/Birds 1.wav"; // MP3 Or WAV
+const char *file_path = "/sdcard/audio/Birds 1.wav"; // MP3 Or WAV
 
 typedef uint8_t esp_peer_bdname_t[ESP_BT_GAP_MAX_BDNAME_LEN + 1];
 
@@ -237,9 +237,11 @@ bool A2DP::connect_to_bt_device(const char *device_name)
             ESP_LOGI(TAG, "Connecting to %s (%s)...", device_name, bda2str(scanned_devices[i].bda, bda_str, 18));
             if (esp_a2d_source_connect(scanned_devices[i].bda) == ESP_OK) {
                 ESP_LOGI(TAG, "Connection successful.");
+                deviceConnected = true;
                 return true;
             } else {
                 ESP_LOGE(TAG, "Connection failed.");
+                deviceConnected = false;
                 return false;
             }
         }
@@ -351,14 +353,9 @@ void A2DP::A2dpAudioStart(char *filepath, int play_time_sec)
     audio_pipeline_run(pipeline);
     AudioPlaying = true;
     startedOnce = true;
-    setTimerValues(play_time_sec, startedOnce);
-    if (!timerRunning) {
-        timerRunning = true;
-        startTime = TIME_IN_SEC;
-    }
-
     if(play_time_sec > 10)
     {
+        setTimerValues(play_time_sec, startedOnce);
         play_time_us = (int64_t)play_time_sec * 1000000;
         // Create task for monitoring playback
         start_time_us = esp_timer_get_time();
@@ -373,7 +370,6 @@ void A2DP::loopAudioTask(void *param)
     while (AudioPlaying) 
     {
         vTaskDelay(pdMS_TO_TICKS(500));
-        updateTimer();
         if ((int64_t)(esp_timer_get_time() - start_time_us) >= play_time_us) 
         {
             ESP_LOGW(TAG, "[Stopping] Playback time reached");
@@ -390,7 +386,6 @@ void A2DP::loopAudioTask(void *param)
             break;
         }
     }
-
     // Cleanup: Delete the task properly
     vTaskDelete(NULL);
 }

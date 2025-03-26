@@ -385,22 +385,22 @@ void memLog()
 void System::loadAudio()
 {
     if (strcmp(soundNumber, "Waves") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/converted/Waves 1.wav", 1500);
+        btAudio.A2dpAudioStart("/sdcard/audio/Waves 1.wav", 1500);
     }
     else if (strcmp(soundNumber, "Thunder") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/converted/Thunder 1.wav", 220);
+        btAudio.A2dpAudioStart("/sdcard/audio/Thunder 1.wav", 220);
     }
     else if (strcmp(soundNumber, "Garden Rain") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/converted/Garden Rain 1.mp3", 170);
+        btAudio.A2dpAudioStart("/sdcard/audio/Garden Rain 1.mp3", 170);
     }
     else if (strcmp(soundNumber, "Streams") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/converted/Stream 1.wav", 115);
+        btAudio.A2dpAudioStart("/sdcard/audio/Stream 1.wav", 115);
     }
     else if (strcmp(soundNumber, "Forest Rain") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/converted/Forest Rain 1.mp3", 145);
+        btAudio.A2dpAudioStart("/sdcard/audio/Forest Rain 1.mp3", 145);
     }
     else if (strcmp(soundNumber, "Birds") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/converted/Birds 1.wav", 145);
+        btAudio.A2dpAudioStart("/sdcard/audio/Birds 1.wav", 145);
     }
 
     

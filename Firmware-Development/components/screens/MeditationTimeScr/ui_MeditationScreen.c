@@ -241,12 +241,25 @@ void setTimerValues(uint32_t time, bool startTimer)
     arcTimeInSec = 0;
     totalTimeInSec = time;
     // setTimeLabels(totalTimeInSec, arcTimeInSec);
-    _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
     if(startTimer)
     {
         resetTimerParams();
         timerRunning = false;
-        // controlMedTimer();
+    }
+
+    if (!timerRunning) {
+            timerRunning = true;
+            startTime = TIME_IN_SEC;
+    }
+    if (meditation_timer) {
+        lv_timer_delete(meditation_timer);
+        meditation_timer = NULL;
+        _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+    }
+    if (!meditation_timer) {  // Avoid multiple timers
+        lv_arc_set_range(ui_meditationTimer, 0, totalTimeInSec);
+        _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+        meditation_timer = lv_timer_create(updateTimer, 1000, NULL);
     }
 }
 //checks the state of timer, start and pauses/resumes it
