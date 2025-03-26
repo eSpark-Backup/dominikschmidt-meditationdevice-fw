@@ -8,7 +8,8 @@
         "audio_event_iface.h": "c",
         "freertos.h": "c",
         "gpio.h": "c",
-        "audio_common.h": "c"
+        "audio_common.h": "c",
+        "ui_meditationscreen.h": "c"
     },
     "idf.flashType": "UART",
     "idf.portWin": "COM19"

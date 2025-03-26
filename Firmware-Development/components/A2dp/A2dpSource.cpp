@@ -351,6 +351,11 @@ void A2DP::A2dpAudioStart(char *filepath, int play_time_sec)
     audio_pipeline_run(pipeline);
     AudioPlaying = true;
     startedOnce = true;
+    setTimerValues(play_time_sec, startedOnce);
+    if (!timerRunning) {
+        timerRunning = true;
+        startTime = TIME_IN_SEC;
+    }
 
     if(play_time_sec > 10)
     {
@@ -367,7 +372,8 @@ void A2DP::loopAudioTask(void *param)
 
     while (AudioPlaying) 
     {
-        vTaskDelay(pdMS_TO_TICKS(100));
+        vTaskDelay(pdMS_TO_TICKS(500));
+        updateTimer();
         if ((int64_t)(esp_timer_get_time() - start_time_us) >= play_time_us) 
         {
             ESP_LOGW(TAG, "[Stopping] Playback time reached");

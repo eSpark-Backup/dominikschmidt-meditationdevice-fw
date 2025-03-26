@@ -5,14 +5,6 @@
 
 #include "ui_MeditationScreen.h"
 
-#define MIN_TO_SEC(x)           (x*60)
-#define HRS_TO_SEC(x)           (x*60*MIN_TO_SEC(x))
-#define SEC_TO_MIN(x)           (x/60)
-#define SEC_TO_HRS(x)           (x/(60*SEC_TO_MIN(x)))
-#define TIME_IN_SEC             (xTaskGetTickCount()/1000)
-#define MIN_FROM_SEC(x)         (x / 60)
-#define SEC_REMAIN(x)           (x % 60)
-
 // SCREEN: ui_MeditationScreen variable declaration
 lv_obj_t *ui_MeditationScreen;
 lv_obj_t *ui_meditationTimer;
@@ -131,7 +123,7 @@ void ui_MeditationScreen_screen_init(void)
 
     //Events
     lv_obj_add_event_cb(ui_MeditationScreen, ui_event_medScreenEvent, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_medPauseBtn,      ui_event_medPauseBtn,    LV_EVENT_ALL, NULL);
+    // lv_obj_add_event_cb(ui_medPauseBtn,      ui_event_medPauseBtn,    LV_EVENT_ALL, NULL);
 
     //Hidden Object to shift focus
     ui_HiddenMedScrBtn = lv_obj_create(ui_MeditationScreen);
@@ -157,14 +149,14 @@ void resetTimerParams(void)
     pausedTime = 0;
     setArcValue = 0;
     arcTimeInSec = 0;
-    totalTimeInSec = MIN_TO_SEC(maxArcValue);
+    // totalTimeInSec = MIN_TO_SEC(maxArcValue);
     if (meditation_timer) {
         lv_timer_delete(meditation_timer);
         meditation_timer = NULL;
+        _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
     }
     setTimeLabels(totalTimeInSec, arcTimeInSec);
     lv_arc_set_value(ui_meditationTimer, setArcValue);
-    _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
 }
 
 void ui_event_medPauseBtn(lv_event_t * e)
@@ -173,28 +165,7 @@ void ui_event_medPauseBtn(lv_event_t * e)
     // static int lastMaxArcValue = maxArcValue;
     if (event_code == LV_EVENT_PRESSED) {
         _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        
-        if (!timerRunning) {
-            timerRunning = true;
-            startTime = TIME_IN_SEC - pausedTime;
-            // Create LVGL timer to update every second
-            if (!meditation_timer) {  // Avoid multiple timers
-                meditation_timer = lv_timer_create(updateTimer, 1000, NULL);
-            }
-            else
-            {
-                lv_timer_resume(meditation_timer);
-            }
-            timerIsUp(true, true);
-        } else {
-            timerRunning = false;
-            
-            // Pause the timer
-            if (meditation_timer) {
-                lv_timer_pause(meditation_timer);
-                pausedTime = TIME_IN_SEC - startTime;
-            }
-        }
+
     }
     else if (event_code == LV_EVENT_LONG_PRESSED) {
         resetTimerParams();
@@ -263,4 +234,43 @@ void ui_event_medScreenEvent(lv_event_t * e)
     if (event_code == LV_EVENT_CANCEL) {
         timerIsUp(true, false);
     }  
+}
+
+void setTimerValues(uint32_t time, bool startTimer)
+{
+    arcTimeInSec = 0;
+    totalTimeInSec = time;
+    // setTimeLabels(totalTimeInSec, arcTimeInSec);
+    _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+    if(startTimer)
+    {
+        resetTimerParams();
+        timerRunning = false;
+        // controlMedTimer();
+    }
+}
+//checks the state of timer, start and pauses/resumes it
+void controlMedTimer()
+{
+    if (!timerRunning) {
+        timerRunning = true;
+        startTime = TIME_IN_SEC - pausedTime;
+        // Create LVGL timer to update every second
+        if (!meditation_timer) {  // Avoid multiple timers
+            meditation_timer = lv_timer_create(updateTimer, 1000, NULL);
+        }
+        else
+        {
+            lv_timer_resume(meditation_timer);
+        }
+        timerIsUp(true, true);
+    } else {
+        timerRunning = false;
+        
+        // Pause the timer
+        if (meditation_timer) {
+            lv_timer_pause(meditation_timer);
+            pausedTime = TIME_IN_SEC - startTime;
+        }
+    }
 }
