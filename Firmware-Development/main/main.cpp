@@ -64,36 +64,33 @@ extern "C" void app_main(void)
 
 void lvglTask(void *pvParameters)
 {  
-    // Turn on the back-light LED & set default brightness 50%
-    Core.setupPWM();
-
     lv_init();
     /*Set a tick source so that LVGL will know how much time elapsed. */
     lv_tick_set_cb(my_tick);
     static void *buf0 = (lv_color_t *)heap_caps_malloc(DRAW_BUF_SIZE, MALLOC_CAP_SPIRAM);
     static void *buf1 = (lv_color_t *)heap_caps_malloc(DRAW_BUF_SIZE, MALLOC_CAP_SPIRAM);
-
+    
     assert(buf0 != NULL);
     assert(buf1 != NULL);
     uint32_t size_in_px = DRAW_BUF_SIZE;
     /* register print function for debugging */
-#if LV_USE_LOG != 0
+    #if LV_USE_LOG != 0
     lv_log_register_print_cb( my_print );
-#endif
-
+    #endif
+    
     lv_display_t * disp;
-#if LV_USE_TFT_ESPI
+    #if LV_USE_TFT_ESPI
     /*TFT_eSPI can be enabled lv_conf.h to initialize the display in a simple way*/
     disp = lv_tft_espi_create(TFT_HOR_RES, TFT_VER_RES, buf0, NULL, size_in_px, LV_DISPLAY_RENDER_MODE_PARTIAL);
     // lv_display_set_rotation(disp, TFT_ROTATION);
-
-#else
+    
+    #else
     /*Else create a display yourself*/
     disp = lv_display_create(TFT_HOR_RES, TFT_VER_RES);
     lv_display_set_flush_cb(disp, my_disp_flush);
     lv_display_set_buffers(disp, buf0, NULL, size_in_px, LV_DISPLAY_RENDER_MODE_PARTIAL);
-#endif
-
+    #endif
+    
     /*Initialize the Input device driver*/
     lv_indev_t * indev = lv_indev_create();
     lv_indev_set_type(indev, LV_INDEV_TYPE_KEYPAD);
@@ -109,8 +106,11 @@ void lvglTask(void *pvParameters)
     // Initialize screen and set background
     Core.Initialize();
     lv_disp_load_scr(Screen[0]);
+    // Turn on the back-light LED & set default brightness 50%
+    lv_timer_handler(); /* let the GUI do its work */
+    Core.setupPWM();
     memLog();
-
+    
     while (1)
     {
         /* Delay 1 tick (assumes FreeRTOS tick is 10ms */
