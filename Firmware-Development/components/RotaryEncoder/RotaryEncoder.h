@@ -7,6 +7,8 @@
 
 // #include <Arduino.h>
 #include "driver/gpio.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 // Enum for button states
 enum EncoderDirection
 {
@@ -29,6 +31,7 @@ class RotaryEncoder
         gpio_num_t _dtPin;
         int _CLK_state;
         int _prev_CLK_state;
+        uint32_t _lastUpdateTime;
         EncoderState _encoder;
 
     public:
