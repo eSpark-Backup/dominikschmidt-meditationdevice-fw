@@ -4,5 +4,6 @@ cmake_minimum_required(VERSION 3.5)
 
 # include($ENV{ADF_PATH}/CMakeLists.txt)
 list(APPEND EXTRA_COMPONENT_DIRS "$ENV{ADF_PATH}/components")
+set(ENV{IDF_COMPONENT_OVERWRITE_MANAGED_COMPONENTS} 1)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(Firmware-Development)
