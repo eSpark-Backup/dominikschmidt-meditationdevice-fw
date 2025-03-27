@@ -594,17 +594,12 @@ void ui_SoundScreen_screen_init(void)
 
     //Events
     lv_obj_add_event_cb(ui_SoundPanel, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_NoSoundBtn, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_NatureSoundBtn, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_WhiteNoiseBtn, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_BinauralBeatBtn, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_SingingBowlsBtn, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_SoundStartBtnBox, ui_event_startBtnBox, LV_EVENT_PRESSED, NULL);
-    lv_obj_add_event_cb(ui_NoSoundBtn, ui_event_NoSoundBtn, LV_EVENT_PRESSED, NULL);
-    lv_obj_add_event_cb(ui_NatureSoundBtn, ui_event_NatureSoundBtn, LV_EVENT_PRESSED, NULL);
-    lv_obj_add_event_cb(ui_WhiteNoiseBtn, ui_event_WhiteNoiseBtn, LV_EVENT_PRESSED, NULL);
-    lv_obj_add_event_cb(ui_BinauralBeatBtn, ui_event_BinauralBeatBtn, LV_EVENT_PRESSED, NULL);
-    lv_obj_add_event_cb(ui_SingingBowlsBtn, ui_event_SingingBowlsBtn, LV_EVENT_PRESSED, NULL);
+    lv_obj_add_event_cb(ui_SoundStartBtnBox, ui_event_startBtnBox, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_NoSoundBtn, ui_event_NoSoundBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_NatureSoundBtn, ui_event_NatureSoundBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_WhiteNoiseBtn, ui_event_WhiteNoiseBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_BinauralBeatBtn, ui_event_BinauralBeatBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_SingingBowlsBtn, ui_event_SingingBowlsBtn, LV_EVENT_ALL, NULL);
     
     //Hidden Object to shift focus
     ui_HiddenSoundBtn = lv_obj_create(ui_SoundScreen);
@@ -631,17 +626,12 @@ void ui_SoundScreen_screen_init(void)
     }
 }
 
-void ui_event_toggleSoundPanelGroup(lv_event_t * e)
+void selectSoundPanel(bool focus)
 {
-    lv_event_code_t event_code = lv_event_get_code(e);
-    static bool panelActive = false;
     static lv_group_t *SoundPanelGroup = NULL;
-
-    if(event_code == LV_EVENT_LONG_PRESSED || event_code == LV_EVENT_CANCEL) {
-        lv_indev_t * indev = lv_indev_get_next(NULL);
+    lv_indev_t * indev = lv_indev_get_next(NULL);
         
-        if (!panelActive && event_code != LV_EVENT_CANCEL) {
-
+        if (focus) {
             // Create a new focus group for the panel
             SoundPanelGroup = lv_group_create();
             lv_group_add_obj(SoundPanelGroup, ui_NoSoundBtn);
@@ -649,16 +639,16 @@ void ui_event_toggleSoundPanelGroup(lv_event_t * e)
             lv_group_add_obj(SoundPanelGroup, ui_WhiteNoiseBtn);
             lv_group_add_obj(SoundPanelGroup, ui_BinauralBeatBtn);
             lv_group_add_obj(SoundPanelGroup, ui_SingingBowlsBtn);
-
+            
             // Switch focus to the panel group
             if (indev) lv_indev_set_group(indev, SoundPanelGroup);
             lv_group_focus_obj(ui_NoSoundBtn);
             ScreenGroup[1] = SoundPanelGroup;
             currentGroup = SoundPanelGroup;
-            panelActive = true;
         } 
         else
         {
+            lv_group_focus_obj(ui_NoSoundBtn); // moves screen to top
             // Switch back to the previous focus group
             if (indev) {
                 lv_indev_set_group(indev, SoundGroup);
@@ -671,14 +661,19 @@ void ui_event_toggleSoundPanelGroup(lv_event_t * e)
             }
             ScreenGroup[1] = SoundGroup;
             currentGroup = SoundGroup;
-
-            if(event_code == LV_EVENT_LONG_PRESSED)
-                lv_group_focus_obj(ui_SoundPanel);
-            else if(event_code == LV_EVENT_CANCEL)
-                lv_group_focus_obj(ui_HiddenSoundBtn);
-
-            panelActive = false;
+            lv_group_focus_obj(ui_HiddenSoundBtn);
         }
+}
+
+void ui_event_toggleSoundPanelGroup(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    
+    if(event_code == LV_EVENT_PRESSED) {
+        selectSoundPanel(true);
+    }
+    else if(event_code == LV_EVENT_CANCEL) {
+        selectSoundPanel(false);
     }
 }
 
@@ -692,6 +687,9 @@ void ui_event_NoSoundBtn(lv_event_t * e)
         _ui_state_modify(ui_NoSoundIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_NoSoundLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
     }
+    else if(event_code == LV_EVENT_CANCEL) {
+        selectSoundPanel(false);
+    }
 }
 
 void ui_event_NatureSoundBtn(lv_event_t * e)
@@ -704,6 +702,8 @@ void ui_event_NatureSoundBtn(lv_event_t * e)
         _ui_state_modify(ui_NatureSoundIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_NatureSoundLbl, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
     }
+    else if(event_code == LV_EVENT_CANCEL)
+        selectSoundPanel(false);
 }
 
 void ui_event_WhiteNoiseBtn(lv_event_t * e)
@@ -716,6 +716,8 @@ void ui_event_WhiteNoiseBtn(lv_event_t * e)
         _ui_state_modify(ui_WhiteNoiseIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_WhiteNoiseLbl, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
     }
+    else if(event_code == LV_EVENT_CANCEL)
+        selectSoundPanel(false);
 }
 
 void ui_event_BinauralBeatBtn(lv_event_t * e)
@@ -728,6 +730,8 @@ void ui_event_BinauralBeatBtn(lv_event_t * e)
         _ui_state_modify(ui_BinauralBeatIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_BinauralBeatLbl, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
     }
+    else if(event_code == LV_EVENT_CANCEL)
+        selectSoundPanel(false);
 }
 
 void ui_event_SingingBowlsBtn(lv_event_t * e)
@@ -740,4 +744,6 @@ void ui_event_SingingBowlsBtn(lv_event_t * e)
         _ui_state_modify(ui_SingingBowlsIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_SingingBowlsLbl, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
     }
+    else if(event_code == LV_EVENT_CANCEL)
+        selectSoundPanel(false);
 }
