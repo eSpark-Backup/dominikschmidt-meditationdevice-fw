@@ -188,39 +188,40 @@ void System::NavigateScreens(ButtonData btnData, int encData)
         }
     }
 
-    if(encDiff != 0 && !navigatingWidgets)
+    if(encDiff != 0)
     {
-        // Normal screen navigation
-        screenCount += encDiff;
-        screenChanged = true;
-
-        if (screenCount > 7) screenCount = 0;
-        if (screenCount < 0) screenCount = 7;
-
-        if (screenChanged) {
-            lv_disp_load_scr(Screen[screenCount]); // Load new screen
-            lastScreen = lv_screen_active();
-            
-            lv_indev_t *indev = lv_indev_get_next(NULL);
-            if (indev && ScreenGroup[screenCount]) {
-                lv_indev_set_group(indev, ScreenGroup[screenCount]);
-                lv_obj_send_event(Screen[screenCount], LV_EVENT_CANCEL, NULL);
-            }
+        if (navigatingWidgets) {
+            navigateWidgets(BUTTON_PRESS, screenCount);  // Call a new function to navigate widgets
         }
-        if(screenCount == 6)
+        else
         {
-            btAudio.start_bt_scan();
-            isScanned = true;
+            // Normal screen navigation
+            screenCount += encDiff;
+            screenChanged = true;
+            
+            if (screenCount > 7) screenCount = 0;
+            if (screenCount < 0) screenCount = 7;
+            
+            if (screenChanged) {
+                lv_disp_load_scr(Screen[screenCount]); // Load new screen
+                lastScreen = lv_screen_active();
+                
+                lv_indev_t *indev = lv_indev_get_next(NULL);
+                if (indev && ScreenGroup[screenCount]) {
+                    lv_indev_set_group(indev, ScreenGroup[screenCount]);
+                    lv_obj_send_event(Screen[screenCount], LV_EVENT_CANCEL, NULL);
+                }
+            }
+            if(screenCount == 6)
+            {
+                btAudio.start_bt_scan();
+                isScanned = true;
+            }
         }
     }
     else if (btnData.ID == B) // Handle Button B for selection mode
     {
-        if (btnData.State == BUTTON_DOUBLE_CLICK) {  ///for testing changed to SINGLE else DOUBLE
-            navigatingWidgets = !navigatingWidgets; // Exit widget navigation mode
-            sendEvents(BUTTON_NONE, -1);
-            navigateWidgets(BUTTON_NONE, screenCount, navigatingWidgets);
-        }
-        else if (btnData.State == BUTTON_SINGLE_CLICK || (btnData.State == BUTTON_LONG_HOLD)) {
+        if (btnData.State == BUTTON_SINGLE_CLICK || (btnData.State == BUTTON_LONG_HOLD)) {
             sendEvents(btnData.State, screenCount);
 
             if(deviceName[0] != '\0' && isScanned)
@@ -236,37 +237,34 @@ void System::NavigateScreens(ButtonData btnData, int encData)
     }
     else if (btnData.ID == A)
     {
-        if (navigatingWidgets) {
-            navigateWidgets(btnData.State, screenCount);  // Call a new function to navigate widgets
+        if (btnData.State == BUTTON_SINGLE_CLICK) {  ///for testing changed to SINGLE else DOUBLE
+            navigatingWidgets = !navigatingWidgets; // Exit widget navigation mode
+            sendEvents(BUTTON_NONE, -1);
+            navigateWidgets(BUTTON_NONE, screenCount, navigatingWidgets);
         }
+        
     }
 }
 
 void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
 {
-    currentGroup = ScreenGroup[screenCount];  // Get group for the active screen
-    if (!currentGroup) return; // Safety check
+    currentGroup = ScreenGroup[screenCount];
+    if (!currentGroup) return;
 
-    if (state == BUTTON_SINGLE_CLICK) {
-        lv_group_focus_next(currentGroup); // Move focus to the next widget
-    } 
-    else if (state == BUTTON_DOUBLE_CLICK) {
-        lv_group_focus_prev(currentGroup); // Move focus to the previous widget
-    }
-    else if(state == BUTTON_NONE)
+    int count = lv_group_get_obj_count(currentGroup);
+    if (count < 1) return;
+
+    static int curFocusedObj = 0;
+
+    if(state == BUTTON_NONE)
     {
-        if(focus)
-        {
-            lv_group_focus_obj(lv_group_get_obj_by_index(currentGroup, 0));
-        }
-        else
-        {
-            int count = lv_group_get_obj_count(currentGroup);
-            if (count > 0) {
-                lv_obj_t *lastObj = lv_group_get_obj_by_index(currentGroup, count - 1);
-                lv_group_focus_obj(lastObj);
-            }
-        }
+        curFocusedObj = 0;
+        lv_group_focus_obj(lv_group_get_obj_by_index(currentGroup, focus ? 0 :  count - 1));
+    }
+    else
+    {
+        curFocusedObj = (curFocusedObj + encDiff + count) % count;
+        lv_group_focus_obj(lv_group_get_obj_by_index(currentGroup, curFocusedObj));
     }
 }
 
