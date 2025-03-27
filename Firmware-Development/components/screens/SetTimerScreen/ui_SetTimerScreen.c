@@ -35,7 +35,7 @@ lv_obj_t *ui_HiddenTimerScrBtn;
 lv_group_t *TimerScrGroup;
 lv_obj_t* roller = NULL;
 bool roller_selected = false;
-int storedValue[3] = {1, 1, 1};
+int storedValue[3] = {0, 10, 25};
 
 void ui_SetTimerScr_screen_init(void)
 {
@@ -588,7 +588,7 @@ char* setRollerOptions(int maxRange)
     static char secOptions[256]; // Ensure enough space
     secOptions[0] = '\0'; // Initialize empty string
     
-    for (int i = 1; i <= maxRange; i++) {
+    for (int i = 0; i <= maxRange; i++) {
         char buffer[4]; // Temporary buffer for each number
         snprintf(buffer, sizeof(buffer), i < maxRange? "%02d\n":"%02d", i); // Format number as "01", "02", ..., "60"
         strcat(secOptions, buffer); // Append to options string
