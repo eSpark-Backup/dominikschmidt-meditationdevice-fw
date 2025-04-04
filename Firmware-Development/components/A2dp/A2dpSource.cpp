@@ -59,6 +59,32 @@ void list_sdcard_files(const char *path) {
     closedir(dir);
 }
 
+void A2DP::print_bonded_devices()
+{
+    int num_bonded = 15;
+    esp_bd_addr_t dev_list[10];
+
+    esp_err_t res = esp_bt_gap_get_bond_device_list(&num_bonded, dev_list);
+
+    if (res == ESP_OK) {
+        printf("Number of bonded devices: %d\n", num_bonded);
+        for (int i = 0; i < num_bonded; i++) {
+            printf("Device %d MAC: %02X:%02X:%02X:%02X:%02X:%02X\n", i,
+                   dev_list[i][0], dev_list[i][1], dev_list[i][2], 
+                   dev_list[i][3], dev_list[i][4], dev_list[i][5]);
+                if (esp_bt_gap_remove_bond_device(dev_list[i]) == ESP_OK) {
+                    printf("Removed bonded device %d\n", i);
+                } else {
+                    printf("Failed to remove bonded device %d\n", i);
+                }
+        }
+    } else if (res == ESP_ERR_NOT_FOUND) {
+        printf("No bonded devices found.\n");
+    } else {
+        printf("Error retrieving bonded devices: %d\n", res);
+    }
+}
+
 char *A2DP::bda2str(esp_bd_addr_t bda, char *str, size_t size)
 {
     if (bda == NULL || str == NULL || size < 18) {
@@ -193,29 +219,45 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
             esp_bt_gap_pin_reply(param->pin_req.bda, true, 4, pin_code);
             break;
             }
+        case ESP_BT_GAP_ACL_CONN_CMPL_STAT_EVT: {
+            esp_bd_addr_t connected_bda;
+            memcpy(connected_bda, param->acl_conn_cmpl_stat.bda, sizeof(esp_bd_addr_t));
+
+            printf( "Device Connected - MAC: %02X:%02X:%02X:%02X:%02X:%02X\n",
+                        connected_bda[0], connected_bda[1], connected_bda[2], 
+                        connected_bda[3], connected_bda[4], connected_bda[5]);
+
+            // Get device name
+            if (esp_bt_gap_read_remote_name(connected_bda) == ESP_OK) {
+                printf("Fetching remote device name...\n");
+            } else {
+                printf("Failed to fetch remote device name\n");
+            }
+            break;
+        }
+        case ESP_BT_GAP_ACL_DISCONN_CMPL_STAT_EVT: {
+            esp_bd_addr_t disconnected_bda;
+            memcpy(disconnected_bda, param->acl_disconn_cmpl_stat.bda, sizeof(esp_bd_addr_t));
+
+            printf("Device Disconnected - MAC: %02X:%02X:%02X:%02X:%02X:%02X\n",
+                        disconnected_bda[0], disconnected_bda[1], disconnected_bda[2], 
+                        disconnected_bda[3], disconnected_bda[4], disconnected_bda[5]);
+            break;        
+        }
+        case ESP_BT_GAP_READ_REMOTE_NAME_EVT: { // Device Name Received
+            if (param->read_rmt_name.stat == ESP_BT_STATUS_SUCCESS) {
+                printf("Connected Device Name: %s\n", param->read_rmt_name.rmt_name);
+                deviceConnected = true;
+            } else {
+                printf("Failed to get remote device name\n");
+                deviceConnected = false;
+            }
+            break;
+        }
         default:
             break;
     }
     return;
-}
-
-void bt_app_a2d_cb(esp_a2d_cb_event_t event, esp_a2d_cb_param_t *param) {
-    switch (event) {
-        case ESP_A2D_CONNECTION_STATE_EVT:
-            if (param->conn_stat.state == ESP_A2D_CONNECTION_STATE_CONNECTED) {
-                ESP_LOGI(TAG, "A2DP Connected to: %02X:%02X:%02X:%02X:%02X:%02X",
-                         param->conn_stat.remote_bda[0], param->conn_stat.remote_bda[1],
-                         param->conn_stat.remote_bda[2], param->conn_stat.remote_bda[3],
-                         param->conn_stat.remote_bda[4], param->conn_stat.remote_bda[5]);
-                         deviceConnected = true;
-            } else if (param->conn_stat.state == ESP_A2D_CONNECTION_STATE_DISCONNECTED) {
-                ESP_LOGI(TAG, "A2DP Disconnected.");
-                deviceConnected = false;
-            }
-            break;
-        default:
-            break;
-    }
 }
 
 /* Starts Bluetooth scanning */
@@ -261,10 +303,10 @@ void A2DP::A2dpServiceInit()
     ESP_ERROR_CHECK(esp_bt_controller_enable(ESP_BT_MODE_CLASSIC_BT));
     ESP_ERROR_CHECK(esp_bluedroid_init());
     ESP_ERROR_CHECK(esp_bluedroid_enable());
+    print_bonded_devices();
 
     esp_bt_dev_set_device_name("ESP_SOURCE_STREAM_DEMO");
     esp_bt_gap_register_callback(bt_app_gap_cb);
-    esp_a2d_register_callback(bt_app_a2d_cb);
     
     ESP_LOGI(TAG, "[ 3 ] Create bt peripheral");
     bt_periph = bt_create_periph();
