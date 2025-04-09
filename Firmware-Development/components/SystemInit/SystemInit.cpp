@@ -150,6 +150,11 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
         
         if (Btn_A.State == BUTTON_SINGLE_CLICK || Btn_A.State == BUTTON_DOUBLE_CLICK) {
             NavigateScreens(Btn_A, encDiff);
+            if(deviceConnected) 
+            {
+                count++;
+                if(count>5) count = 1;
+            }
         } 
         else if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_DOUBLE_CLICK || Btn_B.State == BUTTON_LONG_HOLD) {
             NavigateScreens(Btn_B, encDiff);
@@ -383,22 +388,22 @@ void memLog()
 void System::loadAudio()
 {
     if (strcmp(soundNumber, "Waves") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/audio/Waves 1.wav", 1500);
+        btAudio.A2dpAudioStart("/sdcard/audio/Waves 1.wav", 600);
     }
     else if (strcmp(soundNumber, "Thunder") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/audio/Thunder 1.wav", 220);
+        btAudio.A2dpAudioStart("/sdcard/audio/Thunder 1.wav", 600);
     }
     else if (strcmp(soundNumber, "Garden Rain") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/audio/Garden Rain 1.mp3", 170);
+        btAudio.A2dpAudioStart("/sdcard/audio/Garden Rain 1.mp3", 600);
     }
     else if (strcmp(soundNumber, "Streams") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/audio/Stream 1.wav", 115);
+        btAudio.A2dpAudioStart("/sdcard/audio/Stream 1.wav", 600);
     }
     else if (strcmp(soundNumber, "Forest Rain") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/audio/Forest Rain 1.mp3", 145);
+        btAudio.A2dpAudioStart("/sdcard/audio/Forest Rain 1.mp3", 600);
     }
     else if (strcmp(soundNumber, "Birds") == 0) {
-        btAudio.A2dpAudioStart("/sdcard/audio/Birds 1.wav", 145);
+        btAudio.A2dpAudioStart("/sdcard/audio/Birds 1.wav", 600);
     }
 
     

@@ -9,8 +9,9 @@
         "freertos.h": "c",
         "gpio.h": "c",
         "audio_common.h": "c",
-        "ui_meditationscreen.h": "c"
+        "ui_meditationscreen.h": "c",
+        "*.tcc": "cpp"
     },
     "idf.flashType": "UART",
-    "idf.portWin": "COM19"
+    "idf.portWin": "COM22"
 }

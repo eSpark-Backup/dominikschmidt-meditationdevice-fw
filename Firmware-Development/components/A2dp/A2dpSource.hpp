@@ -41,7 +41,6 @@ class A2DP
         void print_bonded_devices();
         
     private:
-        static void bluetooth_monitor_task(void *param);
         static void loopAudioTask(void *param);
         static void bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *param);
         static void filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param);
@@ -60,5 +59,5 @@ typedef struct {
 
 extern A2DP btAudio;
 extern bool deviceConnected;
-
+extern int count;
 #endif /*A2DPSOURCE_H */
