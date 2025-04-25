@@ -152,8 +152,8 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
             NavigateScreens(Btn_A, encDiff);
             if(deviceConnected) 
             {
-                count++;
-                if(count>5) count = 1;
+                audioCount++;
+                if(audioCount>5) audioCount = 1;
             }
         } 
         else if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_DOUBLE_CLICK || Btn_B.State == BUTTON_LONG_HOLD) {

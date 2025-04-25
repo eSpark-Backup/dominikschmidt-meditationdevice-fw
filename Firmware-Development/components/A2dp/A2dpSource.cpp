@@ -18,7 +18,7 @@ const char *file_path3 = "/sdcard/audio/Garden Rain 1.mp3"; // MP3 Or WAV
 const char *file_path4 = "/sdcard/audio/Stream 1.wav"; // MP3 Or WAV
 const char *file_path5 = "/sdcard/audio/Forest Rain 1.mp3"; // MP3 Or WAV
 const char *file_path6 = "/sdcard/audio/Birds 1.wav"; // MP3 Or WAV
-int count = 0;
+int audioCount = 1;
 char filePath[256];
 typedef uint8_t esp_peer_bdname_t[ESP_BT_GAP_MAX_BDNAME_LEN + 1];
 
@@ -387,7 +387,18 @@ void A2DP::A2dpAudioStart(char *filepath, int play_time_sec)
         {
             ESP_LOGI(TAG, "Changing decoder from %s to %s", last_file_ext, current_file_ext);
 
+            audio_pipeline_unregister(pipeline, fatfs_stream_reader);
             audio_pipeline_unregister(pipeline, music_decoder);
+            audio_pipeline_unregister(pipeline, bt_stream_writer);
+            audio_element_reset_state(fatfs_stream_reader);
+            audio_element_reset_state(music_decoder);
+            audio_element_reset_state(bt_stream_writer);
+
+            // Optional: Deinit decoder if switching between WAV <-> MP3
+            if (music_decoder) {
+                audio_element_deinit(music_decoder);
+                music_decoder = NULL;
+            }
 
             // Re-init decoder based on new file type
             if (strcmp(current_file_ext, ".mp3") == 0) {
@@ -396,20 +407,16 @@ void A2DP::A2dpAudioStart(char *filepath, int play_time_sec)
                 music_decoder = wav_decoder_init(&wav_cfg);
             }
 
-            audio_pipeline_register(pipeline, music_decoder, "dec");
-
             strcpy(last_file_ext, current_file_ext);  // update last file extension
+            
+            // Always update file source
+            audio_pipeline_register(pipeline, fatfs_stream_reader, "file");
+            audio_pipeline_register(pipeline, music_decoder, "dec");
+            audio_pipeline_register(pipeline, bt_stream_writer, "bt");
         }
 
-        // Always update file source
+        
         audio_element_set_uri(fatfs_stream_reader, filepath);
-        audio_pipeline_unregister(pipeline, fatfs_stream_reader);
-        audio_element_reset_state(fatfs_stream_reader);
-        audio_pipeline_register(pipeline, fatfs_stream_reader, "file");
-
-        audio_pipeline_unregister(pipeline, bt_stream_writer);
-        audio_element_reset_state(bt_stream_writer);
-        audio_pipeline_register(pipeline, bt_stream_writer, "bt");
 
         const char *link_tag[3] = {"file", "dec", "bt"};
         audio_pipeline_link(pipeline, &link_tag[0], 3);
@@ -435,86 +442,86 @@ void A2DP::loopAudioTask(void *param)
     esp_err_t ret;
     unsigned long swTime = xTaskGetTickCount();
     start_time_us = xTaskGetTickCount();
-    static int lastCount = count;
+    static int lastCount = audioCount;
     // loadAudio();
     ESP_LOGW(TAG, "[Starting] Playback time %u : %lld : %lld",xTaskGetTickCount(), start_time_us, play_time_us);
     while (AudioPlaying) 
     {
         if (xSemaphoreTake(xAudioMutex, pdMS_TO_TICKS(100)))
         {
-            // if (xTaskGetTickCount() - swTime > pdMS_TO_TICKS(6000))
-            // if(lastCount != count)
-            // {
-                
-            //     // Even = !Even;
-                
+            // if (lastCount != audioCount) {
+
+            //     ESP_LOGW(TAG, "[Audio Switch] Stopping pipeline...");
             //     audio_pipeline_stop(pipeline);
             //     audio_pipeline_wait_for_stop(pipeline);
             //     audio_pipeline_terminate(pipeline);
-            //     audio_pipeline_reset_ringbuffer(pipeline);
-            //     audio_pipeline_reset_elements(pipeline);
-            //     audio_pipeline_reset_items_state(pipeline);
-            //     ///[STARTING] change decoder/different file
-            //     audio_pipeline_unregister(pipeline, music_decoder);
-            //     // audio_element_deinit(music_decoder); // Prevent memory leaks
-                
-            //     if(count == 1)
-            //     {
-            //         music_decoder = wav_decoder_init(&wav_cfg);
-            //         strcpy(filePath,file_path);
-            //     }
-            //     if(count == 2)
-            //     {
-            //         music_decoder = wav_decoder_init(&wav_cfg);
-            //         strcpy(filePath,file_path2);
-            //     }
-            //     if(count == 3)
-            //     {
-            //         music_decoder = mp3_decoder_init(&mp3_cfg);
-            //         strcpy(filePath,file_path3);
-            //     }
-            //     if(count == 4)
-            //     {
-            //         music_decoder = wav_decoder_init(&wav_cfg);
-            //         strcpy(filePath,file_path4);
-            //     }
-            //     if(count == 5)
-            //     {
-            //         music_decoder = mp3_decoder_init(&mp3_cfg);
-            //         strcpy(filePath,file_path5);
-            //     }
-            //     if(count == 6)
-            //     {
-            //         music_decoder = wav_decoder_init(&wav_cfg);
-            //         strcpy(filePath,file_path6);
-            //     }
-            //     ESP_LOGE(TAG, "SWITCHING :%s Even %d", filePath, Even);
-
-            //     // if (Even) {
-            //     //     // mp3_decoder_cfg_t mp3_cfg = DEFAULT_MP3_DECODER_CONFIG();
-            //     //     music_decoder = mp3_decoder_init(&mp3_cfg);
-            //     // } else {
-            //     //     // wav_cfg = DEFAULT_WAV_DECODER_CONFIG();
-            //     //     music_decoder = wav_decoder_init(&wav_cfg);
-            //     // }
-            //     audio_pipeline_register(pipeline, music_decoder,"dec");
-            //     audio_element_set_uri(fatfs_stream_reader, filePath);
-            //     // **Unregister & Reset FATFS Stream**
+            
+            //     // Unregister all existing elements
             //     audio_pipeline_unregister(pipeline, fatfs_stream_reader);
-            //     audio_element_reset_state(fatfs_stream_reader);
-            //     audio_pipeline_register(pipeline, fatfs_stream_reader, "file");
-                
+            //     audio_pipeline_unregister(pipeline, music_decoder);
             //     audio_pipeline_unregister(pipeline, bt_stream_writer);
+            
+            //     // Reset their states
+            //     audio_element_reset_state(fatfs_stream_reader);
+            //     audio_element_reset_state(music_decoder);
             //     audio_element_reset_state(bt_stream_writer);
+            
+            //     // Optional: Deinit decoder if switching between WAV <-> MP3
+            //     if (music_decoder) {
+            //         audio_element_deinit(music_decoder);
+            //         music_decoder = NULL;
+            //     }
+            
+            //     // Choose decoder & file path based on audioCount
+            //     switch (audioCount) {
+            //         case 1:
+            //             music_decoder = wav_decoder_init(&wav_cfg);
+            //             strcpy(filePath, file_path);
+            //             break;
+            //         case 2:
+            //             music_decoder = wav_decoder_init(&wav_cfg);
+            //             strcpy(filePath, file_path2);
+            //             break;
+            //         case 3:
+            //             music_decoder = mp3_decoder_init(&mp3_cfg);
+            //             strcpy(filePath, file_path3);
+            //             break;
+            //         case 4:
+            //             music_decoder = wav_decoder_init(&wav_cfg);
+            //             strcpy(filePath, file_path4);
+            //             break;
+            //         case 5:
+            //             music_decoder = mp3_decoder_init(&mp3_cfg);
+            //             strcpy(filePath, file_path5);
+            //             break;
+            //         case 6:
+            //             music_decoder = wav_decoder_init(&wav_cfg);
+            //             strcpy(filePath, file_path6);
+            //             break;
+            //         default:
+            //             ESP_LOGE(TAG, "Invalid audioCount: %d", audioCount);
+            //             break;
+            //     }
+            
+            //     ESP_LOGI(TAG, "[Audio Switch] Using file: %s", filePath);
+            
+            //     // Register updated elements back into the pipeline
+            //     audio_pipeline_register(pipeline, fatfs_stream_reader, "file");
+            //     audio_pipeline_register(pipeline, music_decoder, "dec");
             //     audio_pipeline_register(pipeline, bt_stream_writer, "bt");
-
+            
+            //     // Set new file path
+            //     audio_element_set_uri(fatfs_stream_reader, filePath);
+            
+            //     // Re-link pipeline
             //     const char *link_tag[3] = {"file", "dec", "bt"};
             //     audio_pipeline_link(pipeline, &link_tag[0], 3);
-            //     ///[ENDING] change decoder/different file
-                
+            
+            //     // Start the pipeline
+            //     ESP_LOGW(TAG, "[Audio Switch] Restarting pipeline...");
             //     audio_pipeline_run(pipeline);
-            //     // swTime = xTaskGetTickCount();
-            //     lastCount = count;
+            
+            //     lastCount = audioCount;
             // }
             if ((int64_t)(xTaskGetTickCount() - start_time_us) >= play_time_us) 
             {
@@ -538,7 +545,7 @@ void A2DP::loopAudioTask(void *param)
                 ESP_LOGW(TAG, "[msg event] source: %d lastData: %d msg.data: %d lastCmd: %d msg.cmd: %d",msg.source_type, lastData, (int)msg.data, lastCmd, msg.cmd);
                 lastData = (int)msg.data; lastCmd = msg.cmd;
             }
-            if (ret == ESP_OK && msg.source_type == AUDIO_ELEMENT_TYPE_ELEMENT && msg.cmd == AEL_MSG_CMD_REPORT_STATUS \
+            if (ret == ESP_OK && msg.source_type == AUDIO_ELEMENT_TYPE_ELEMENT && msg.cmd == AEL_MSG_CMD_REPORT_STATUS
                 && (((int)msg.data == AEL_STATUS_STATE_FINISHED))) {
                     // ESP_LOGE(TAG, "[ LOOP ] LOOPING");
                     ESP_LOGW(TAG, "[ LOOP ] Playback time %u : %lld : %lld",xTaskGetTickCount(), start_time_us, play_time_us);
@@ -589,16 +596,9 @@ void A2DP::A2dpAudioStop()
     audio_pipeline_stop(pipeline);
     audio_pipeline_wait_for_stop(pipeline);
     audio_pipeline_terminate(pipeline);
-    audio_pipeline_reset_ringbuffer(pipeline);
-    audio_pipeline_reset_elements(pipeline);
-    audio_pipeline_reset_items_state(pipeline);
-        
-    // audio_pipeline_unregister(pipeline, bt_stream_writer);
-    // audio_pipeline_unregister(pipeline, fatfs_stream_reader);
-    // audio_pipeline_unregister(pipeline, music_decoder);
-    // audio_element_deinit(bt_stream_writer);
-    // audio_element_deinit(fatfs_stream_reader);
-    // audio_element_deinit(music_decoder);
+//     audio_pipeline_reset_ringbuffer(pipeline);
+//     audio_pipeline_reset_elements(pipeline);
+//     audio_pipeline_reset_items_state(pipeline);
 }
 
 void A2DP::update_bt_dropdown(lv_obj_t *dropdown)

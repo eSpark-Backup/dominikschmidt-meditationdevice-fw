@@ -59,5 +59,5 @@ typedef struct {
 
 extern A2DP btAudio;
 extern bool deviceConnected;
-extern int count;
+extern int audioCount;
 #endif /*A2DPSOURCE_H */
