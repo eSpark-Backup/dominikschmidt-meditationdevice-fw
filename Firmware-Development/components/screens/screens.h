@@ -25,6 +25,7 @@ extern "C"
 #include "FavScreen/ui_FavScreen.h"
 #include "FavEditScreen/ui_FavEditScreen.h"
 #include "FavPreviewScreen/ui_FavPreviewScreen.h"
+#include "EnableBt/ui_EnableConnectBt.h"
 // #include <Arduino.h>
 
 extern lv_obj_t *Screen[8];

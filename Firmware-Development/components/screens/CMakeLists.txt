@@ -8,6 +8,7 @@ idf_component_register(
          "ScreenHelpers/ui_helpers.c"
          "SetTimerScreen/ui_SetTimerScreen.c"
          "SoundScreen/ui_SoundScreen.c"
-    INCLUDE_DIRS "." "BluetoothScreen" "EndGong" "FavEditScreen" "FavPreviewScreen" "FavScreen" "MeditationTimeScr" "ScreenHelpers" "SetTimerScreen" "SoundScreen"
+         "EnableBt/ui_EnableConnectBt.c"
+    INCLUDE_DIRS "." "BluetoothScreen" "EnableBt" "EndGong" "FavEditScreen" "FavPreviewScreen" "FavScreen" "MeditationTimeScr" "ScreenHelpers" "SetTimerScreen" "SoundScreen"
     REQUIRES arduino-esp32 lvgl images
 )

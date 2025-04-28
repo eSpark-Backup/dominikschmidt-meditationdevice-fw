@@ -80,6 +80,7 @@ void System::InitializeScreen(void)
     ui_FavEditScreen_screen_init();
     ui_FavPreview_screen_init();
     ui_BluetoothScreen_screen_init();
+    ui_EnableConnectBt_screen_init();
     ui_MeditationScreen_screen_init();
 }
 

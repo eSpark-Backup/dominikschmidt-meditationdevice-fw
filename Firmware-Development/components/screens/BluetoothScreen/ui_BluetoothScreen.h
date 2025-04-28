@@ -15,17 +15,18 @@ extern "C" {
 // SCREEN: ui_BluetoothScreen
 #define BUF_SIZE  50
 void ui_BluetoothScreen_screen_init(void);
+void ui_event_connectBtnBox(lv_event_t * e);
 void ui_event_btBtn(lv_event_t * e);
 void ui_event_btDropdownList(lv_event_t * e);
 void rotateDropdown(int diff);
 extern lv_obj_t * ui_BluetoothScreen;
-extern lv_obj_t * ui_startBtnBox2;
-extern lv_obj_t * ui_startLabel2;
-extern lv_obj_t * ui_startIcon2;
+extern lv_obj_t * ui_connectBtnBox;
+extern lv_obj_t * ui_connectLbl;
+extern lv_obj_t * ui_connectIcon;
 extern lv_obj_t * ui_btBtn;
 extern lv_obj_t * ui_btBtnIcon;
 extern lv_obj_t * ui_btBtnLabel;
-extern lv_obj_t * ui_btLabel2;
+extern lv_obj_t * ui_btLabel;
 extern lv_obj_t * ui_leftGong2;
 extern lv_obj_t * ui_midLeftHeart;
 extern lv_obj_t * ui_midBt;

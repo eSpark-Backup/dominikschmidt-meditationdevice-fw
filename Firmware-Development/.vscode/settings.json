@@ -10,7 +10,14 @@
         "gpio.h": "c",
         "audio_common.h": "c",
         "ui_meditationscreen.h": "c",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "ui_bluetoothscreen.h": "c",
+        "ui_helpers.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "ui_endgong.h": "c",
+        "ui_enableconnectbt.h": "c"
     },
     "idf.flashType": "UART",
     "idf.portWin": "COM22"

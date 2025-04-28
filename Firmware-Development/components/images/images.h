@@ -53,6 +53,8 @@ LV_IMG_DECLARE(ui_img_30_blackbirdicon_png);
 LV_IMG_DECLARE(ui_img_30editicon_png); 
 LV_IMG_DECLARE(ui_img_30deleteicon_png); 
 LV_IMG_DECLARE(ui_img_playbutton_png); 
+LV_IMG_DECLARE(ui_img_powerBtn_png); 
+LV_IMG_DECLARE(ui_img_bt_scan_png);
 
 
 

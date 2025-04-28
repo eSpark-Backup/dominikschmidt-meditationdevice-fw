@@ -48,6 +48,8 @@ idf_component_register(
          "ui_img_30editicon_png.c" 
          "ui_img_30deleteicon_png.c" 
          "ui_img_playbutton_png.c" 
+         "ui_img_powerBtn_png.c" 
+         "ui_img_bt_scan_png.c" 
     INCLUDE_DIRS "."
     REQUIRES arduino-esp32 lvgl
 )
