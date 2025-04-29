@@ -259,7 +259,7 @@ void setTimerValues(uint32_t time, bool startTimer)
     if (!meditation_timer) {  // Avoid multiple timers
         lv_arc_set_range(ui_meditationTimer, 0, totalTimeInSec);
         _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-        meditation_timer = lv_timer_create(updateTimer, 1000, NULL);
+        meditation_timer = lv_timer_create((lv_timer_cb_t)updateTimer, 1000, NULL);
     }
 }
 //checks the state of timer, start and pauses/resumes it
@@ -270,7 +270,7 @@ void controlMedTimer()
         startTime = TIME_IN_SEC - pausedTime;
         // Create LVGL timer to update every second
         if (!meditation_timer) {  // Avoid multiple timers
-            meditation_timer = lv_timer_create(updateTimer, 1000, NULL);
+            meditation_timer = lv_timer_create((lv_timer_cb_t)updateTimer, 1000, NULL);
         }
         else
         {

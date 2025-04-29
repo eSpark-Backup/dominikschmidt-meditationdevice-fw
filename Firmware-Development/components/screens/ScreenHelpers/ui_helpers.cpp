@@ -79,13 +79,13 @@ void _ui_arc_increment(lv_obj_t * target, int val)
 void _ui_bar_increment(lv_obj_t * target, int val, int anm)
 {
     int old = lv_bar_get_value(target);
-    lv_bar_set_value(target, old + val, anm);
+    lv_bar_set_value(target, old + val, (lv_anim_enable_t)anm);
 }
 
 void _ui_slider_increment(lv_obj_t * target, int val, int anm)
 {
     int old = lv_slider_get_value(target);
-    lv_slider_set_value(target, old + val, anm);
+    lv_slider_set_value(target, old + val, (lv_anim_enable_t)anm);
     lv_obj_send_event(target, LV_EVENT_VALUE_CHANGED, 0);
 }
 
@@ -97,11 +97,11 @@ void _ui_keyboard_set_target(lv_obj_t * keyboard, lv_obj_t * textarea)
 void _ui_flag_modify(lv_obj_t * target, int32_t flag, int value)
 {
     if(value == _UI_MODIFY_FLAG_TOGGLE) {
-        if(lv_obj_has_flag(target, flag)) lv_obj_remove_flag(target, flag);
-        else lv_obj_add_flag(target, flag);
+        if(lv_obj_has_flag(target, (lv_obj_flag_t)flag)) lv_obj_remove_flag(target, (lv_obj_flag_t)flag);
+        else lv_obj_add_flag(target, (lv_obj_flag_t)flag);
     }
-    else if(value == _UI_MODIFY_FLAG_ADD) lv_obj_add_flag(target, flag);
-    else lv_obj_remove_flag(target, flag);
+    else if(value == _UI_MODIFY_FLAG_ADD) lv_obj_add_flag(target, (lv_obj_flag_t)flag);
+    else lv_obj_remove_flag(target, (lv_obj_flag_t)flag);
 }
 void _ui_state_modify(lv_obj_t * target, int32_t state, int value)
 {
@@ -129,7 +129,7 @@ void scr_unloaded_delete_cb(lv_event_t * e)
 
 {
 
-    lv_obj_t ** var = lv_event_get_user_data(e);
+    lv_obj_t ** var = (lv_obj_t**)lv_event_get_user_data(e);
     lv_obj_delete(*var);
     (*var) = NULL;
 
