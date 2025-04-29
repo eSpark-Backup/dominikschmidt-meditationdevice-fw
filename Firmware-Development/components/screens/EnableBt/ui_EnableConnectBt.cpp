@@ -359,6 +359,7 @@ void EnableBtFocus(bool focus)
     // Switch focus to the panel group
     if (indev) lv_indev_set_group(indev, focus ? EnableBtGroup : BTGroup);
     if (focus) lv_group_focus_obj(ui_btEnableBtn);
+    else lv_group_focus_obj(ui_HiddenBTScrBtn);
     ScreenGroup[6] = focus ? EnableBtGroup : BTGroup;
     currentGroup = focus ? EnableBtGroup : BTGroup;
 }
@@ -406,7 +407,6 @@ void ui_event_btBackBtn(lv_event_t * e)
         _ui_screen_change(&ui_BluetoothScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_BluetoothScreen_screen_init);
     }
 }
-
 
 void rotateScannedDropdown(int diff)
 {

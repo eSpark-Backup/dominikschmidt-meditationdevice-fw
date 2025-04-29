@@ -172,7 +172,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
     bool screenChanged = false;
     static lv_obj_t *lastScreen = lv_screen_active();
 
-    if(lastScreen != lv_screen_active() && lv_screen_active() != controlScreen)
+    if(lastScreen != lv_screen_active() && controlScreen == NULL)
     {
         navigatingWidgets = false;
         lastScreen = lv_screen_active();
@@ -226,15 +226,15 @@ void System::NavigateScreens(ButtonData btnData, int encData)
         if (btnData.State == BUTTON_SINGLE_CLICK || (btnData.State == BUTTON_LONG_HOLD)) {
             sendEvents(btnData.State, screenCount);
 
-            if(deviceName[0] != '\0' && isScanned)
-            {
-                if(btAudio.connect_to_bt_device(deviceName) || deviceConnected)
-                {
-                    _ui_state_modify(ui_btBtnIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-                    _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-                }
-                isScanned = false;
-            }
+            // if(deviceName[0] != '\0' && isScanned)
+            // {
+            //     if(btAudio.connect_to_bt_device(deviceName) || deviceConnected)
+            //     {
+            //         _ui_state_modify(ui_btBtnIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+            //         _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+            //     }
+            //     isScanned = false;
+            // }
         } 
     }
     else if (btnData.ID == A)
