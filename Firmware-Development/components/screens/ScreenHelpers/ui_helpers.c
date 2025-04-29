@@ -6,6 +6,8 @@
 #include "ui_helpers.h"
 
 lv_style_t style_focus;
+lv_style_t colored_style_focus;
+lv_obj_t *controlScreen = NULL;
 
 void _ui_bar_set_property(lv_obj_t * target, int id, int val)
 {
@@ -352,7 +354,16 @@ void setFocusStyle(void)
     // Create a focus style
     lv_style_init(&style_focus);
     lv_style_set_outline_width(&style_focus, 2);
-    lv_style_set_outline_color(&style_focus, lv_color_hex(0x424242)); // Green focus border
+    lv_style_set_outline_color(&style_focus, lv_color_hex(0x424242)); // Grey focus border
     lv_style_set_outline_opa(&style_focus, LV_OPA_COVER);
     lv_style_set_outline_pad(&style_focus, 5); // Add spacing around the outline
+}
+
+void setFocusStyleColored(int color)
+{
+    lv_style_init(&colored_style_focus);
+    lv_style_set_outline_width(&colored_style_focus, 2);
+    lv_style_set_outline_color(&colored_style_focus, lv_color_hex(color)); // Grey focus border
+    lv_style_set_outline_opa(&colored_style_focus, LV_OPA_COVER);
+    lv_style_set_outline_pad(&colored_style_focus, 5); // Add spacing around the outline
 }

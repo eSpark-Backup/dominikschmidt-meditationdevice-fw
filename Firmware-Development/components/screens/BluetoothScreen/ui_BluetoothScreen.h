@@ -33,8 +33,6 @@ extern lv_obj_t * ui_midBt;
 extern lv_obj_t * ui_btDropdownList;
 extern lv_obj_t * ui_HiddenBTScrBtn;
 extern lv_group_t * BTGroup;
-extern bool list_selected;
-extern char deviceName[BUF_SIZE];
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

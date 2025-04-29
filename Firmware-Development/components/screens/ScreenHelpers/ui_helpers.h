@@ -134,19 +134,20 @@ void _ui_slider_set_text_value(lv_obj_t * trg, lv_obj_t * src, const char * pref
 
 void _ui_checked_set_text_value(lv_obj_t * trg, lv_obj_t * src, const char * txt_on, const char * txt_off);
 
-void _ui_spinbox_step(lv_obj_t * target, int val)
-;
+void _ui_spinbox_step(lv_obj_t * target, int val);
 
 
-void _ui_switch_theme(int val)
-;
+void _ui_switch_theme(int val);
 
 extern lv_style_t style_focus;
+extern lv_style_t colored_style_focus;
 extern lv_group_t *ScreenGroup[TotalScreens];
 extern lv_group_t *currentGroup;
 extern bool navigatingWidgets;
+extern lv_obj_t *controlScreen;
 
 void setFocusStyle(void);
+void setFocusStyleColored(int color);
 
 #ifdef __cplusplus
 } /*extern "C"*/

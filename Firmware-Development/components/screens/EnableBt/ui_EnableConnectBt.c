@@ -17,15 +17,22 @@ lv_obj_t * ui_btEnableBtn;
 lv_obj_t * ui_btEnableBtnIcon;
 lv_obj_t * ui_btEnableBtnLabel;
 void ui_event_btEnableSwitch(lv_event_t * e);
+void ui_event_btListSwitch(lv_event_t * e);
+void ui_event_btScanBtn(lv_event_t * e);
+void ui_event_btBackBtn(lv_event_t * e);
 lv_obj_t * ui_btEnableSwitch;
 lv_obj_t * ui_ScannedDevDropdown;
 lv_obj_t * ui_btScanBtn;
 lv_obj_t * ui_btScanBtnIcon;
 lv_obj_t * ui_btScanBtnLabel;
+lv_obj_t * ui_btBackBtn;
+lv_obj_t * ui_btBackBtnLabel;
 lv_obj_t * ui_btConnectBtnBox;
 lv_obj_t * ui_btConnectLabel;
 lv_obj_t * ui_HiddenEnableBtScrBtn;
 lv_group_t * EnableBtGroup;
+bool list_selected = false;
+char deviceName[NAME_BUF] = "Select Device";
 // CUSTOM VARIABLES
 
 
@@ -104,10 +111,10 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_x(ui_btEnablePanel, 0);
     lv_obj_set_y(ui_btEnablePanel, 22);
     lv_obj_set_align(ui_btEnablePanel, LV_ALIGN_CENTER);
-    lv_obj_set_flex_flow(ui_btEnablePanel, LV_FLEX_FLOW_ROW_WRAP);
-    lv_obj_set_flex_align(ui_btEnablePanel, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START);
+    lv_obj_set_flex_flow(ui_btEnablePanel, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(ui_btEnablePanel, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     lv_obj_remove_flag(ui_btEnablePanel, LV_OBJ_FLAG_CLICKABLE);      /// Flags
-    lv_obj_set_scrollbar_mode(ui_btEnablePanel, LV_SCROLLBAR_MODE_ACTIVE);
+    lv_obj_set_scrollbar_mode(ui_btEnablePanel, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_scroll_dir(ui_btEnablePanel, LV_DIR_VER);
     lv_obj_set_style_radius(ui_btEnablePanel, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_btEnablePanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -128,7 +135,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_x(ui_btEnableBtn, -2);
     lv_obj_set_y(ui_btEnableBtn, 46);
     lv_obj_set_align(ui_btEnableBtn, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_btEnableBtn, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_add_flag(ui_btEnableBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);      /// Flags
     lv_obj_set_style_radius(ui_btEnableBtn, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_btEnableBtn, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_btEnableBtn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -188,13 +195,13 @@ void ui_EnableConnectBt_screen_init(void)
 
     ui_ScannedDevDropdown = lv_dropdown_create(ui_btEnablePanel);
     lv_dropdown_set_options(ui_ScannedDevDropdown, "opt 1\nopt 2\nopt 3\nopt 1\nopt 2\nopt 3\nopt 1\nopt 2\nopt 3");
-    lv_dropdown_set_text(ui_ScannedDevDropdown, "Select Device");
+    lv_dropdown_set_text(ui_ScannedDevDropdown, deviceName);
     lv_obj_set_width(ui_ScannedDevDropdown, 300);
     lv_obj_set_height(ui_ScannedDevDropdown, 65);
     lv_obj_set_x(ui_ScannedDevDropdown, -154);
     lv_obj_set_y(ui_ScannedDevDropdown, 97);
     lv_obj_set_align(ui_ScannedDevDropdown, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_ScannedDevDropdown, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    lv_obj_add_flag(ui_ScannedDevDropdown, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_set_style_text_color(ui_ScannedDevDropdown, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_ScannedDevDropdown, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_ScannedDevDropdown, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -222,7 +229,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_x(ui_btScanBtn, -2);
     lv_obj_set_y(ui_btScanBtn, 46);
     lv_obj_set_align(ui_btScanBtn, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_btScanBtn, LV_OBJ_FLAG_HIDDEN);     /// Flags
+    lv_obj_add_flag(ui_btScanBtn, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_remove_flag(ui_btScanBtn, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_btScanBtn, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_btScanBtn, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -248,6 +255,28 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_align(ui_btScanBtnLabel, LV_ALIGN_CENTER);
     lv_label_set_text(ui_btScanBtnLabel, "Scan Devices");
     lv_obj_set_style_text_font(ui_btScanBtnLabel, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_btBackBtn = lv_obj_create(ui_btEnablePanel);
+    lv_obj_remove_style_all(ui_btBackBtn);
+    lv_obj_set_width(ui_btBackBtn, 300);
+    lv_obj_set_height(ui_btBackBtn, 65);
+    lv_obj_set_x(ui_btBackBtn, -2);
+    lv_obj_set_y(ui_btBackBtn, 46);
+    lv_obj_set_align(ui_btBackBtn, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_btBackBtn, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_CHECKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    lv_obj_remove_flag(ui_btBackBtn, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_btBackBtn, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_btBackBtn, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_btBackBtn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_btBackBtnLabel = lv_label_create(ui_btBackBtn);
+    lv_obj_set_width(ui_btBackBtnLabel, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_btBackBtnLabel, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_btBackBtnLabel, -11);
+    lv_obj_set_y(ui_btBackBtnLabel, 1);
+    lv_obj_set_align(ui_btBackBtnLabel, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_btBackBtnLabel, "Back");
+    lv_obj_set_style_text_font(ui_btBackBtnLabel, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btConnectBtnBox = lv_obj_create(ui_EnableConnectBt);
     lv_obj_remove_style_all(ui_btConnectBtnBox);
@@ -277,23 +306,27 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_style_text_font(ui_btConnectLabel, &lv_font_montserrat_26, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     //Events
-    lv_obj_add_event_cb(ui_btEnableBtn, ui_event_btEnableSwitch, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_btEnableBtn,         ui_event_btEnableSwitch, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ScannedDevDropdown,  ui_event_btListSwitch, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_btScanBtn,           ui_event_btScanBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_btBackBtn,           ui_event_btBackBtn, LV_EVENT_ALL, NULL);
 
     //Hidden Object to shift focus
     ui_HiddenEnableBtScrBtn = lv_obj_create(ui_EnableConnectBt);
     lv_obj_add_flag(ui_HiddenEnableBtScrBtn, LV_OBJ_FLAG_HIDDEN);
     
     //Style of Focus
-    lv_obj_add_style(ui_btEnableBtn, &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_ScannedDevDropdown, &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_btDropdownList, &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_btScanBtn, &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_btEnableBtn,        &colored_style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_ScannedDevDropdown, &colored_style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_btScanBtn,          &colored_style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_btBackBtn,          &colored_style_focus, LV_STATE_FOCUS_KEY);
     
-    //Bluetooth Screen Group of objects for Focus and Events
+    //Enable BT Screen Group of objects for Focus and Events
     EnableBtGroup = lv_group_create();
     lv_group_add_obj(EnableBtGroup, ui_btEnableBtn);
     lv_group_add_obj(EnableBtGroup, ui_ScannedDevDropdown);
     lv_group_add_obj(EnableBtGroup, ui_btScanBtn);
+    lv_group_add_obj(EnableBtGroup, ui_btBackBtn);
     lv_group_add_obj(EnableBtGroup, ui_HiddenEnableBtScrBtn);
 
     lv_indev_t * indev = lv_indev_get_next(NULL);
@@ -305,17 +338,104 @@ void ui_EnableConnectBt_screen_init(void)
 void ui_event_btEnableSwitch(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_VALUE_CHANGED) {
+    // printf("Event code: %d\n",event_code);
+    if(event_code == LV_EVENT_VALUE_CHANGED || event_code == LV_EVENT_PRESSED ) {
+        _ui_state_modify(ui_btEnableSwitch, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_btEnablePanel, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_flag_modify(ui_ScannedDevDropdown, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
         _ui_flag_modify(ui_btScanBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
+        _ui_flag_modify(ui_btBackBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
         _ui_state_modify(ui_btConnectBtnBox, LV_STATE_DISABLED, _UI_MODIFY_STATE_TOGGLE);
+        lv_group_focus_obj(ui_btEnableBtn);
     }
 }
 
-void EnableFocus(bool focus)
+void EnableBtFocus(bool focus)
 {
-    static lv_group_t *FavPanelGroup = NULL;
+    navigatingWidgets = focus;
+    controlScreen = focus ? ui_EnableConnectBt : NULL;
     lv_indev_t * indev = lv_indev_get_next(NULL);
+        
+    // Switch focus to the panel group
+    if (indev) lv_indev_set_group(indev, focus ? EnableBtGroup : BTGroup);
+    if (focus) lv_group_focus_obj(ui_btEnableBtn);
+    ScreenGroup[6] = focus ? EnableBtGroup : BTGroup;
+    currentGroup = focus ? EnableBtGroup : BTGroup;
+}
+
+void ui_event_btListSwitch(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        if(list_selected == false)
+        {
+            lv_dropdown_open(ui_ScannedDevDropdown);
+            list_selected = true;
+            memset(deviceName, 0, NAME_BUF);
+            strcpy(deviceName, "Select Device");
+            lv_dropdown_set_text(ui_ScannedDevDropdown, deviceName);
+
+        }
+        else
+        {
+            lv_dropdown_close(ui_ScannedDevDropdown);
+            // lv_group_focus_obj(ui_btBtn);
+            list_selected = false;
+            lv_dropdown_get_selected_str(ui_ScannedDevDropdown, deviceName, NAME_BUF);
+            lv_dropdown_set_text(ui_ScannedDevDropdown, deviceName);
+            // printf("deviceName: %s\n",deviceName);
+        }
+    }
+}
+
+void ui_event_btScanBtn(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED)
+    {}
+}
+
+void ui_event_btBackBtn(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        EnableBtFocus(false);
+        _ui_screen_change(&ui_BluetoothScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_BluetoothScreen_screen_init);
+    }
+}
+
+
+void rotateScannedDropdown(int diff)
+{
+    if (diff != 0)
+    {
+        // Get the current selected index
+        int current_index = lv_dropdown_get_selected(ui_ScannedDevDropdown);
+        
+        // Get the total number of options
+        const char *options = lv_dropdown_get_options(ui_ScannedDevDropdown);
+        int total_options = 0;
+        
+        // Count the number of options by counting '\n' occurrences
+        for (const char *p = options; *p; p++)
+        {
+            if (*p == '\n') total_options++;
+        }
+        total_options++; // Add one for the last option (no '\n' at the end)
+        
+        // Update index based on rotation direction
+        int new_index = current_index + diff;
+        
+        // Ensure index stays within valid bounds
+        if (new_index < 0) 
+        new_index = total_options - 1; // Wrap around to the last item
+        else if (new_index >= total_options) 
+        new_index = 0; // Wrap around to the first item
+        
+        // Set new selected index
+        lv_dropdown_set_selected(ui_ScannedDevDropdown, new_index);
+    } 
 }

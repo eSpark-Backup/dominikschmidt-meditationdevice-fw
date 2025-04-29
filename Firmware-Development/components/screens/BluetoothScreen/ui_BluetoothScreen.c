@@ -21,8 +21,6 @@ lv_obj_t *ui_midBt;
 lv_obj_t *ui_btDropdownList;
 lv_obj_t *ui_HiddenBTScrBtn;
 lv_group_t *BTGroup;
-bool list_selected = false;
-char deviceName[BUF_SIZE] = {0};
 // CUSTOM VARIABLES
 
 void ui_BluetoothScreen_screen_init(void)
@@ -321,7 +319,6 @@ void ui_BluetoothScreen_screen_init(void)
 
 
     //Events
-    lv_obj_add_event_cb(ui_btBtn, ui_event_btBtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_btDropdownList, ui_event_btDropdownList, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_connectBtnBox, ui_event_connectBtnBox, LV_EVENT_ALL, NULL);
 
@@ -331,12 +328,10 @@ void ui_BluetoothScreen_screen_init(void)
     
     //Style of Focus
     lv_obj_add_style(ui_connectBtnBox, &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_btBtn, &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_btDropdownList, &style_focus, LV_STATE_FOCUS_KEY);
     
     //Bluetooth Screen Group of objects for Focus and Events
     BTGroup = lv_group_create();
-    lv_group_add_obj(BTGroup, ui_btBtn);
     lv_group_add_obj(BTGroup, ui_connectBtnBox);
     lv_group_add_obj(BTGroup, ui_btDropdownList);
     lv_group_add_obj(BTGroup, ui_HiddenBTScrBtn);
@@ -352,6 +347,7 @@ void ui_event_connectBtnBox(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_PRESSED) {
+        EnableBtFocus(true);
         _ui_screen_change(&ui_EnableConnectBt, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_EnableConnectBt_screen_init);
     }
 }

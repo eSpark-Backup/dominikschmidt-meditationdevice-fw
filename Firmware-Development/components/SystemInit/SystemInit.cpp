@@ -41,6 +41,7 @@ void System::Initialize(void)
     numButtons = sizeof(buttons) / sizeof(buttons[0]);
     EncoderInit();
     setFocusStyle();
+    setFocusStyleColored(0xCAC7C7); //dull white
     initScreens();
     btAudio.A2dpServiceInit();
 }
@@ -136,7 +137,7 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
         if ((roller_selected && roller != NULL) || list_selected)  // Only update if roller is in selection mode
         {
             if (roller_selected)        {rotateRoller(encDiff);return;}
-            else if (list_selected)     {rotateDropdown(encDiff);return;}
+            else if (list_selected)     {rotateScannedDropdown(encDiff);return;}
         }
         if (!roller_selected || !list_selected) {
             Btn_A.ID = UNDEFINED;
@@ -149,7 +150,7 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
         Btn_A = {A, button1.getState()};
         Btn_B = {B, button2.getState()};
         
-        if (Btn_A.State == BUTTON_SINGLE_CLICK || Btn_A.State == BUTTON_DOUBLE_CLICK) {
+        if (Btn_A.State == BUTTON_SINGLE_CLICK && controlScreen == NULL) {
             NavigateScreens(Btn_A, encDiff);
             if(deviceConnected) 
             {
@@ -157,7 +158,7 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
                 if(audioCount>5) audioCount = 1;
             }
         } 
-        else if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_DOUBLE_CLICK || Btn_B.State == BUTTON_LONG_HOLD) {
+        else if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_LONG_HOLD) {
             NavigateScreens(Btn_B, encDiff);
         } 
         else 
@@ -171,7 +172,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
     bool screenChanged = false;
     static lv_obj_t *lastScreen = lv_screen_active();
 
-    if(lastScreen != lv_screen_active())
+    if(lastScreen != lv_screen_active() && lv_screen_active() != controlScreen)
     {
         navigatingWidgets = false;
         lastScreen = lv_screen_active();
@@ -218,11 +219,6 @@ void System::NavigateScreens(ButtonData btnData, int encData)
                     lv_obj_send_event(Screen[screenCount], LV_EVENT_CANCEL, NULL);
                 }
             }
-            if(screenCount == 6)
-            {
-                btAudio.start_bt_scan();
-                isScanned = true;
-            }
         }
     }
     else if (btnData.ID == B) // Handle Button B for selection mode
@@ -262,7 +258,7 @@ void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
 
     static int curFocusedObj = 0;
 
-    if(state == BUTTON_NONE)
+    if(state == BUTTON_NONE && controlScreen == NULL)
     {
         curFocusedObj = 0;
         lv_group_focus_obj(lv_group_get_obj_by_index(currentGroup, focus ? 0 :  count - 1));
