@@ -31,7 +31,7 @@ void ui_MeditationScreen_screen_init(void)
     totalTimeInSec = HRS_TO_SEC(storedValue[0]) + MIN_TO_SEC(storedValue[1]) + storedValue[2];
     
     ui_MeditationScreen = lv_obj_create(NULL);
-    lv_obj_remove_flag(ui_MeditationScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_MeditationScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_MeditationScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_MeditationScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     
@@ -60,7 +60,7 @@ void ui_MeditationScreen_screen_init(void)
     lv_obj_set_width(ui_ArcOverlay, 360);
     lv_obj_set_height(ui_ArcOverlay, 360);
     lv_obj_set_align(ui_ArcOverlay, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_ArcOverlay, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_ArcOverlay, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_image_src(ui_ArcOverlay, &ui_img_340_arcspaces_png, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor(ui_ArcOverlay, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_ArcOverlay, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -111,8 +111,8 @@ void ui_MeditationScreen_screen_init(void)
     lv_obj_set_x(ui_medPauseBtn, 0);
     lv_obj_set_y(ui_medPauseBtn, 91);
     lv_obj_set_align(ui_medPauseBtn, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_medPauseBtn, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_remove_flag(ui_medPauseBtn, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    addFlag(ui_medPauseBtn, LV_OBJ_FLAG_CLICKABLE);
+    removeFlag(ui_medPauseBtn, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_medPauseBtn, 100, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_medPauseBtn, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_medPauseBtn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -127,7 +127,7 @@ void ui_MeditationScreen_screen_init(void)
 
     //Hidden Object to shift focus
     ui_HiddenMedScrBtn = lv_obj_create(ui_MeditationScreen);
-    lv_obj_add_flag(ui_HiddenMedScrBtn, LV_OBJ_FLAG_HIDDEN);
+    addFlag(ui_HiddenMedScrBtn, LV_OBJ_FLAG_HIDDEN);
 
     //Style of Focus
     lv_obj_add_style(ui_medPauseBtn, &style_focus, LV_STATE_FOCUS_KEY);

@@ -39,10 +39,4 @@ extern lv_group_t * BTGroup;
 }
 #endif
 
-#ifdef __cplusplus
-inline lv_obj_flag_t operator|(lv_obj_flag_t lhs, lv_obj_flag_t rhs) {
-    return static_cast<lv_obj_flag_t>((int)lhs | (int)rhs);
-}
-#endif
-
 #endif /*UI_BLUETOOTHSCREEN_H */

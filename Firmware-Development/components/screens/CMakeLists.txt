@@ -10,5 +10,5 @@ idf_component_register(
          "SoundScreen/ui_SoundScreen.cpp"
          "EnableBt/ui_EnableConnectBt.cpp"
     INCLUDE_DIRS "." "BluetoothScreen" "EnableBt" "EndGong" "FavEditScreen" "FavPreviewScreen" "FavScreen" "MeditationTimeScr" "ScreenHelpers" "SetTimerScreen" "SoundScreen"
-    REQUIRES arduino-esp32 lvgl images
+    REQUIRES arduino-esp32 lvgl images A2dp
 )

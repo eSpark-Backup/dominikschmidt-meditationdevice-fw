@@ -367,3 +367,13 @@ void setFocusStyleColored(int color)
     lv_style_set_outline_opa(&colored_style_focus, LV_OPA_COVER);
     lv_style_set_outline_pad(&colored_style_focus, 5); // Add spacing around the outline
 }
+
+void removeFlag(lv_obj_t * obj, int flag)
+{
+    lv_obj_remove_flag(obj, (lv_obj_flag_t)flag);
+}
+
+void addFlag(lv_obj_t * obj, int flag)
+{
+    lv_obj_add_flag(obj, (lv_obj_flag_t)flag);
+}

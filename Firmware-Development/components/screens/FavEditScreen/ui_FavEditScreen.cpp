@@ -23,7 +23,7 @@ char FavEditLblBuffer[25] = "Favourite 1"; // Persistent storage
 void ui_FavEditScreen_screen_init(void)
 {
     ui_FavEditScreen = lv_obj_create(NULL);
-    lv_obj_remove_flag(ui_FavEditScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_FavEditScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_FavEditScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_FavEditScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -72,7 +72,7 @@ void ui_FavEditScreen_screen_init(void)
     lv_obj_set_x(ui_EditBtnIcon, -28);
     lv_obj_set_y(ui_EditBtnIcon, 1);
     lv_obj_set_align(ui_EditBtnIcon, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_EditBtnIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_EditBtnIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_image_src(ui_EditBtnIcon, &ui_img_30editicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor(ui_EditBtnIcon, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_EditBtnIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -109,7 +109,7 @@ void ui_FavEditScreen_screen_init(void)
     lv_obj_set_x(ui_DeleteBtnIcon, -39);
     lv_obj_set_y(ui_DeleteBtnIcon, 1);
     lv_obj_set_align(ui_DeleteBtnIcon, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_DeleteBtnIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_DeleteBtnIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_image_src(ui_DeleteBtnIcon, &ui_img_30deleteicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor(ui_DeleteBtnIcon, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_DeleteBtnIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -120,7 +120,7 @@ void ui_FavEditScreen_screen_init(void)
 
     //Hidden Object to shift focus
     ui_HiddenBtn = lv_obj_create(ui_FavEditScreen);
-    lv_obj_add_flag(ui_HiddenBtn, LV_OBJ_FLAG_HIDDEN);
+    addFlag(ui_HiddenBtn, LV_OBJ_FLAG_HIDDEN);
 
     //Style of Focus
     lv_obj_add_style(ui_EditBtn, &style_focus, LV_STATE_FOCUS_KEY);

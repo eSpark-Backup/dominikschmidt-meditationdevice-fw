@@ -39,7 +39,7 @@ char deviceName[NAME_BUF] = "Select Device";
 void ui_EnableConnectBt_screen_init(void)
 {
     ui_EnableConnectBt = lv_obj_create(NULL);
-    lv_obj_remove_flag(ui_EnableConnectBt, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_EnableConnectBt, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_EnableConnectBt, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_EnableConnectBt, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -50,7 +50,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_x(ui_leftGong1, -90);
     lv_obj_set_y(ui_leftGong1, -117);
     lv_obj_set_align(ui_leftGong1, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_leftGong1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_leftGong1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_leftGong1, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_leftGong1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_leftGong1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -68,7 +68,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_x(ui_midLeftHeart1, -50);
     lv_obj_set_y(ui_midLeftHeart1, -125);
     lv_obj_set_align(ui_midLeftHeart1, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_midLeftHeart1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_midLeftHeart1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_midLeftHeart1, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_midLeftHeart1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_midLeftHeart1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -86,7 +86,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_x(ui_midBt1, 0);
     lv_obj_set_y(ui_midBt1, -133);
     lv_obj_set_align(ui_midBt1, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_midBt1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_midBt1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_midBt1, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_midBt1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_midBt1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -113,7 +113,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_align(ui_btEnablePanel, LV_ALIGN_CENTER);
     lv_obj_set_flex_flow(ui_btEnablePanel, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_flex_align(ui_btEnablePanel, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_btEnablePanel, LV_OBJ_FLAG_CLICKABLE);      /// Flags
+    removeFlag(ui_btEnablePanel, LV_OBJ_FLAG_CLICKABLE);      /// Flags
     lv_obj_set_scrollbar_mode(ui_btEnablePanel, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_scroll_dir(ui_btEnablePanel, LV_DIR_VER);
     lv_obj_set_style_radius(ui_btEnablePanel, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -135,7 +135,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_x(ui_btEnableBtn, -2);
     lv_obj_set_y(ui_btEnableBtn, 46);
     lv_obj_set_align(ui_btEnableBtn, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_btEnableBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);      /// Flags
+    addFlag(ui_btEnableBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);      /// Flags
     lv_obj_set_style_radius(ui_btEnableBtn, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_btEnableBtn, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_btEnableBtn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -147,8 +147,8 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_x(ui_btEnableBtnIcon, -122);
     lv_obj_set_y(ui_btEnableBtnIcon, 0);
     lv_obj_set_align(ui_btEnableBtnIcon, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_btEnableBtnIcon, LV_OBJ_FLAG_CLICKABLE);     /// Flags
-    lv_obj_remove_flag(ui_btEnableBtnIcon, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    addFlag(ui_btEnableBtnIcon, LV_OBJ_FLAG_CLICKABLE);     /// Flags
+    removeFlag(ui_btEnableBtnIcon, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_image_recolor(ui_btEnableBtnIcon, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_image_recolor_opa(ui_btEnableBtnIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -201,7 +201,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_x(ui_ScannedDevDropdown, -154);
     lv_obj_set_y(ui_ScannedDevDropdown, 97);
     lv_obj_set_align(ui_ScannedDevDropdown, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_ScannedDevDropdown, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    addFlag(ui_ScannedDevDropdown, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     lv_obj_set_style_text_color(ui_ScannedDevDropdown, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_ScannedDevDropdown, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_ScannedDevDropdown, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -229,8 +229,8 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_x(ui_btScanBtn, -2);
     lv_obj_set_y(ui_btScanBtn, 46);
     lv_obj_set_align(ui_btScanBtn, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_btScanBtn, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
-    lv_obj_remove_flag(ui_btScanBtn, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    addFlag(ui_btScanBtn, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    removeFlag(ui_btScanBtn, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_btScanBtn, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_btScanBtn, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_btScanBtn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -242,8 +242,8 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_x(ui_btScanBtnIcon, -117);
     lv_obj_set_y(ui_btScanBtnIcon, 0);
     lv_obj_set_align(ui_btScanBtnIcon, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_btScanBtnIcon, LV_OBJ_FLAG_CLICKABLE);     /// Flags
-    lv_obj_remove_flag(ui_btScanBtnIcon, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    addFlag(ui_btScanBtnIcon, LV_OBJ_FLAG_CLICKABLE);     /// Flags
+    removeFlag(ui_btScanBtnIcon, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_image_recolor(ui_btScanBtnIcon, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_image_recolor_opa(ui_btScanBtnIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -263,8 +263,8 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_x(ui_btBackBtn, -2);
     lv_obj_set_y(ui_btBackBtn, 46);
     lv_obj_set_align(ui_btBackBtn, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_btBackBtn, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_CHECKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);
-    lv_obj_remove_flag(ui_btBackBtn, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    addFlag(ui_btBackBtn, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_CHECKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    removeFlag(ui_btBackBtn, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_btBackBtn, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_btBackBtn, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_btBackBtn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -286,7 +286,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_y(ui_btConnectBtnBox, 142);
     lv_obj_set_align(ui_btConnectBtnBox, LV_ALIGN_CENTER);
     lv_obj_add_state(ui_btConnectBtnBox, LV_STATE_DISABLED);       /// States
-    lv_obj_remove_flag(ui_btConnectBtnBox, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_btConnectBtnBox, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_btConnectBtnBox, 12, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_btConnectBtnBox, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_btConnectBtnBox, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -313,7 +313,7 @@ void ui_EnableConnectBt_screen_init(void)
 
     //Hidden Object to shift focus
     ui_HiddenEnableBtScrBtn = lv_obj_create(ui_EnableConnectBt);
-    lv_obj_add_flag(ui_HiddenEnableBtScrBtn, LV_OBJ_FLAG_HIDDEN);
+    addFlag(ui_HiddenEnableBtScrBtn, LV_OBJ_FLAG_HIDDEN);
     
     //Style of Focus
     lv_obj_add_style(ui_btEnableBtn,        &colored_style_focus, LV_STATE_FOCUS_KEY);
@@ -395,7 +395,9 @@ void ui_event_btScanBtn(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_PRESSED)
-    {}
+    {
+        btAudio.start_bt_scan();
+    }
 }
 
 void ui_event_btBackBtn(lv_event_t * e)

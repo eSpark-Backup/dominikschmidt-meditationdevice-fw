@@ -148,6 +148,8 @@ extern lv_obj_t *controlScreen;
 
 void setFocusStyle(void);
 void setFocusStyleColored(int color);
+void removeFlag(lv_obj_t * obj, int flag);
+void addFlag(lv_obj_t * obj, int flag);
 
 #ifdef __cplusplus
 } /*extern "C"*/

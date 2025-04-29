@@ -40,7 +40,7 @@ int storedValue[3] = {0, 10, 25};
 void ui_SetTimerScr_screen_init(void)
 {
     ui_SetTimerScreen = lv_obj_create(NULL);
-    lv_obj_remove_flag(ui_SetTimerScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_SetTimerScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_color(ui_SetTimerScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_SetTimerScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -49,7 +49,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_width(ui_mainCntr, 317);
     lv_obj_set_height(ui_mainCntr, 140);
     lv_obj_set_align(ui_mainCntr, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_mainCntr, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_mainCntr, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_clkColon1 = lv_label_create(ui_mainCntr);
     lv_obj_set_width(ui_clkColon1, LV_SIZE_CONTENT);   /// 1
@@ -103,7 +103,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_clkHr, -121);
     lv_obj_set_y(ui_clkHr, -12);
     lv_obj_set_align(ui_clkHr, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_clkHr, LV_OBJ_FLAG_CLICKABLE);     /// Flags
+    addFlag(ui_clkHr, LV_OBJ_FLAG_CLICKABLE);     /// Flags
     lv_label_set_text(ui_clkHr, labelString(storedValue[0]));
     lv_obj_set_style_text_color(ui_clkHr, lv_color_hex(0x6A696A), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_clkHr, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -119,7 +119,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_hrRoller, -111);
     lv_obj_set_y(ui_hrRoller, -12);
     lv_obj_set_align(ui_hrRoller, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_hrRoller, LV_OBJ_FLAG_HIDDEN);     /// Flags
+    addFlag(ui_hrRoller, LV_OBJ_FLAG_HIDDEN);     /// Flags
     lv_obj_set_style_text_color(ui_hrRoller, lv_color_hex(0x94D28B), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_hrRoller, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui_hrRoller, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -148,7 +148,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_clkMin, -5);
     lv_obj_set_y(ui_clkMin, -12);
     lv_obj_set_align(ui_clkMin, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_clkMin, LV_OBJ_FLAG_CLICKABLE);     /// Flags
+    addFlag(ui_clkMin, LV_OBJ_FLAG_CLICKABLE);     /// Flags
     lv_label_set_text(ui_clkMin, labelString(storedValue[1]));
     lv_obj_set_style_text_color(ui_clkMin, lv_color_hex(0x6A696A), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_clkMin, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -164,7 +164,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_minRoller, 5);
     lv_obj_set_y(ui_minRoller, -12);
     lv_obj_set_align(ui_minRoller, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_minRoller, LV_OBJ_FLAG_HIDDEN);     /// Flags
+    addFlag(ui_minRoller, LV_OBJ_FLAG_HIDDEN);     /// Flags
     lv_obj_set_style_text_color(ui_minRoller, lv_color_hex(0x94D28B), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_minRoller, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui_minRoller, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -193,7 +193,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_clkSec, 99);
     lv_obj_set_y(ui_clkSec, -12);
     lv_obj_set_align(ui_clkSec, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_clkSec, LV_OBJ_FLAG_CLICKABLE); 
+    addFlag(ui_clkSec, LV_OBJ_FLAG_CLICKABLE); 
     lv_label_set_text(ui_clkSec, labelString(storedValue[2]));
     lv_obj_set_style_text_color(ui_clkSec, lv_color_hex(0x6A696A), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_clkSec, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -209,7 +209,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_secRoller, 119);
     lv_obj_set_y(ui_secRoller, -12);
     lv_obj_set_align(ui_secRoller, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_secRoller, LV_OBJ_FLAG_HIDDEN);     /// Flags
+    addFlag(ui_secRoller, LV_OBJ_FLAG_HIDDEN);     /// Flags
     lv_obj_set_style_text_color(ui_secRoller, lv_color_hex(0x94D28B), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_secRoller, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui_secRoller, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -240,7 +240,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_rightGong, 90);
     lv_obj_set_y(ui_rightGong, -117);
     lv_obj_set_align(ui_rightGong, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_rightGong, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_rightGong, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_rightGong, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_rightGong, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_rightGong, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -258,7 +258,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_midRightTune, 51);
     lv_obj_set_y(ui_midRightTune, -125);
     lv_obj_set_align(ui_midRightTune, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_midRightTune, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_midRightTune, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_midRightTune, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_midRightTune, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_midRightTune, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -276,7 +276,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_midTime, 0);
     lv_obj_set_y(ui_midTime, -133);
     lv_obj_set_align(ui_midTime, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_midTime, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_midTime, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_midTime, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_midTime, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_midTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -288,8 +288,8 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_startBtnBox1, 0);
     lv_obj_set_y(ui_startBtnBox1, 142);
     lv_obj_set_align(ui_startBtnBox1, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_startBtnBox1, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
-    lv_obj_remove_flag(ui_startBtnBox1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    addFlag(ui_startBtnBox1, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    removeFlag(ui_startBtnBox1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_startBtnBox1, 12, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_startBtnBox1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_startBtnBox1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -312,7 +312,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_startIcon1, -48);
     lv_obj_set_y(ui_startIcon1, -14);
     lv_obj_set_align(ui_startIcon1, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_startIcon1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_startIcon1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_image_src(ui_startIcon1, &ui_img_31_blackstarticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_pgCntr = lv_obj_create(ui_SetTimerScreen);
@@ -322,7 +322,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_pgCntr, 0);
     lv_obj_set_y(ui_pgCntr, 80);
     lv_obj_set_align(ui_pgCntr, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_pgCntr, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_pgCntr, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_pg1 = lv_obj_create(ui_pgCntr);
     lv_obj_remove_style_all(ui_pg1);
@@ -331,7 +331,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_pg1, -31);
     lv_obj_set_y(ui_pg1, -1);
     lv_obj_set_align(ui_pg1, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_pg1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_pg1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_pg1, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_pg1, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_pg1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -343,7 +343,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_pg2, -16);
     lv_obj_set_y(ui_pg2, -1);
     lv_obj_set_align(ui_pg2, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_pg2, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_pg2, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_pg2, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_pg2, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_pg2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -355,7 +355,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_pg3, 1);
     lv_obj_set_y(ui_pg3, -1);
     lv_obj_set_align(ui_pg3, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_pg3, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_pg3, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_pg3, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_pg3, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_pg3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -367,7 +367,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_pg4, 16);
     lv_obj_set_y(ui_pg4, -1);
     lv_obj_set_align(ui_pg4, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_pg4, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_pg4, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_pg4, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_pg4, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_pg4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -379,7 +379,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_x(ui_pg5, 32);
     lv_obj_set_y(ui_pg5, -1);
     lv_obj_set_align(ui_pg5, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_pg5, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    removeFlag(ui_pg5, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_pg5, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_pg5, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_pg5, 250, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -423,7 +423,7 @@ void ui_SetTimerScr_screen_init(void)
 
     //Hidden Object to shift focus
     ui_HiddenTimerScrBtn = lv_obj_create(ui_SetTimerScreen);
-    lv_obj_add_flag(ui_HiddenTimerScrBtn, LV_OBJ_FLAG_HIDDEN);
+    addFlag(ui_HiddenTimerScrBtn, LV_OBJ_FLAG_HIDDEN);
     
     //Style of Focus
     lv_obj_add_style(ui_clkHr,          &style_focus, LV_STATE_FOCUS_KEY);
