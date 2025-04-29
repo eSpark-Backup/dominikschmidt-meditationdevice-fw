@@ -27,6 +27,7 @@ extern lv_obj_t * ui_btBtn;
 extern lv_obj_t * ui_btBtnIcon;
 extern lv_obj_t * ui_btBtnLabel;
 extern lv_obj_t * ui_btLabel;
+extern lv_obj_t * ui_btDeviceConLbl;
 extern lv_obj_t * ui_leftGong2;
 extern lv_obj_t * ui_midLeftHeart;
 extern lv_obj_t * ui_midBt;

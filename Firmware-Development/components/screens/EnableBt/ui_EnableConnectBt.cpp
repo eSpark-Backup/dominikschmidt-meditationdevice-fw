@@ -194,8 +194,8 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_style_pad_bottom(ui_btEnableSwitch, -2, LV_PART_KNOB | LV_STATE_CHECKED);
 
     ui_ScannedDevDropdown = lv_dropdown_create(ui_btEnablePanel);
-    lv_dropdown_set_options(ui_ScannedDevDropdown, "opt 1\nopt 2\nopt 3\nopt 1\nopt 2\nopt 3\nopt 1\nopt 2\nopt 3");
-    lv_dropdown_set_text(ui_ScannedDevDropdown, deviceName);
+    lv_dropdown_set_options(ui_ScannedDevDropdown, "");
+    lv_dropdown_set_text(ui_ScannedDevDropdown, "Select Device");
     lv_obj_set_width(ui_ScannedDevDropdown, 300);
     lv_obj_set_height(ui_ScannedDevDropdown, 65);
     lv_obj_set_x(ui_ScannedDevDropdown, -154);
@@ -368,24 +368,31 @@ void ui_event_btListSwitch(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if(event_code == LV_EVENT_PRESSED) {
+    if(event_code == LV_EVENT_PRESSED && strcmp(lv_dropdown_get_text(ui_ScannedDevDropdown), "Scanning Devices") != 0) {
         if(list_selected == false)
         {
             lv_dropdown_open(ui_ScannedDevDropdown);
             list_selected = true;
             memset(deviceName, 0, NAME_BUF);
-            strcpy(deviceName, "Select Device");
-            lv_dropdown_set_text(ui_ScannedDevDropdown, deviceName);
+            lv_dropdown_set_text(ui_ScannedDevDropdown, "Select Device");
 
         }
         else
         {
             lv_dropdown_close(ui_ScannedDevDropdown);
-            // lv_group_focus_obj(ui_btBtn);
             list_selected = false;
             lv_dropdown_get_selected_str(ui_ScannedDevDropdown, deviceName, NAME_BUF);
-            lv_dropdown_set_text(ui_ScannedDevDropdown, deviceName);
-            // printf("deviceName: %s\n",deviceName);
+            if (strlen(deviceName) == 0 || strcmp(deviceName, "Select None") == 0)
+            {
+                lv_dropdown_set_text(ui_ScannedDevDropdown, "Select Device");
+                memset(deviceName, 0, NAME_BUF);
+                printf("None Selected\n");
+            }
+            else
+            {
+                lv_dropdown_set_text(ui_ScannedDevDropdown, deviceName);
+                printf("device name: %s\n",deviceName);
+            }
         }
     }
 }
@@ -396,6 +403,7 @@ void ui_event_btScanBtn(lv_event_t * e)
 
     if(event_code == LV_EVENT_PRESSED)
     {
+        lv_dropdown_set_text(ui_ScannedDevDropdown, "Scanning Devices");
         btAudio.start_bt_scan();
     }
 }

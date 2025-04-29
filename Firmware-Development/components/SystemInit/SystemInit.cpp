@@ -226,15 +226,25 @@ void System::NavigateScreens(ButtonData btnData, int encData)
         if (btnData.State == BUTTON_SINGLE_CLICK || (btnData.State == BUTTON_LONG_HOLD)) {
             sendEvents(btnData.State, screenCount);
 
-            // if(deviceName[0] != '\0' && isScanned)
-            // {
-            //     if(btAudio.connect_to_bt_device(deviceName) || deviceConnected)
-            //     {
-            //         _ui_state_modify(ui_btBtnIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-            //         _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-            //     }
-            //     isScanned = false;
-            // }
+            if(deviceName[0] != '\0' && strlen(deviceName) != 0)
+            {
+                if(btAudio.connect_to_bt_device(deviceName) || deviceConnected)
+                {
+                    lv_label_set_text(ui_btBtnLabel, "Bluetooth Connected");
+                    lv_label_set_text_fmt(ui_btDeviceConLbl, "To : %s",deviceName);
+                    _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+                    _ui_state_modify(ui_btBtnIcon,  LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+                    _ui_flag_modify(ui_btDeviceConLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+                }
+                isScanned = false;
+            }
+            else
+            {
+                lv_label_set_text(ui_btBtnLabel, "Bluetooth Not Connected");
+                _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+                _ui_state_modify(ui_btBtnIcon,  LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+                _ui_flag_modify(ui_btDeviceConLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_STATE_ADD);
+            }
         } 
     }
     else if (btnData.ID == A)
@@ -266,6 +276,9 @@ void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
     else
     {
         curFocusedObj = (curFocusedObj + encDiff + count) % count;
+        if(curFocusedObj == count) {
+            if(encDiff<0) curFocusedObj--;
+            else if(encDiff>0) curFocusedObj++;}
         lv_group_focus_obj(lv_group_get_obj_by_index(currentGroup, curFocusedObj));
     }
 }

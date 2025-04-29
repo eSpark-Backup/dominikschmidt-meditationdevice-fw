@@ -88,6 +88,8 @@ void ui_BluetoothScreen_screen_init(void)
     removeFlag(ui_btBtnIcon, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_image_recolor(ui_btBtnIcon, lv_color_hex(0xFF0000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_image_recolor_opa(ui_btBtnIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_image_recolor(ui_btBtnIcon, lv_color_hex(0x62DA41), LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_image_recolor_opa(ui_btBtnIcon, 255, LV_PART_MAIN | LV_STATE_CHECKED);
 
     ui_btBtnLabel = lv_label_create(ui_btBtn);
     lv_obj_set_width(ui_btBtnLabel, LV_SIZE_CONTENT);   /// 1

@@ -211,7 +211,7 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
                 for (int i = 0; i < scanned_device_count; i++) {
                     ESP_LOGI(TAG, "[%d] Name: %s", i + 1, scanned_devices[i].name);
                 }
-                update_bt_dropdown(ui_btDropdownList);
+                update_bt_dropdown(ui_ScannedDevDropdown);
             } else if (param->disc_st_chg.state == ESP_BT_GAP_DISCOVERY_STARTED) {
                 ESP_LOGI(TAG, "Discovery started.");
                 scanned_device_count = 0;  // Reset list on new scan
@@ -609,7 +609,7 @@ void A2DP::update_bt_dropdown(lv_obj_t *dropdown)
         return;
     }
 
-    size_t total_length = 1; // Start with 1 for null terminator
+    size_t total_length = 13; // Start with 1 for null terminator + "Select None"
     for (int i = 0; i < scanned_device_count; i++) {
         total_length += strlen(scanned_devices[i].name) + 1;
     }
@@ -623,6 +623,7 @@ void A2DP::update_bt_dropdown(lv_obj_t *dropdown)
     dropdown_options[0] = '\0';
 
     ESP_LOGI(TAG, "Final device list for dropdown:");
+    strcat(dropdown_options, "Select None\n");
     for (int i = 0; i < scanned_device_count; i++) {
         strcat(dropdown_options, scanned_devices[i].name);
         if (i < scanned_device_count - 1) strcat(dropdown_options, "\n");
@@ -634,13 +635,14 @@ void A2DP::update_bt_dropdown(lv_obj_t *dropdown)
     // ✅ Debug log before setting options
     ESP_LOGI(TAG, "Updating dropdown with new options...");
 
-    lv_dropdown_set_options(ui_btDropdownList, dropdown_options);
+    lv_dropdown_set_options(ui_ScannedDevDropdown, dropdown_options);
 
     // ✅ Force refresh the dropdown UI
     lv_obj_invalidate(dropdown);
     lv_obj_refresh_style(dropdown, LV_PART_MAIN, LV_STATE_DEFAULT);
 
     free(dropdown_options);
+    lv_dropdown_set_text(ui_ScannedDevDropdown, "Select Device");
 }
 
 void A2DP::update_dropdown_options(lv_obj_t *dropdown, char **options, int option_count)
