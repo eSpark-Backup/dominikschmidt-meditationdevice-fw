@@ -37,6 +37,7 @@ class System
     static void ButtonReadStatic(lv_indev_t * indev, lv_indev_data_t * data);
     void setBrightness(uint8_t brightness_percent);
     void setupPWM();
+    void updateBluetoothSettings();
     
     private:
     void initScreens(void);

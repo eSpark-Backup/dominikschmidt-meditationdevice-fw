@@ -17,7 +17,8 @@
         "string": "c",
         "string_view": "c",
         "ui_endgong.h": "c",
-        "ui_enableconnectbt.h": "c"
+        "ui_enableconnectbt.h": "c",
+        "functional": "cpp"
     },
     "idf.flashType": "UART",
     "idf.portWin": "COM22"

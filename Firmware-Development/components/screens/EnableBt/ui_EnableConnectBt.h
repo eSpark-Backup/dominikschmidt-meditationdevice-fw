@@ -36,8 +36,10 @@ void ui_event_btEnableSwitch(lv_event_t * e);
 void ui_event_btListSwitch(lv_event_t * e);
 void ui_event_btScanBtn(lv_event_t * e);
 void ui_event_btBackBtn(lv_event_t * e);
+void ui_event_btConnectBtn(lv_event_t * e);
 void EnableBtFocus(bool focus);
 void rotateScannedDropdown(int diff);
+void checkBtDeviceConnectivity();
 extern bool list_selected;
 #define NAME_BUF  50
 extern char deviceName[NAME_BUF];

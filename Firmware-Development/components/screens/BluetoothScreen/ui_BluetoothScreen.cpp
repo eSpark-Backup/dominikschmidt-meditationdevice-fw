@@ -18,7 +18,6 @@ lv_obj_t *ui_btDeviceConLbl;
 lv_obj_t *ui_leftGong2;
 lv_obj_t *ui_midLeftHeart;
 lv_obj_t *ui_midBt;
-lv_obj_t *ui_btDropdownList;
 lv_obj_t *ui_HiddenBTScrBtn;
 lv_group_t *BTGroup;
 // CUSTOM VARIABLES
@@ -287,41 +286,8 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_bg_color(ui_pg15, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_pg15, 250, LV_PART_MAIN | LV_STATE_DEFAULT);
     
-    ui_btDropdownList = lv_dropdown_create(ui_BluetoothScreen);
-    char *option_str = "Option 1\nOption 2\nOption 3\nOption 4\nOption 5\nOption 6";
-    lv_dropdown_set_options(ui_btDropdownList, option_str);
-    // lv_dropdown_set_text(ui_btDropdownList, "Select Bluetooth Device");
-    lv_obj_set_width(ui_btDropdownList, 310);
-    lv_obj_set_height(ui_btDropdownList, LV_SIZE_CONTENT);    /// 54
-    lv_obj_set_x(ui_btDropdownList, -1);
-    lv_obj_set_y(ui_btDropdownList, 0);
-    lv_obj_set_align(ui_btDropdownList, LV_ALIGN_CENTER);
-    addFlag(ui_btDropdownList, LV_OBJ_FLAG_HIDDEN);     /// Flags
-    lv_obj_set_style_text_font(ui_btDropdownList, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_align(ui_btDropdownList, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_btDropdownList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_btDropdownList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    lv_obj_set_style_text_color(ui_btDropdownList, lv_color_hex(0x808080), LV_PART_INDICATOR | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_btDropdownList, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);
-
-    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_btDropdownList), lv_color_hex(0x424242),  LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_btDropdownList), 255,  LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    lv_obj_set_style_text_color(lv_dropdown_get_list(ui_btDropdownList), lv_color_hex(0x000000),
-                                LV_PART_SELECTED | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(lv_dropdown_get_list(ui_btDropdownList), 255,  LV_PART_SELECTED | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_btDropdownList), lv_color_hex(0x424242),
-                              LV_PART_SELECTED | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_btDropdownList), 255,  LV_PART_SELECTED | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_btDropdownList), lv_color_hex(0x424242),
-                              LV_PART_SELECTED | LV_STATE_CHECKED);
-    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_btDropdownList), 255,  LV_PART_SELECTED | LV_STATE_CHECKED);
-
-
 
     //Events
-    lv_obj_add_event_cb(ui_btDropdownList, ui_event_btDropdownList, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_connectBtnBox, ui_event_connectBtnBox, LV_EVENT_ALL, NULL);
 
     //Hidden Object to shift focus
@@ -330,12 +296,10 @@ void ui_BluetoothScreen_screen_init(void)
     
     //Style of Focus
     lv_obj_add_style(ui_connectBtnBox, &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_btDropdownList, &style_focus, LV_STATE_FOCUS_KEY);
     
     //Bluetooth Screen Group of objects for Focus and Events
     BTGroup = lv_group_create();
     lv_group_add_obj(BTGroup, ui_connectBtnBox);
-    lv_group_add_obj(BTGroup, ui_btDropdownList);
     lv_group_add_obj(BTGroup, ui_HiddenBTScrBtn);
 
     lv_indev_t * indev = lv_indev_get_next(NULL);
@@ -353,68 +317,3 @@ void ui_event_connectBtnBox(lv_event_t * e)
         _ui_screen_change(&ui_EnableConnectBt, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_EnableConnectBt_screen_init);
     }
 }
-
-// _ui_state_modify(ui_btBtnIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-// _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-void ui_event_btBtn(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-    
-    if(event_code == LV_EVENT_LONG_PRESSED) {
-        _ui_flag_modify(ui_btBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-        _ui_flag_modify(ui_btDropdownList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-        lv_group_focus_obj(ui_btDropdownList);
-        lv_dropdown_open(ui_btDropdownList);
-        list_selected = true;
-        memset(deviceName, 0, BUF_SIZE);
-    }
-}
-
-void ui_event_btDropdownList(lv_event_t * e)
-{
-    lv_event_code_t event_code = lv_event_get_code(e);
-
-    if(event_code == LV_EVENT_PRESSED) {
-        lv_dropdown_close(ui_btDropdownList);
-        _ui_flag_modify(ui_btBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-        _ui_flag_modify(ui_btDropdownList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-        lv_group_focus_obj(ui_btBtn);
-        list_selected = false;
-        lv_dropdown_get_selected_str(ui_btDropdownList, deviceName, BUF_SIZE);
-        printf("deviceName: %s\n",deviceName);
-    }
-}
-
-void rotateDropdown(int diff)
-{
-    if (diff != 0)
-    {
-        // Get the current selected index
-        int current_index = lv_dropdown_get_selected(ui_btDropdownList);
-        
-        // Get the total number of options
-        const char *options = lv_dropdown_get_options(ui_btDropdownList);
-        int total_options = 0;
-        
-        // Count the number of options by counting '\n' occurrences
-        for (const char *p = options; *p; p++)
-        {
-            if (*p == '\n') total_options++;
-        }
-        total_options++; // Add one for the last option (no '\n' at the end)
-        
-        // Update index based on rotation direction
-        int new_index = current_index + diff;
-        
-        // Ensure index stays within valid bounds
-        if (new_index < 0) 
-        new_index = total_options - 1; // Wrap around to the last item
-        else if (new_index >= total_options) 
-        new_index = 0; // Wrap around to the first item
-        
-        // Set new selected index
-        lv_dropdown_set_selected(ui_btDropdownList, new_index);
-    } 
-}
-
-

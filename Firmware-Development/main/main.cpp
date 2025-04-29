@@ -115,6 +115,7 @@ void lvglTask(void *pvParameters)
     {
         /* Delay 1 tick (assumes FreeRTOS tick is 10ms */
         lv_timer_handler(); /* let the GUI do its work */
+        Core.updateBluetoothSettings();
         vTaskDelay(pdMS_TO_TICKS(3));
     }
 }

@@ -1,11 +1,17 @@
 idf_component_register(SRCS "main.cpp"
                        INCLUDE_DIRS ".")
 
-target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-error)
-target_compile_options(${COMPONENT_LIB} PRIVATE -Wdeprecated-declarations)
-target_compile_options(${COMPONENT_LIB} PRIVATE -Wcpp)
-target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-unused-variable)
-target_compile_options(${COMPONENT_LIB} PRIVATE -Wmissing-field-initializers)
-target_compile_options(${COMPONENT_LIB} PRIVATE -Wconversion-null)
-target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-format-truncation)
-
+# Suppress warnings for C++ specifically
+target_compile_options(${COMPONENT_LIB} PRIVATE
+    $<$<COMPILE_LANGUAGE:CXX>:
+        -Wno-error
+        -Wdeprecated-declarations
+        -Wcpp
+        -Wno-unused-variable
+        -Wno-missing-field-initializers
+        -Wno-format-truncation
+        -Wno-c++11-narrowing
+        -Wno-narrowing
+        -Wno-conversion-null
+    >
+)

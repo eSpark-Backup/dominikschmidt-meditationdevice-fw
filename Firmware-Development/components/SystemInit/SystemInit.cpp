@@ -127,11 +127,6 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     encDiff = newCounter - last_encoder_counter;
     last_encoder_counter = newCounter;
 
-    if(startMeditation)
-    {   loadAudio();
-        startMeditation = false;
-    }
-    
     if(encDiff != 0)
     {
         if ((roller_selected && roller != NULL) || list_selected)  // Only update if roller is in selection mode
@@ -225,26 +220,6 @@ void System::NavigateScreens(ButtonData btnData, int encData)
     {
         if (btnData.State == BUTTON_SINGLE_CLICK || (btnData.State == BUTTON_LONG_HOLD)) {
             sendEvents(btnData.State, screenCount);
-
-            if(deviceName[0] != '\0' && strlen(deviceName) != 0)
-            {
-                if(btAudio.connect_to_bt_device(deviceName) || deviceConnected)
-                {
-                    lv_label_set_text(ui_btBtnLabel, "Bluetooth Connected");
-                    lv_label_set_text_fmt(ui_btDeviceConLbl, "To : %s",deviceName);
-                    _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-                    _ui_state_modify(ui_btBtnIcon,  LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-                    _ui_flag_modify(ui_btDeviceConLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-                }
-                isScanned = false;
-            }
-            else
-            {
-                lv_label_set_text(ui_btBtnLabel, "Bluetooth Not Connected");
-                _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
-                _ui_state_modify(ui_btBtnIcon,  LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
-                _ui_flag_modify(ui_btDeviceConLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_STATE_ADD);
-            }
         } 
     }
     else if (btnData.ID == A)
@@ -424,5 +399,14 @@ void System::loadAudio()
     // Favourite fav5 = {145, "Nature Sounds", "Forest Rain", false}; // 2:32
     // Favourite fav6 = {145, "Nature Sounds", "Birds", false}; //2:30
 
+}
+
+void System::updateBluetoothSettings()
+{
+    if(startMeditation)
+    {   loadAudio();
+        startMeditation = false;
+    }
+    checkBtDeviceConnectivity();
 }
     

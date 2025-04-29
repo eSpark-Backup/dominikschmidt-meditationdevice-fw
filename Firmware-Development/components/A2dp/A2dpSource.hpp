@@ -38,6 +38,7 @@ class A2DP
         void update_dropdown_options(lv_obj_t *dropdown, char **options, int option_count);
         void start_bt_scan();
         bool connect_to_bt_device(const char *device_name);
+        bool disconnect_to_bt_device(const char *device_name);
         void print_bonded_devices();
         
     private:

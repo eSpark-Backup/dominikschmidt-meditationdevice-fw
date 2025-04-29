@@ -32,7 +32,7 @@ lv_obj_t * ui_btConnectLabel;
 lv_obj_t * ui_HiddenEnableBtScrBtn;
 lv_group_t * EnableBtGroup;
 bool list_selected = false;
-char deviceName[NAME_BUF] = "Select Device";
+char deviceName[NAME_BUF] = {0};
 // CUSTOM VARIABLES
 
 
@@ -310,6 +310,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_add_event_cb(ui_ScannedDevDropdown,  ui_event_btListSwitch, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_btScanBtn,           ui_event_btScanBtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_btBackBtn,           ui_event_btBackBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_btConnectBtnBox,     ui_event_btConnectBtn, LV_EVENT_ALL, NULL);
 
     //Hidden Object to shift focus
     ui_HiddenEnableBtScrBtn = lv_obj_create(ui_EnableConnectBt);
@@ -320,6 +321,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_add_style(ui_ScannedDevDropdown, &colored_style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_btScanBtn,          &colored_style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_btBackBtn,          &colored_style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_btConnectBtnBox,    &colored_style_focus, LV_STATE_FOCUS_KEY);
     
     //Enable BT Screen Group of objects for Focus and Events
     EnableBtGroup = lv_group_create();
@@ -345,7 +347,7 @@ void ui_event_btEnableSwitch(lv_event_t * e)
         _ui_flag_modify(ui_ScannedDevDropdown, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
         _ui_flag_modify(ui_btScanBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
         _ui_flag_modify(ui_btBackBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
-        _ui_state_modify(ui_btConnectBtnBox, LV_STATE_DISABLED, _UI_MODIFY_STATE_TOGGLE);
+        // _ui_state_modify(ui_btConnectBtnBox, LV_STATE_DISABLED, _UI_MODIFY_STATE_TOGGLE);
         lv_group_focus_obj(ui_btEnableBtn);
     }
 }
@@ -392,6 +394,8 @@ void ui_event_btListSwitch(lv_event_t * e)
             {
                 lv_dropdown_set_text(ui_ScannedDevDropdown, deviceName);
                 printf("device name: %s\n",deviceName);
+                lv_group_add_obj(EnableBtGroup, ui_btConnectBtnBox);
+                _ui_state_modify(ui_btConnectBtnBox, LV_STATE_DISABLED, _UI_MODIFY_STATE_REMOVE);
             }
         }
     }
@@ -448,4 +452,54 @@ void rotateScannedDropdown(int diff)
         // Set new selected index
         lv_dropdown_set_selected(ui_ScannedDevDropdown, new_index);
     } 
+}
+
+void ui_event_btConnectBtn(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED)
+    {
+        if(deviceConnected && strcmp(lv_label_get_text(ui_btConnectLabel), "DISCONNECT") != 0)
+        {
+            btAudio.disconnect_to_bt_device(deviceName);
+        }
+        else if(!deviceConnected && strcmp(lv_label_get_text(ui_btConnectLabel), "CONNECT") != 0)
+        {
+            btAudio.connect_to_bt_device(deviceName);
+        }
+    }
+}
+
+void checkBtDeviceConnectivity()
+{
+    if (strlen(deviceName) != 0 && strcmp(deviceName, "Select None") != 0 && deviceConnected)
+    {
+        lv_group_add_obj(EnableBtGroup, ui_btConnectBtnBox);
+        if(deviceConnected)
+        {
+            lv_label_set_text(ui_btConnectLabel, "DISCONNECT");
+        }
+        if(lv_obj_has_state(ui_btConnectBtnBox, LV_STATE_DISABLED))
+        {
+            _ui_state_modify(ui_btConnectBtnBox, LV_STATE_DISABLED, _UI_MODIFY_STATE_REMOVE);
+        }
+
+        if(strcmp(lv_label_get_text(ui_btBtnLabel), "Bluetooth Connected") != 0)
+        {
+            lv_label_set_text(ui_btBtnLabel, "Bluetooth Connected");
+            lv_label_set_text_fmt(ui_btDeviceConLbl, "To : %s",deviceName);
+            _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+            _ui_state_modify(ui_btBtnIcon,  LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+            _ui_flag_modify(ui_btDeviceConLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);           
+        }
+    }
+    else if(strcmp(lv_label_get_text(ui_btBtnLabel), "Bluetooth Not Connected") != 0)
+    {
+        lv_group_remove_obj(ui_btConnectBtnBox);
+        lv_label_set_text(ui_btBtnLabel, "Bluetooth Not Connected");
+        _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+        _ui_state_modify(ui_btBtnIcon,  LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+        _ui_flag_modify(ui_btDeviceConLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_STATE_ADD);
+    }
 }

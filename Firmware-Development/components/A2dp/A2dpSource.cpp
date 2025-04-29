@@ -299,6 +299,30 @@ bool A2DP::connect_to_bt_device(const char *device_name)
     return false;
 }
 
+/* Disconnects to a Bluetooth device by name */
+bool A2DP::disconnect_to_bt_device(const char *device_name)
+{
+    for (int i = 0; i < scanned_device_count; i++) {
+        if (strcmp(scanned_devices[i].name, device_name) == 0) {
+            char bda_str[18];
+            ESP_LOGI(TAG, "Disconnecting to %s (%s)...", device_name, bda2str(scanned_devices[i].bda, bda_str, 18));
+            if (esp_a2d_source_disconnect(scanned_devices[i].bda) == ESP_OK) {
+                ESP_LOGI(TAG, "Disconnection successful.");
+                deviceConnected = true;
+                return true;
+            } else {
+                ESP_LOGE(TAG, "Disconnection failed.");
+                deviceConnected = false;
+                return false;
+            }
+        }
+    }
+    memset(deviceName, 0, BUF_SIZE);
+    ESP_LOGW(TAG, "Device %s not found.", device_name);
+    return false;
+}
+
+
 void A2DP::A2dpServiceInit()
 {
     ESP_LOGI(TAG, "[ 2 ] Bluetooth setup");

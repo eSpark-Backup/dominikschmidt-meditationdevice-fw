@@ -31,7 +31,6 @@ extern lv_obj_t * ui_btDeviceConLbl;
 extern lv_obj_t * ui_leftGong2;
 extern lv_obj_t * ui_midLeftHeart;
 extern lv_obj_t * ui_midBt;
-extern lv_obj_t * ui_btDropdownList;
 extern lv_obj_t * ui_HiddenBTScrBtn;
 extern lv_group_t * BTGroup;
 // CUSTOM VARIABLES
