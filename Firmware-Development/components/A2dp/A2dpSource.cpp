@@ -146,12 +146,12 @@ void A2DP::filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param) {
     int32_t rssi = -129; /* invalid value */
     bool name_found = false;
 
-    ESP_LOGI(TAG, "Scanned device: %s", bda2str(param->disc_res.bda, bda_str, 18));
+    // ESP_LOGI(TAG, "Scanned device: %s", bda2str(param->disc_res.bda, bda_str, 18));
 
     // Check if device already exists
     for (int i = 0; i < scanned_device_count; i++) {
         if (memcmp(scanned_devices[i].bda, param->disc_res.bda, ESP_BD_ADDR_LEN) == 0) {
-            ESP_LOGI(TAG, "Device %s already scanned, skipping.", bda_str);
+            // ESP_LOGI(TAG, "Device %s already scanned, skipping.", bda_str);
             return;  // ✅ Skip duplicate device
         }
     }
@@ -162,17 +162,17 @@ void A2DP::filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param) {
         switch (p->type) {
             case ESP_BT_GAP_DEV_PROP_COD:
                 cod = *(uint32_t *)(p->val);
-                ESP_LOGI(TAG, "--Class of Device: 0x%" PRIx32, cod);
+                // ESP_LOGI(TAG, "--Class of Device: 0x%" PRIx32, cod);
                 break;
             case ESP_BT_GAP_DEV_PROP_RSSI:
                 rssi = *(int8_t *)(p->val);
-                ESP_LOGI(TAG, "--RSSI: %" PRId32, rssi);
+                // ESP_LOGI(TAG, "--RSSI: %" PRId32, rssi);
                 break;
             case ESP_BT_GAP_DEV_PROP_EIR:
                 eir = (uint8_t *)(p->val);
                 if (get_name_from_eir(eir, (uint8_t *)&peer_bdname, NULL)) {
                     name_found = true;
-                    ESP_LOGI(TAG, "--Name: %s", peer_bdname);
+                    // ESP_LOGI(TAG, "--Name: %s", peer_bdname);
                 }
                 break;
             case ESP_BT_GAP_DEV_PROP_BDNAME:
@@ -194,7 +194,7 @@ void A2DP::filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param) {
         scanned_device_count++;
         ESP_LOGI(TAG, "✅ Stored device: %s", peer_bdname);
     } else {
-        ESP_LOGW(TAG, "⚠ Skipping device without name.");
+        // ESP_LOGW(TAG, "⚠ Skipping device without name.");
     }
 }
 
@@ -208,9 +208,9 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
         case ESP_BT_GAP_DISC_STATE_CHANGED_EVT: {
             if (param->disc_st_chg.state == ESP_BT_GAP_DISCOVERY_STOPPED) {
                 ESP_LOGI(TAG, "Device discovery stopped. Found %d devices:", scanned_device_count);
-                for (int i = 0; i < scanned_device_count; i++) {
-                    ESP_LOGI(TAG, "[%d] Name: %s", i + 1, scanned_devices[i].name);
-                }
+                // for (int i = 0; i < scanned_device_count; i++) {
+                //     ESP_LOGI(TAG, "[%d] Name: %s", i + 1, scanned_devices[i].name);
+                // }
                 update_bt_dropdown(ui_ScannedDevDropdown);
             } else if (param->disc_st_chg.state == ESP_BT_GAP_DISCOVERY_STARTED) {
                 ESP_LOGI(TAG, "Discovery started.");
@@ -229,25 +229,25 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
             esp_bd_addr_t connected_bda;
             memcpy(connected_bda, param->acl_conn_cmpl_stat.bda, sizeof(esp_bd_addr_t));
 
-            printf( "Device Connected - MAC: %02X:%02X:%02X:%02X:%02X:%02X\n",
-                        connected_bda[0], connected_bda[1], connected_bda[2], 
-                        connected_bda[3], connected_bda[4], connected_bda[5]);
+            // printf( "Device Connected - MAC: %02X:%02X:%02X:%02X:%02X:%02X\n",
+            //             connected_bda[0], connected_bda[1], connected_bda[2], 
+            //             connected_bda[3], connected_bda[4], connected_bda[5]);
 
-            // Get device name
-            if (esp_bt_gap_read_remote_name(connected_bda) == ESP_OK) {
-                printf("Fetching remote device name...\n");
-            } else {
-                printf("Failed to fetch remote device name\n");
-            }
+            // // Get device name
+            // if (esp_bt_gap_read_remote_name(connected_bda) == ESP_OK) {
+            //     printf("Fetching remote device name...\n");
+            // } else {
+            //     printf("Failed to fetch remote device name\n");
+            // }
             break;
         }
         case ESP_BT_GAP_ACL_DISCONN_CMPL_STAT_EVT: {
             esp_bd_addr_t disconnected_bda;
             memcpy(disconnected_bda, param->acl_disconn_cmpl_stat.bda, sizeof(esp_bd_addr_t));
 
-            printf("Device Disconnected - MAC: %02X:%02X:%02X:%02X:%02X:%02X\n",
-                        disconnected_bda[0], disconnected_bda[1], disconnected_bda[2], 
-                        disconnected_bda[3], disconnected_bda[4], disconnected_bda[5]);
+            // printf("Device Disconnected - MAC: %02X:%02X:%02X:%02X:%02X:%02X\n",
+            //             disconnected_bda[0], disconnected_bda[1], disconnected_bda[2], 
+            //             disconnected_bda[3], disconnected_bda[4], disconnected_bda[5]);
             break;        
         }
         case ESP_BT_GAP_READ_REMOTE_NAME_EVT: { // Device Name Received
@@ -646,18 +646,18 @@ void A2DP::update_bt_dropdown(lv_obj_t *dropdown)
 
     dropdown_options[0] = '\0';
 
-    ESP_LOGI(TAG, "Final device list for dropdown:");
+    // ESP_LOGI(TAG, "Final device list for dropdown:");
     strcat(dropdown_options, "Select None\n");
     for (int i = 0; i < scanned_device_count; i++) {
         strcat(dropdown_options, scanned_devices[i].name);
         if (i < scanned_device_count - 1) strcat(dropdown_options, "\n");
-        ESP_LOGI(TAG, "[%d] %s", i + 1, scanned_devices[i].name);
+        // ESP_LOGI(TAG, "[%d] %s", i + 1, scanned_devices[i].name);
     }
 
     ESP_LOGI(TAG, "Dropdown string: %s", dropdown_options);
 
     // ✅ Debug log before setting options
-    ESP_LOGI(TAG, "Updating dropdown with new options...");
+    // ESP_LOGI(TAG, "Updating dropdown with new options...");
 
     lv_dropdown_set_options(ui_ScannedDevDropdown, dropdown_options);
 
