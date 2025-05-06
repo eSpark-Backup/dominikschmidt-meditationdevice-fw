@@ -460,11 +460,11 @@ void ui_event_btConnectBtn(lv_event_t * e)
 
     if(event_code == LV_EVENT_PRESSED)
     {
-        if(deviceConnected && strcmp(lv_label_get_text(ui_btConnectLabel), "DISCONNECT") != 0)
+        if(deviceConnected && strcmp(lv_label_get_text(ui_btConnectLabel), "DISCONNECT") == 0)
         {
             btAudio.disconnect_to_bt_device(deviceName);
         }
-        else if(!deviceConnected && strcmp(lv_label_get_text(ui_btConnectLabel), "CONNECT") != 0)
+        else if(!deviceConnected && strcmp(lv_label_get_text(ui_btConnectLabel), "CONNECT") == 0)
         {
             btAudio.connect_to_bt_device(deviceName);
         }
