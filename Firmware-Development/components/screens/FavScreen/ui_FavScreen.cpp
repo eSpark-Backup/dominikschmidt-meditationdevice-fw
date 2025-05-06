@@ -536,6 +536,7 @@ void selectFavPanel(bool focus)
         lv_group_add_obj(FavPanelGroup, ui_Fav4);
         lv_group_add_obj(FavPanelGroup, ui_Fav5);
         lv_group_add_obj(FavPanelGroup, ui_Fav6);
+        lv_group_add_obj(FavPanelGroup, ui_HiddenFavScrBtn);
 
         // Switch focus to the panel group
         if (indev) lv_indev_set_group(indev, FavPanelGroup);
@@ -558,7 +559,7 @@ void selectFavPanel(bool focus)
         }
         ScreenGroup[3] = FavScrGroup;
         currentGroup = FavScrGroup;
-
+        lv_group_add_obj(FavScrGroup, ui_HiddenFavScrBtn);
         lv_group_focus_obj(ui_HiddenFavScrBtn);
 
     }

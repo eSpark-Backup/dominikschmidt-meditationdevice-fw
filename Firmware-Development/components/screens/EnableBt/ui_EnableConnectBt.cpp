@@ -326,9 +326,6 @@ void ui_EnableConnectBt_screen_init(void)
     //Enable BT Screen Group of objects for Focus and Events
     EnableBtGroup = lv_group_create();
     lv_group_add_obj(EnableBtGroup, ui_btEnableBtn);
-    lv_group_add_obj(EnableBtGroup, ui_ScannedDevDropdown);
-    lv_group_add_obj(EnableBtGroup, ui_btScanBtn);
-    lv_group_add_obj(EnableBtGroup, ui_btBackBtn);
     lv_group_add_obj(EnableBtGroup, ui_HiddenEnableBtScrBtn);
 
     lv_indev_t * indev = lv_indev_get_next(NULL);
@@ -348,6 +345,22 @@ void ui_event_btEnableSwitch(lv_event_t * e)
         _ui_flag_modify(ui_btScanBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
         _ui_flag_modify(ui_btBackBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_TOGGLE);
         // _ui_state_modify(ui_btConnectBtnBox, LV_STATE_DISABLED, _UI_MODIFY_STATE_TOGGLE);
+        if(lv_obj_has_state(ui_btEnablePanel, LV_STATE_CHECKED))
+        {
+            lv_group_add_obj(EnableBtGroup, ui_ScannedDevDropdown);
+            lv_group_add_obj(EnableBtGroup, ui_btScanBtn);
+            lv_group_add_obj(EnableBtGroup, ui_btBackBtn);
+            if(lv_group_get_obj_count(EnableBtGroup) > 5)
+                lv_group_add_obj(EnableBtGroup, ui_connectBtnBox);
+            lv_group_add_obj(EnableBtGroup, ui_HiddenEnableBtScrBtn);
+        }
+        else
+        {
+            // lv_group_add_obj(EnableBtGroup, ui_btBackBtn);
+            lv_group_remove_obj(ui_ScannedDevDropdown);
+            lv_group_remove_obj(ui_btScanBtn);
+            lv_group_remove_obj(ui_btBackBtn);
+        }
         lv_group_focus_obj(ui_btEnableBtn);
     }
 }
@@ -395,6 +408,7 @@ void ui_event_btListSwitch(lv_event_t * e)
                 lv_dropdown_set_text(ui_ScannedDevDropdown, deviceName);
                 printf("device name: %s\n",deviceName);
                 lv_group_add_obj(EnableBtGroup, ui_btConnectBtnBox);
+                lv_group_add_obj(EnableBtGroup, ui_HiddenEnableBtScrBtn);
                 _ui_state_modify(ui_btConnectBtnBox, LV_STATE_DISABLED, _UI_MODIFY_STATE_REMOVE);
             }
         }
@@ -476,6 +490,7 @@ void checkBtDeviceConnectivity()
     if (strlen(deviceName) != 0 && strcmp(deviceName, "Select None") != 0 && deviceConnected)
     {
         lv_group_add_obj(EnableBtGroup, ui_btConnectBtnBox);
+        lv_group_add_obj(EnableBtGroup, ui_HiddenEnableBtScrBtn);
         if(deviceConnected)
         {
             lv_label_set_text(ui_btConnectLabel, "DISCONNECT");

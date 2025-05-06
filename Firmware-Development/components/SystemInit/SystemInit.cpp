@@ -239,7 +239,7 @@ void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
     currentGroup = ScreenGroup[screenCount];
     if (!currentGroup) return;
 
-    int count = lv_group_get_obj_count(currentGroup);
+    int count = lv_group_get_obj_count(currentGroup)-1;
     if (count < 1) return;
 
     static int curFocusedObj = 0;
@@ -247,7 +247,7 @@ void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
     if(state == BUTTON_NONE && controlScreen == NULL)
     {
         curFocusedObj = 0;
-        lv_group_focus_obj(lv_group_get_obj_by_index(currentGroup, focus ? 0 :  count - 1));
+        lv_group_focus_obj(lv_group_get_obj_by_index(currentGroup, focus ? 0 :  count));
     }
     else
     {

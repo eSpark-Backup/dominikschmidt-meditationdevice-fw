@@ -438,11 +438,8 @@ void ui_SetTimerScr_screen_init(void)
     //Set Timer Screen Group of objects for Focus and Events
     TimerScrGroup = lv_group_create();
     lv_group_add_obj(TimerScrGroup, ui_clkHr);
-    lv_group_add_obj(TimerScrGroup, ui_hrRoller);
     lv_group_add_obj(TimerScrGroup, ui_clkMin);
-    lv_group_add_obj(TimerScrGroup, ui_minRoller);
     lv_group_add_obj(TimerScrGroup, ui_clkSec);
-    lv_group_add_obj(TimerScrGroup, ui_secRoller);
     lv_group_add_obj(TimerScrGroup, ui_startBtnBox1);
     lv_group_add_obj(TimerScrGroup, ui_HiddenTimerScrBtn);
 
@@ -483,6 +480,11 @@ void ui_event_resetSetTimerEvent(lv_event_t * e)
         _ui_flag_modify(ui_minRoller,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_clkSec,      LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         _ui_flag_modify(ui_secRoller,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+
+        lv_group_remove_obj(ui_hrRoller);
+        lv_group_remove_obj(ui_minRoller);
+        lv_group_remove_obj(ui_secRoller);
+
     }
 }
 
@@ -493,6 +495,7 @@ void ui_event_clkHr(lv_event_t * e)
     if(event_code == LV_EVENT_PRESSED) {
         _ui_flag_modify(ui_clkHr, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_hrRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        lv_group_add_obj(TimerScrGroup, ui_hrRoller);
         lv_group_focus_obj(ui_hrRoller);
         roller = ui_hrRoller;
         roller_selected = true;  // Enable selection mode
@@ -508,6 +511,7 @@ void ui_event_hrRoller(lv_event_t * e)
         _ui_flag_modify(ui_hrRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         if (event_code == LV_EVENT_PRESSED)
         {
+            lv_group_remove_obj(ui_hrRoller);
             lv_group_focus_obj(ui_clkHr);
             roller = NULL;
             roller_selected = false;  // Reset selection mode
@@ -523,6 +527,7 @@ void ui_event_clkMin(lv_event_t * e)
     if(event_code == LV_EVENT_PRESSED) {
         _ui_flag_modify(ui_clkMin, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_minRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        lv_group_add_obj(TimerScrGroup, ui_minRoller);
         lv_group_focus_obj(ui_minRoller);
         roller = ui_minRoller;
         roller_selected = true;
@@ -538,6 +543,7 @@ void ui_event_minRoller(lv_event_t * e)
         _ui_flag_modify(ui_minRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         if (event_code == LV_EVENT_PRESSED)
         {
+            lv_group_remove_obj(ui_minRoller);
             lv_group_focus_obj(ui_clkMin);
             roller = NULL;
             roller_selected = false;
@@ -553,6 +559,7 @@ void ui_event_clkSec(lv_event_t * e)
     if(event_code == LV_EVENT_PRESSED) {
         _ui_flag_modify(ui_clkSec, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_secRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        lv_group_add_obj(TimerScrGroup, ui_secRoller);
         lv_group_focus_obj(ui_secRoller);
         roller = ui_secRoller;
         roller_selected = true;
@@ -568,6 +575,7 @@ void ui_event_secRoller(lv_event_t * e)
         _ui_flag_modify(ui_secRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         if (event_code == LV_EVENT_PRESSED)
         {
+            lv_group_remove_obj(ui_secRoller);
             lv_group_focus_obj(ui_clkSec);
             roller = NULL;
             roller_selected = false;
