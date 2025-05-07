@@ -41,7 +41,6 @@ audio_pipeline_handle_t pipeline;
 audio_element_handle_t fatfs_stream_reader, bt_stream_writer, music_decoder;
 mp3_decoder_cfg_t mp3_cfg;
 wav_decoder_cfg_t wav_cfg;
-esp_periph_set_handle_t set;
 esp_periph_handle_t bt_periph;
 audio_event_iface_handle_t evt;
 TaskHandle_t xBtTaskHandler;
@@ -63,6 +62,13 @@ void list_sdcard_files(const char *path) {
     }
 
     closedir(dir);
+}
+
+
+
+void A2DP::setSdcardPeriph(esp_periph_set_handle_t sd)
+{
+    set = sd;
 }
 
 void A2DP::print_bonded_devices()
@@ -587,20 +593,6 @@ void A2DP::loopAudioTask(void *param)
     }
     // Cleanup: Delete the task properly
     vTaskDelete(NULL);
-}
-
-void A2DP::mountSDcard()
-{
-    esp_err_t err = nvs_flash_init();
-    if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        err = nvs_flash_init();
-    }
-    
-    ESP_LOGI(TAG, "[ 1 ] Mount sdcard");
-    esp_periph_config_t periph_cfg = DEFAULT_ESP_PERIPH_SET_CONFIG();
-    set = esp_periph_set_init(&periph_cfg);
-    audio_board_sdcard_init(set, SD_MODE_SPI);
 }
 
 bool A2DP::isAudioStarted()

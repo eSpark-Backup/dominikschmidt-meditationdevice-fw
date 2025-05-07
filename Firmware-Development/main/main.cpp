@@ -45,7 +45,7 @@ static uint32_t my_tick(void)
 
 extern "C" void app_main(void)
 {
-    btAudio.mountSDcard();
+    storagCard.mountSDcard();
     xTaskCreatePinnedToCore( lvglTask, "LVGL Task", 8192, NULL, 5, NULL, 1);
     
     // Read a favourite from JSON

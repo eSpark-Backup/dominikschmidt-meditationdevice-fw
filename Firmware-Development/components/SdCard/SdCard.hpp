@@ -8,6 +8,8 @@
 #include "esp_log.h"
 #include "sdkconfig.h"
 #include "cJSON.h"
+#include "esp_peripherals.h"
+#include "nvs_flash.h"
 
 typedef struct {
     int timer;
@@ -19,6 +21,7 @@ typedef struct {
 class SdCard
 {
     public:
+        void mountSDcard();
         void save_favourite_to_json(const char* fav_name, Favourite fav);
         bool read_favourite_from_json(const char* fav_name, Favourite* fav);
     private:

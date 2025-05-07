@@ -8,12 +8,10 @@
 #include "esp_log.h"
 #include "esp_wifi.h"
 #include "sdkconfig.h"
-#include "esp_peripherals.h"
 #include "esp_bt_device.h"
 #include "esp_bt_main.h"
 #include "esp_gap_bt_api.h"
 
-#include "nvs_flash.h"
 #include "audio_element.h"
 #include "audio_pipeline.h"
 #include "audio_event_iface.h"
@@ -29,9 +27,13 @@
 
 class A2DP
 {
+    //Variables
+    private:
+        esp_periph_set_handle_t set;
+
+    //Methods
     public:
         void A2dpServiceInit();
-        void mountSDcard();
         void A2dpAudioStart(char *filepath, int play_time_sec = 0);
         void A2dpAudioStop();
         bool isAudioStarted();
@@ -40,6 +42,7 @@ class A2DP
         bool connect_to_bt_device(const char *device_name);
         bool disconnect_to_bt_device(const char *device_name);
         void print_bonded_devices();
+        void setSdcardPeriph(esp_periph_set_handle_t sd);
         
     private:
         static void loopAudioTask(void *param);

@@ -1,9 +1,25 @@
 #include "SdCard.hpp"
-#include "esp_log.h"
+#include "A2dpSource.hpp"
 
 #define FAV_MOUNT_POINT "/sdcard"
 static const char *TAG = "SdCard";
 SdCard storagCard;
+
+void SdCard::mountSDcard()
+{
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+    
+    ESP_LOGI(TAG, "[ 1 ] Mount sdcard");
+    esp_periph_config_t periph_cfg = DEFAULT_ESP_PERIPH_SET_CONFIG();
+    esp_periph_set_handle_t setSD = esp_periph_set_init(&periph_cfg);
+    audio_board_sdcard_init(setSD, SD_MODE_SPI);
+
+    btAudio.setSdcardPeriph(setSD);
+}
 
 void SdCard::save_favourite_to_json(const char* fav_name, Favourite fav)
 {
