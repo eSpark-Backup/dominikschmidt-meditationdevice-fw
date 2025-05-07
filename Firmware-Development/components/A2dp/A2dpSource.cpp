@@ -29,25 +29,7 @@ int A2DP::scanned_device_count = 0;
 TaskHandle_t xBtTaskHandler;
 A2DP btAudio; //class object
 
-void list_sdcard_files(const char *path) {
-    DIR *dir = opendir(path);
-    if (!dir) {
-        printf("Failed to open directory: %s\n", path);
-        return;
-    }
-
-    struct dirent *entry;
-    printf("Listing files in: %s\n", path);
-
-    while ((entry = readdir(dir)) != NULL) {
-        printf( "File: %s\n", entry->d_name);
-    }
-
-    closedir(dir);
-}
-
-
-
+///======================== Class Methods ==========================///
 void A2DP::setSdcardPeriph(esp_periph_set_handle_t sd)
 {
     set = sd;

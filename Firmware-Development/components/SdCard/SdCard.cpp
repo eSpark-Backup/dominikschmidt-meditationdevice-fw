@@ -2,6 +2,7 @@
 #include "A2dpSource.hpp"
 
 #define FAV_MOUNT_POINT "/sdcard"
+#define AUDIO_PATH "/sdcard/audio"
 static const char *TAG = "SdCard";
 SdCard storagCard;
 
@@ -19,6 +20,25 @@ void SdCard::mountSDcard()
     audio_board_sdcard_init(setSD, SD_MODE_SPI);
 
     btAudio.setSdcardPeriph(setSD);
+    // list_sdcard_files(AUDIO_PATH);
+}
+
+void SdCard::list_sdcard_files(const char *path)
+{
+    DIR *dir = opendir(path);
+    if (!dir) {
+        printf("Failed to open directory: %s\n", path);
+        return;
+    }
+
+    struct dirent *entry;
+    printf("Listing files in: %s\n", path);
+
+    while ((entry = readdir(dir)) != NULL) {
+        printf( "File: %s\n", entry->d_name);
+    }
+
+    closedir(dir);
 }
 
 void SdCard::save_favourite_to_json(const char* fav_name, Favourite fav)

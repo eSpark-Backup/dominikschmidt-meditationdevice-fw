@@ -32,6 +32,7 @@ typedef struct
 class System
 {
     public:
+    void InitializeScreen(void);
     void Initialize(void);
     void ButtonRead(lv_indev_t * indev, lv_indev_data_t * data);
     static void ButtonReadStatic(lv_indev_t * indev, lv_indev_data_t * data);
@@ -41,7 +42,6 @@ class System
     
     private:
     void initScreens(void);
-    void InitializeScreen(void);
     void loadScreens(void);
     void loadScreenGroups(void);
     void EncoderInit(void);

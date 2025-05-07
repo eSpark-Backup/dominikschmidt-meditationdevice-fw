@@ -48,7 +48,6 @@ void System::Initialize(void)
 
 void System::initScreens(void)
 {
-    InitializeScreen();
     loadScreens();
     loadScreenGroups();
     ESP_LOGI(TAG, "Screens initialized successfully\n\n");

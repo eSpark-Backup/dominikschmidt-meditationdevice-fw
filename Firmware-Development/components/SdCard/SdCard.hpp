@@ -22,6 +22,7 @@ class SdCard
 {
     public:
         void mountSDcard();
+        void list_sdcard_files(const char *path);
         void save_favourite_to_json(const char* fav_name, Favourite fav);
         bool read_favourite_from_json(const char* fav_name, Favourite* fav);
     private:
