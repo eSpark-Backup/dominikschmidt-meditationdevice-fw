@@ -24,12 +24,32 @@
 #include "screens.h"
 
 
+#define MAX_SCANNED_DEVICES 6
+
+typedef struct {
+    char name[ESP_BT_GAP_MAX_BDNAME_LEN + 1];
+    esp_bd_addr_t bda;
+} ScannedDevice;
 
 class A2DP
 {
     //Variables
+    public:
+    
     private:
+        int64_t play_time_us = 0;
+        int64_t start_time_us = 0;
+        bool AudioPlaying = false;
+        audio_pipeline_handle_t pipeline;
+        audio_element_handle_t fatfs_stream_reader, bt_stream_writer, music_decoder;
+        mp3_decoder_cfg_t mp3_cfg;
+        wav_decoder_cfg_t wav_cfg;
+        esp_periph_handle_t bt_periph;
+        audio_event_iface_handle_t evt;
         esp_periph_set_handle_t set;
+        static ScannedDevice scanned_devices[MAX_SCANNED_DEVICES];
+        static int scanned_device_count;
+        typedef uint8_t esp_peer_bdname_t[ESP_BT_GAP_MAX_BDNAME_LEN + 1];
 
     //Methods
     public:

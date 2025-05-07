@@ -20,32 +20,14 @@ const char *file_path5 = "/sdcard/audio/Forest Rain 1.mp3"; // MP3 Or WAV
 const char *file_path6 = "/sdcard/audio/Birds 1.wav"; // MP3 Or WAV
 int audioCount = 1;
 char filePath[256];
-typedef uint8_t esp_peer_bdname_t[ESP_BT_GAP_MAX_BDNAME_LEN + 1];
 
 static const char *TAG = "BLUETOOTH_A2DP";
 bool deviceConnected = false;
 
-int64_t play_time_us = 0;
-int64_t start_time_us = 0;
-#define MAX_SCANNED_DEVICES 6
-
-typedef struct {
-    char name[ESP_BT_GAP_MAX_BDNAME_LEN + 1];
-    esp_bd_addr_t bda;
-} ScannedDevice;
-
-static ScannedDevice scanned_devices[MAX_SCANNED_DEVICES];
-static int scanned_device_count = 0;
-
-audio_pipeline_handle_t pipeline;
-audio_element_handle_t fatfs_stream_reader, bt_stream_writer, music_decoder;
-mp3_decoder_cfg_t mp3_cfg;
-wav_decoder_cfg_t wav_cfg;
-esp_periph_handle_t bt_periph;
-audio_event_iface_handle_t evt;
+ScannedDevice A2DP::scanned_devices[MAX_SCANNED_DEVICES];
+int A2DP::scanned_device_count = 0;
 TaskHandle_t xBtTaskHandler;
-bool AudioPlaying = false;
-A2DP btAudio;
+A2DP btAudio; //class object
 
 void list_sdcard_files(const char *path) {
     DIR *dir = opendir(path);
@@ -144,12 +126,12 @@ bool A2DP::get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len)
 void A2DP::filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param) {
     if (scanned_device_count >= MAX_SCANNED_DEVICES) return;  // Stop if array is full
 
-    char bda_str[18];
     esp_peer_bdname_t peer_bdname;
     uint8_t *eir = NULL;
     esp_bt_gap_dev_prop_t *p;
-    uint32_t cod = 0;
-    int32_t rssi = -129; /* invalid value */
+    // char bda_str[18];
+    // uint32_t cod = 0;
+    // int32_t rssi = -129; /* invalid value */
     bool name_found = false;
 
     // ESP_LOGI(TAG, "Scanned device: %s", bda2str(param->disc_res.bda, bda_str, 18));
@@ -166,14 +148,14 @@ void A2DP::filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param) {
     for (int i = 0; i < param->disc_res.num_prop; i++) {
         p = param->disc_res.prop + i;
         switch (p->type) {
-            case ESP_BT_GAP_DEV_PROP_COD:
-                cod = *(uint32_t *)(p->val);
-                // ESP_LOGI(TAG, "--Class of Device: 0x%" PRIx32, cod);
-                break;
-            case ESP_BT_GAP_DEV_PROP_RSSI:
-                rssi = *(int8_t *)(p->val);
-                // ESP_LOGI(TAG, "--RSSI: %" PRId32, rssi);
-                break;
+            // case ESP_BT_GAP_DEV_PROP_COD:
+            //     cod = *(uint32_t *)(p->val);
+            //     // ESP_LOGI(TAG, "--Class of Device: 0x%" PRIx32, cod);
+            //     break;
+            // case ESP_BT_GAP_DEV_PROP_RSSI:
+            //     rssi = *(int8_t *)(p->val);
+            //     // ESP_LOGI(TAG, "--RSSI: %" PRId32, rssi);
+            //     break;
             case ESP_BT_GAP_DEV_PROP_EIR:
                 eir = (uint8_t *)(p->val);
                 if (get_name_from_eir(eir, (uint8_t *)&peer_bdname, NULL)) {
@@ -346,7 +328,7 @@ void A2DP::A2dpServiceInit()
     esp_bt_gap_set_pin(pin_type, 4, pin_code);
     esp_bt_gap_register_callback(bt_app_gap_cb);
 
-    ESP_LOGI(TAG, "[ 4 ] Create audio pipeline");
+    ESP_LOGI(TAG, "[ 3 ] Create audio pipeline");
     audio_pipeline_cfg_t pipeline_cfg = DEFAULT_AUDIO_PIPELINE_CONFIG();
     pipeline = audio_pipeline_init(&pipeline_cfg);
     mem_assert(pipeline);
@@ -371,7 +353,7 @@ void A2DP::A2dpServiceInit()
     mem_assert(music_decoder);
     audio_element_set_uri(fatfs_stream_reader, file_path);
 
-    ESP_LOGI(TAG, "[ 5 ] Register pipeline elements");
+    ESP_LOGI(TAG, "[ 4 ] Register pipeline elements");
     audio_pipeline_register(pipeline, fatfs_stream_reader, "file");
     audio_pipeline_register(pipeline, music_decoder, "dec");
     audio_pipeline_register(pipeline, bt_stream_writer, "bt");
@@ -379,7 +361,7 @@ void A2DP::A2dpServiceInit()
     audio_pipeline_link(pipeline, &link_tag[0], 3);
             
      
-    ESP_LOGI(TAG, "[ 3 ] Create bt peripheral");
+    ESP_LOGI(TAG, "[ 5 ] Create bt peripheral");
     bt_periph = bt_create_periph();
     esp_periph_start(set, bt_periph);
     
@@ -470,12 +452,11 @@ void A2DP::loopAudioTask(void *param)
     ESP_LOGI(TAG, "A2dpAudioStart started");
     audio_event_iface_msg_t msg;
     esp_err_t ret;
-    unsigned long swTime = xTaskGetTickCount();
-    start_time_us = xTaskGetTickCount();
-    static int lastCount = audioCount;
+    btAudio.start_time_us = xTaskGetTickCount();
+    // static int lastCount = audioCount;
     // loadAudio();
-    ESP_LOGW(TAG, "[Starting] Playback time %u : %lld : %lld",xTaskGetTickCount(), start_time_us, play_time_us);
-    while (AudioPlaying) 
+    ESP_LOGW(TAG, "[Starting] Playback time %u : %lld : %lld",xTaskGetTickCount(), btAudio.start_time_us, btAudio.play_time_us);
+    while (btAudio.AudioPlaying) 
     {
         if (xSemaphoreTake(xAudioMutex, pdMS_TO_TICKS(100)))
         {
@@ -553,22 +534,22 @@ void A2DP::loopAudioTask(void *param)
             
             //     lastCount = audioCount;
             // }
-            if ((int64_t)(xTaskGetTickCount() - start_time_us) >= play_time_us) 
+            if ((int64_t)(xTaskGetTickCount() - btAudio.start_time_us) >= btAudio.play_time_us) 
             {
-                ESP_LOGW(TAG, "[Stopping] Playback time reached %u : %lld : %lld",xTaskGetTickCount(), start_time_us, play_time_us);
-                AudioPlaying = false;
+                ESP_LOGW(TAG, "[Stopping] Playback time reached %u : %lld : %lld",xTaskGetTickCount(), btAudio.start_time_us, btAudio.play_time_us);
+                btAudio.AudioPlaying = false;
                 
-                audio_pipeline_stop(pipeline);
-                audio_pipeline_wait_for_stop(pipeline);
-                audio_pipeline_terminate(pipeline);
-                audio_pipeline_reset_ringbuffer(pipeline);
-                audio_pipeline_reset_elements(pipeline);
-                audio_pipeline_reset_items_state(pipeline);
+                audio_pipeline_stop(btAudio.pipeline);
+                audio_pipeline_wait_for_stop(btAudio.pipeline);
+                audio_pipeline_terminate(btAudio.pipeline);
+                audio_pipeline_reset_ringbuffer(btAudio.pipeline);
+                audio_pipeline_reset_elements(btAudio.pipeline);
+                audio_pipeline_reset_items_state(btAudio.pipeline);
                 xSemaphoreGive(xAudioMutex);
                 break;
             }
             
-            ret = audio_event_iface_listen(evt, &msg, pdMS_TO_TICKS(100));
+            ret = audio_event_iface_listen(btAudio.evt, &msg, pdMS_TO_TICKS(100));
 
             static int lastData = 100;  static int lastCmd = 100;
             if (lastData != (int)msg.data || lastCmd != msg.cmd) {
@@ -578,14 +559,14 @@ void A2DP::loopAudioTask(void *param)
             if (ret == ESP_OK && msg.source_type == AUDIO_ELEMENT_TYPE_ELEMENT && msg.cmd == AEL_MSG_CMD_REPORT_STATUS
                 && (((int)msg.data == AEL_STATUS_STATE_FINISHED))) {
                     // ESP_LOGE(TAG, "[ LOOP ] LOOPING");
-                    ESP_LOGW(TAG, "[ LOOP ] Playback time %u : %lld : %lld",xTaskGetTickCount(), start_time_us, play_time_us);
-                audio_pipeline_stop(pipeline);
-                audio_pipeline_wait_for_stop(pipeline);
-                audio_pipeline_terminate(pipeline);
-                audio_pipeline_reset_ringbuffer(pipeline);
-                audio_pipeline_reset_elements(pipeline);
-                audio_pipeline_reset_items_state(pipeline);
-                audio_pipeline_run(pipeline);
+                    ESP_LOGW(TAG, "[ LOOP ] Playback time %u : %lld : %lld",xTaskGetTickCount(), btAudio.start_time_us, btAudio.play_time_us);
+                audio_pipeline_stop(btAudio.pipeline);
+                audio_pipeline_wait_for_stop(btAudio.pipeline);
+                audio_pipeline_terminate(btAudio.pipeline);
+                audio_pipeline_reset_ringbuffer(btAudio.pipeline);
+                audio_pipeline_reset_elements(btAudio.pipeline);
+                audio_pipeline_reset_items_state(btAudio.pipeline);
+                audio_pipeline_run(btAudio.pipeline);
             }
             // vTaskDelay(pdMS_TO_TICKS(50));
             xSemaphoreGive(xAudioMutex);
