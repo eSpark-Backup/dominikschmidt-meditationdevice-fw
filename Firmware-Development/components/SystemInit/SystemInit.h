@@ -31,6 +31,14 @@ typedef struct
 
 class System
 {
+    //variables
+    public:
+    bool focusEnable = false;
+    private:
+    lv_obj_t *previousFocused = NULL;
+    lv_obj_t *focusedObj = NULL;
+
+    //Methods
     public:
     void InitializeScreen(void);
     void Initialize(void);
@@ -39,6 +47,7 @@ class System
     void setBrightness(uint8_t brightness_percent);
     void setupPWM();
     void updateBluetoothSettings();
+    void memLog();
     
     private:
     void initScreens(void);
@@ -49,11 +58,10 @@ class System
     static void checkEncoder(void* arg);
     void NavigateScreens(ButtonData btnData, int encData);
     void navigateWidgets(ButtonState state, int screenCount, bool focus = false);
-    void sendEvents(ButtonState state, int screenCount);
+    void sendEvents(ButtonData btn, int screenCount);
     void loadAudio();
 };
 
 extern System Core;
-void memLog();
 
 #endif /*SYSTEMINIT_H */

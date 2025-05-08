@@ -67,7 +67,6 @@ void lvglTask(void *pvParameters)
    
     // Init everything else
     Core.Initialize();
-    memLog();
     
     while (1)
     {

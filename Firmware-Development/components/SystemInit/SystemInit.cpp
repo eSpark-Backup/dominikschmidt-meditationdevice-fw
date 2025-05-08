@@ -44,6 +44,7 @@ void System::Initialize(void)
     setFocusStyleColored(0xCAC7C7); //dull white
     initScreens();
     btAudio.A2dpServiceInit();
+    memLog();
 }
 
 void System::initScreens(void)
@@ -146,13 +147,13 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
         
         if (Btn_A.State == BUTTON_SINGLE_CLICK && controlScreen == NULL) {
             NavigateScreens(Btn_A, encDiff);
-            if(deviceConnected) 
-            {
-                audioCount++;
-                if(audioCount>5) audioCount = 1;
-            }
+            // if(deviceConnected) 
+            // {
+            //     audioCount++;
+            //     if(audioCount>5) audioCount = 1;
+            // }
         } 
-        else if (Btn_B.State == BUTTON_SINGLE_CLICK || Btn_B.State == BUTTON_LONG_HOLD) {
+        else if (Btn_B.State == BUTTON_SINGLE_CLICK) {
             NavigateScreens(Btn_B, encDiff);
         } 
         else 
@@ -218,19 +219,40 @@ void System::NavigateScreens(ButtonData btnData, int encData)
     }
     else if (btnData.ID == B) // Handle Button B for selection mode
     {
-        if (btnData.State == BUTTON_SINGLE_CLICK || (btnData.State == BUTTON_LONG_HOLD)) {
-            sendEvents(btnData.State, screenCount);
-        } 
+        if (btnData.State == BUTTON_SINGLE_CLICK) {
+
+            if(focusEnable)
+            {
+                focusEnable = false;
+            }
+            else if(navigatingWidgets && !focusEnable)
+            {
+                navigatingWidgets = false;
+                btnData.State = BUTTON_NONE;
+                sendEvents(btnData, -1);
+                navigateWidgets(BUTTON_NONE, screenCount, false);
+            }
+        }
     }
     else if (btnData.ID == A)
     {
-        if (btnData.State == BUTTON_SINGLE_CLICK) {  ///for testing changed to SINGLE else DOUBLE
-            navigatingWidgets = !navigatingWidgets; // Exit widget navigation mode
-            sendEvents(BUTTON_NONE, -1);
-            navigateWidgets(BUTTON_NONE, screenCount, navigatingWidgets);
+        if (btnData.State == BUTTON_SINGLE_CLICK) {
+
+            if((!focusEnable || focusEnable) && navigatingWidgets)
+            {
+                focusEnable = true;
+                sendEvents(btnData, screenCount);
+            }
+            else if(!navigatingWidgets && !focusEnable)
+            {
+                navigatingWidgets = true;
+                btnData.State = BUTTON_NONE;
+                sendEvents(btnData, -1);
+                navigateWidgets(BUTTON_NONE, screenCount, true);
+            }
         }
-        
     }
+    ESP_LOGI(TAG, "NAV : %d - FOCUS : %d", navigatingWidgets, focusEnable);
 }
 
 void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
@@ -258,25 +280,21 @@ void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
     }
 }
 
-void System::sendEvents(ButtonState state, int screenCount)
+void System::sendEvents(ButtonData btn, int screenCount)
 {
     if (!currentGroup) return;  // Ensure the group exists
 
-    static lv_obj_t *previousFocused = NULL;
-    lv_obj_t *focusedObj = lv_group_get_focused(currentGroup); // Get the currently focused object
+    previousFocused = NULL;
+    focusedObj = lv_group_get_focused(currentGroup); // Get the currently focused object
+    
     if (!focusedObj) return; // If no object is focused, exit
-
     
     lv_event_code_t event_code;
-    if(state == BUTTON_LONG_HOLD && screenCount < TotalScreens)
-    {
-        event_code = LV_EVENT_LONG_PRESSED;
-    }
-    else if(state == BUTTON_SINGLE_CLICK && screenCount < TotalScreens)
+    if(btn.State == BUTTON_SINGLE_CLICK && screenCount < TotalScreens)
     {
         event_code = LV_EVENT_PRESSED;
     }
-    else if(state == BUTTON_NONE && screenCount == -1)
+    else if(btn.State == BUTTON_NONE && screenCount == -1)
     {
         event_code = LV_EVENT_CANCEL;
     }
@@ -284,14 +302,16 @@ void System::sendEvents(ButtonState state, int screenCount)
     {
         return;
     }
-    if(previousFocused && previousFocused != focusedObj)
+    if((btn.ID == B) && (previousFocused && previousFocused != focusedObj))
     {
-        lv_obj_send_event(previousFocused, LV_EVENT_DEFOCUSED, NULL);
+        lv_obj_send_event(focusedObj, LV_EVENT_DEFOCUSED, NULL);
+        lv_obj_send_event(previousFocused, LV_EVENT_PRESSED, NULL);
     }
-
-    lv_obj_send_event(focusedObj, event_code, NULL);
-    
-    previousFocused = focusedObj;
+    else
+    {
+        lv_obj_send_event(focusedObj, event_code, NULL);
+        previousFocused = focusedObj;
+    }
 }
 
 void System::ButtonReadStatic(lv_indev_t * indev, lv_indev_data_t * data) {
@@ -348,7 +368,7 @@ uint32_t getCurrentDuty()
 {
     return (ledc_get_duty(LEDC_HIGH_SPEED_MODE, PWM_CHANNEL)*100)/1024;
 }
-void memLog()
+void System::memLog()
 {
     ESP_LOGI(TAG,
         "\n"
