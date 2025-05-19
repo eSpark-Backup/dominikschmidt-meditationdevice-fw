@@ -663,7 +663,7 @@ void selectSoundPanel(bool focus)
             ScreenGroup[1] = SoundGroup;
             currentGroup = SoundGroup;
             lv_group_add_obj(SoundGroup, ui_HiddenSoundBtn);
-            lv_group_focus_obj(ui_HiddenSoundBtn);
+            lv_group_focus_obj(ui_SoundPanel);
         }
 }
 
@@ -674,7 +674,7 @@ void ui_event_toggleSoundPanelGroup(lv_event_t * e)
     if(event_code == LV_EVENT_PRESSED) {
         selectSoundPanel(true);
     }
-    else if(event_code == LV_EVENT_CANCEL) {
+    else if(event_code == LV_EVENT_RELEASED) {
         selectSoundPanel(false);
     }
 }
@@ -689,7 +689,7 @@ void ui_event_NoSoundBtn(lv_event_t * e)
         _ui_state_modify(ui_NoSoundIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_NoSoundLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
     }
-    else if(event_code == LV_EVENT_CANCEL) {
+    else if(event_code == LV_EVENT_RELEASED) {
         selectSoundPanel(false);
     }
 }
@@ -704,7 +704,7 @@ void ui_event_NatureSoundBtn(lv_event_t * e)
         _ui_state_modify(ui_NatureSoundIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_NatureSoundLbl, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
     }
-    else if(event_code == LV_EVENT_CANCEL)
+    else if(event_code == LV_EVENT_RELEASED)
         selectSoundPanel(false);
 }
 
@@ -718,7 +718,7 @@ void ui_event_WhiteNoiseBtn(lv_event_t * e)
         _ui_state_modify(ui_WhiteNoiseIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_WhiteNoiseLbl, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
     }
-    else if(event_code == LV_EVENT_CANCEL)
+    else if(event_code == LV_EVENT_RELEASED)
         selectSoundPanel(false);
 }
 
@@ -732,7 +732,7 @@ void ui_event_BinauralBeatBtn(lv_event_t * e)
         _ui_state_modify(ui_BinauralBeatIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_BinauralBeatLbl, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
     }
-    else if(event_code == LV_EVENT_CANCEL)
+    else if(event_code == LV_EVENT_RELEASED)
         selectSoundPanel(false);
 }
 
@@ -746,6 +746,6 @@ void ui_event_SingingBowlsBtn(lv_event_t * e)
         _ui_state_modify(ui_SingingBowlsIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_SingingBowlsLbl, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
     }
-    else if(event_code == LV_EVENT_CANCEL)
+    else if(event_code == LV_EVENT_RELEASED)
         selectSoundPanel(false);
 }

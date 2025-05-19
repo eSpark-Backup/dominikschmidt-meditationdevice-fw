@@ -171,6 +171,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
     if(lastScreen != lv_screen_active() && controlScreen == NULL)
     {
         navigatingWidgets = false;
+        focusEnable = false;
         lastScreen = lv_screen_active();
         int count = lv_group_get_obj_count(currentGroup);
         if (count > 0) {
