@@ -560,7 +560,7 @@ void selectFavPanel(bool focus)
         ScreenGroup[3] = FavScrGroup;
         currentGroup = FavScrGroup;
         lv_group_add_obj(FavScrGroup, ui_HiddenFavScrBtn);
-        lv_group_focus_obj(ui_HiddenFavScrBtn);
+        lv_group_focus_obj(ui_FavsPanel);
 
     }
 }
@@ -571,7 +571,7 @@ void ui_event_toggleFavPanelGroup(lv_event_t * e)
     if(event_code == LV_EVENT_PRESSED) {
         selectFavPanel(true);
     }
-    else if(event_code == LV_EVENT_CANCEL) {
+    else if(event_code == LV_EVENT_RELEASED) {
         selectFavPanel(false);
     }
 }
@@ -593,9 +593,9 @@ void ui_event_favEditScreen(lv_event_t * e)
         lv_label_set_text(ui_FavEditLabel, FavEditLblBuffer);
         lv_label_set_text(ui_FavPreviewLabel, FavEditLblBuffer);
         lv_obj_t *focused_obj = lv_group_get_focused(currentGroup);
-        lv_obj_send_event(focused_obj, LV_EVENT_CANCEL, NULL);
+        lv_obj_send_event(focused_obj, LV_EVENT_RELEASED, NULL);
     }
-    else if(event_code == LV_EVENT_CANCEL) {
+    else if(event_code == LV_EVENT_RELEASED) {
         selectFavPanel(false);
     }
 }

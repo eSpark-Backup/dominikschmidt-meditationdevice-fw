@@ -314,6 +314,7 @@ void ui_event_onButton(lv_event_t * e)
     if(event_code == LV_EVENT_PRESSED) {
         _ui_state_modify(ui_onButton, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_offButton, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+        focusEnable = false;
     }
 }
 
@@ -324,6 +325,7 @@ void ui_event_offButton(lv_event_t * e)
     if(event_code == LV_EVENT_PRESSED) {
         _ui_state_modify(ui_offButton, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_onButton, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+        focusEnable = false;
     }
 }
 
