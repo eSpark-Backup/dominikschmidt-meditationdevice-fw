@@ -144,6 +144,7 @@ extern lv_style_t colored_style_focus;
 extern lv_group_t *ScreenGroup[TotalScreens];
 extern lv_group_t *currentGroup;
 extern bool navigatingWidgets;
+extern bool focusEnable;
 extern lv_obj_t *controlScreen;
 
 void setFocusStyle(void);

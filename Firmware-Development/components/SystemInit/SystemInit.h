@@ -33,7 +33,6 @@ class System
 {
     //variables
     public:
-    bool focusEnable = false;
     private:
     lv_obj_t *previousFocused = NULL;
     lv_obj_t *focusedObj = NULL;

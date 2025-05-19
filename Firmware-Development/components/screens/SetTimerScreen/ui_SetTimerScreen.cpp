@@ -506,17 +506,17 @@ void ui_event_hrRoller(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     
-    if (event_code == LV_EVENT_PRESSED || event_code == LV_EVENT_DEFOCUSED) {
+    if (event_code == LV_EVENT_PRESSED || event_code == LV_EVENT_RELEASED) {
         _ui_flag_modify(ui_clkHr, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         _ui_flag_modify(ui_hrRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-        if (event_code == LV_EVENT_PRESSED)
-        {
-            lv_group_remove_obj(ui_hrRoller);
-            lv_group_focus_obj(ui_clkHr);
-            roller = NULL;
-            roller_selected = false;  // Reset selection mode
-        }
-        setRollersValue();
+        lv_group_remove_obj(ui_hrRoller);
+        lv_group_focus_obj(ui_clkHr);
+        roller = NULL;
+        roller_selected = false;  // Reset selection mode
+
+        if (event_code == LV_EVENT_PRESSED) 
+        {   setRollersValue();
+            focusEnable = false;}
     }
 }
 
@@ -538,17 +538,17 @@ void ui_event_minRoller(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     
-    if(event_code == LV_EVENT_PRESSED || event_code == LV_EVENT_DEFOCUSED) {
+    if(event_code == LV_EVENT_PRESSED || event_code == LV_EVENT_RELEASED) {
         _ui_flag_modify(ui_clkMin, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         _ui_flag_modify(ui_minRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-        if (event_code == LV_EVENT_PRESSED)
-        {
-            lv_group_remove_obj(ui_minRoller);
-            lv_group_focus_obj(ui_clkMin);
-            roller = NULL;
-            roller_selected = false;
-        }
-        setRollersValue();
+        lv_group_remove_obj(ui_minRoller);
+        lv_group_focus_obj(ui_clkMin);
+        roller = NULL;
+        roller_selected = false;
+
+        if (event_code == LV_EVENT_PRESSED) 
+        {   setRollersValue();
+            focusEnable = false;}
     }
 }
 
@@ -570,17 +570,17 @@ void ui_event_secRoller(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
     
-    if(event_code == LV_EVENT_PRESSED || event_code == LV_EVENT_DEFOCUSED) {
+    if(event_code == LV_EVENT_PRESSED || event_code == LV_EVENT_RELEASED) {
         _ui_flag_modify(ui_clkSec, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         _ui_flag_modify(ui_secRoller, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-        if (event_code == LV_EVENT_PRESSED)
-        {
-            lv_group_remove_obj(ui_secRoller);
-            lv_group_focus_obj(ui_clkSec);
-            roller = NULL;
-            roller_selected = false;
-        }
-        setRollersValue();
+        lv_group_remove_obj(ui_secRoller);
+        lv_group_focus_obj(ui_clkSec);
+        roller = NULL;
+        roller_selected = false;
+
+        if (event_code == LV_EVENT_PRESSED) 
+        {   setRollersValue();
+            focusEnable = false;}
     }
 }
 

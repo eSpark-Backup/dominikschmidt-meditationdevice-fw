@@ -25,6 +25,7 @@ lv_obj_t *Screen[TotalScreens];
 lv_group_t *ScreenGroup[TotalScreens];
 lv_group_t *currentGroup = NULL;
 bool navigatingWidgets = false;  // Tracks whether we are navigating widgets or screens
+bool focusEnable = false;
 bool isScanned = false;
 
 // LEDC Configuration
@@ -224,6 +225,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
             if(focusEnable)
             {
                 focusEnable = false;
+                sendEvents(btnData, screenCount);
             }
             else if(navigatingWidgets && !focusEnable)
             {
@@ -252,7 +254,6 @@ void System::NavigateScreens(ButtonData btnData, int encData)
             }
         }
     }
-    ESP_LOGI(TAG, "NAV : %d - FOCUS : %d", navigatingWidgets, focusEnable);
 }
 
 void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
@@ -302,10 +303,9 @@ void System::sendEvents(ButtonData btn, int screenCount)
     {
         return;
     }
-    if((btn.ID == B) && (previousFocused && previousFocused != focusedObj))
+    if((btn.ID == B))
     {
-        lv_obj_send_event(focusedObj, LV_EVENT_DEFOCUSED, NULL);
-        lv_obj_send_event(previousFocused, LV_EVENT_PRESSED, NULL);
+        lv_obj_send_event(focusedObj, LV_EVENT_RELEASED, NULL);
     }
     else
     {
