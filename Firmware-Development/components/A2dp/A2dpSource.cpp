@@ -236,6 +236,42 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
     return;
 }
 
+void bt_app_a2d_cb(esp_a2d_cb_event_t event, esp_a2d_cb_param_t *param)
+{
+    switch (event) {
+        case ESP_A2D_CONNECTION_STATE_EVT:
+            ESP_LOGI(TAG, "A2DP connection state: %s", 
+                param->conn_stat.state == ESP_A2D_CONNECTION_STATE_CONNECTED ? "CONNECTED" :
+                param->conn_stat.state == ESP_A2D_CONNECTION_STATE_DISCONNECTED ? "DISCONNECTED" : "OTHER");
+
+            if (param->conn_stat.state == ESP_A2D_CONNECTION_STATE_DISCONNECTED) {
+                ESP_LOGW(TAG, "A2DP disconnected from %02x:%02x:%02x:%02x:%02x:%02x",
+                    param->conn_stat.remote_bda[0], param->conn_stat.remote_bda[1], param->conn_stat.remote_bda[2],
+                    param->conn_stat.remote_bda[3], param->conn_stat.remote_bda[4], param->conn_stat.remote_bda[5]);
+
+                // Update internal state
+                deviceConnected = false;
+            }
+            break;
+
+        case ESP_A2D_PROF_STATE_EVT:
+            ESP_LOGI(TAG, "A2DP profile state: %s",
+                param->a2d_prof_stat.init_state == ESP_A2D_INIT_SUCCESS ? "INIT SUCCESS" : "INIT FAIL");
+            break;
+
+        case ESP_A2D_AUDIO_STATE_EVT:
+            ESP_LOGI(TAG, "Audio stream state: %s",
+                param->audio_stat.state == ESP_A2D_AUDIO_STATE_STARTED ? "STARTED" :
+                param->audio_stat.state == ESP_A2D_AUDIO_STATE_STOPPED ? "STOPPED" : "OTHER SUS");
+            break;
+
+        default:
+            ESP_LOGI(TAG, "Unhandled A2DP event: %d", event);
+            break;
+    }
+}
+
+
 /* Starts Bluetooth scanning */
 void A2DP::start_bt_scan() {
 
@@ -278,17 +314,18 @@ bool A2DP::disconnect_to_bt_device(const char *device_name)
             ESP_LOGI(TAG, "Disconnecting to %s (%s)...", device_name, bda2str(scanned_devices[i].bda, bda_str, 18));
             if (esp_a2d_source_disconnect(scanned_devices[i].bda) == ESP_OK) {
                 ESP_LOGI(TAG, "Disconnection successful.");
-                deviceConnected = true;
+                deviceConnected = false;
                 return true;
             } else {
                 ESP_LOGE(TAG, "Disconnection failed.");
-                deviceConnected = false;
+                deviceConnected = true;
                 return false;
             }
         }
     }
     memset(deviceName, 0, BUF_SIZE);
     ESP_LOGW(TAG, "Device %s not found.", device_name);
+    deviceConnected = false;
     return false;
 }
 
@@ -321,7 +358,7 @@ void A2DP::A2dpServiceInit()
 
     a2dp_stream_config_t a2dp_config = {
         .type = AUDIO_STREAM_WRITER,
-        .user_callback = {0},
+        .user_callback= {.user_a2d_cb = bt_app_a2d_cb}
     };
     bt_stream_writer = a2dp_stream_init(&a2dp_config);
     

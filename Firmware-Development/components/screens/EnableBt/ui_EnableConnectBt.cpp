@@ -32,6 +32,7 @@ lv_obj_t * ui_btConnectLabel;
 lv_obj_t * ui_HiddenEnableBtScrBtn;
 lv_group_t * EnableBtGroup;
 bool list_selected = false;
+bool last_connectionStatus = false;
 char deviceName[NAME_BUF] = {0};
 // CUSTOM VARIABLES
 
@@ -371,9 +372,10 @@ void ui_event_btEnableSwitch(lv_event_t * e)
 void EnableBtFocus(bool focus)
 {
     navigatingWidgets = focus;
+    focusEnable = focus;
     controlScreen = focus ? ui_EnableConnectBt : NULL;
     lv_indev_t * indev = lv_indev_get_next(NULL);
-        
+
     // Switch focus to the panel group
     if (indev) lv_indev_set_group(indev, focus ? EnableBtGroup : BTGroup);
     if (focus) lv_group_focus_obj(ui_btEnableBtn);
@@ -471,6 +473,13 @@ void rotateScannedDropdown(int diff)
     } 
 }
 
+void resetConnectionParams()
+{
+    lv_dropdown_set_options(ui_ScannedDevDropdown, "");
+    lv_dropdown_set_text(ui_ScannedDevDropdown, "Select Device");
+    memset(deviceName, 0, NAME_BUF);
+}
+
 void ui_event_btConnectBtn(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -480,44 +489,55 @@ void ui_event_btConnectBtn(lv_event_t * e)
         if(deviceConnected && strcmp(lv_label_get_text(ui_btConnectLabel), "DISCONNECT") == 0)
         {
             btAudio.disconnect_to_bt_device(deviceName);
+            lv_label_set_text(ui_btConnectLabel, "CONNECT");
+            resetConnectionParams();
         }
         else if(!deviceConnected && strcmp(lv_label_get_text(ui_btConnectLabel), "CONNECT") == 0)
         {
             btAudio.connect_to_bt_device(deviceName);
         }
+        lv_group_focus_obj(ui_btEnableBtn);
+
     }
 }
 
 void checkBtDeviceConnectivity()
 {
-    if (strlen(deviceName) != 0 && strcmp(deviceName, "Select None") != 0 && deviceConnected)
+    if(last_connectionStatus != deviceConnected)
     {
-        lv_group_add_obj(EnableBtGroup, ui_btConnectBtnBox);
-        lv_group_add_obj(EnableBtGroup, ui_HiddenEnableBtScrBtn);
         if(deviceConnected)
         {
             lv_label_set_text(ui_btConnectLabel, "DISCONNECT");
+
+            if(lv_obj_has_state(ui_btConnectBtnBox, LV_STATE_DISABLED))
+            {
+                _ui_state_modify(ui_btConnectBtnBox, LV_STATE_DISABLED, _UI_MODIFY_STATE_REMOVE);
+            }
+
+            if(strlen(deviceName) != 0 && strcmp(deviceName, "Select None") != 0 &&
+              strcmp(lv_label_get_text(ui_btBtnLabel), "Bluetooth Connected") != 0)
+            {
+                lv_label_set_text(ui_btBtnLabel, "Bluetooth Connected");
+                lv_label_set_text_fmt(ui_btDeviceConLbl, "To : %s",deviceName);
+                _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+                _ui_state_modify(ui_btBtnIcon,  LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
+                _ui_flag_modify(ui_btDeviceConLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+                resetConnectionParams();
+            }
         }
-        if(lv_obj_has_state(ui_btConnectBtnBox, LV_STATE_DISABLED))
+        else if(strcmp(lv_label_get_text(ui_btBtnLabel), "Bluetooth Not Connected") != 0)
         {
-            _ui_state_modify(ui_btConnectBtnBox, LV_STATE_DISABLED, _UI_MODIFY_STATE_REMOVE);
+            lv_label_set_text(ui_btConnectLabel, "CONNECT");
+            lv_group_remove_obj(ui_btConnectBtnBox);
+            lv_label_set_text(ui_btBtnLabel, "Bluetooth Not Connected");
+            _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+            _ui_state_modify(ui_btBtnIcon,  LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+            _ui_flag_modify(ui_btDeviceConLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_STATE_ADD);
+            resetConnectionParams();
         }
 
-        if(strcmp(lv_label_get_text(ui_btBtnLabel), "Bluetooth Connected") != 0)
-        {
-            lv_label_set_text(ui_btBtnLabel, "Bluetooth Connected");
-            lv_label_set_text_fmt(ui_btDeviceConLbl, "To : %s",deviceName);
-            _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-            _ui_state_modify(ui_btBtnIcon,  LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-            _ui_flag_modify(ui_btDeviceConLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);           
-        }
+        last_connectionStatus = deviceConnected;
     }
-    else if(strcmp(lv_label_get_text(ui_btBtnLabel), "Bluetooth Not Connected") != 0)
-    {
-        lv_group_remove_obj(ui_btConnectBtnBox);
-        lv_label_set_text(ui_btBtnLabel, "Bluetooth Not Connected");
-        _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
-        _ui_state_modify(ui_btBtnIcon,  LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
-        _ui_flag_modify(ui_btDeviceConLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_STATE_ADD);
-    }
+
+    
 }
