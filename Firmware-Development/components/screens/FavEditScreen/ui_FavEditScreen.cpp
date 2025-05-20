@@ -55,10 +55,10 @@ void ui_FavEditScreen_screen_init(void)
     ui_EditBtnLabel = lv_label_create(ui_EditBtn);
     lv_obj_set_width(ui_EditBtnLabel, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_EditBtnLabel, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_EditBtnLabel, 22);
+    lv_obj_set_x(ui_EditBtnLabel, 14);
     lv_obj_set_y(ui_EditBtnLabel, 1);
     lv_obj_set_align(ui_EditBtnLabel, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_EditBtnLabel, "Edit");
+    lv_label_set_text(ui_EditBtnLabel, "Preview");
     lv_obj_set_style_text_color(ui_EditBtnLabel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_EditBtnLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui_EditBtnLabel, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -69,7 +69,7 @@ void ui_FavEditScreen_screen_init(void)
     lv_obj_remove_style_all(ui_EditBtnIcon);
     lv_obj_set_width(ui_EditBtnIcon, 32);
     lv_obj_set_height(ui_EditBtnIcon, 32);
-    lv_obj_set_x(ui_EditBtnIcon, -28);
+    lv_obj_set_x(ui_EditBtnIcon, -50);
     lv_obj_set_y(ui_EditBtnIcon, 1);
     lv_obj_set_align(ui_EditBtnIcon, LV_ALIGN_CENTER);
     removeFlag(ui_EditBtnIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
