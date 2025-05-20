@@ -113,7 +113,7 @@ void ui_SetTimerScr_screen_init(void)
     
     ui_hrRoller = lv_roller_create(ui_SetTimerScreen);
     lv_roller_set_options(ui_hrRoller, setRollerOptions(12), LV_ROLLER_MODE_INFINITE);
-    lv_roller_set_selected(ui_hrRoller, 00, LV_ANIM_OFF);
+    lv_roller_set_selected(ui_hrRoller, storedValue[0], LV_ANIM_OFF);
     lv_obj_set_height(ui_hrRoller, 136);
     lv_obj_set_width(ui_hrRoller, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_x(ui_hrRoller, -111);
@@ -158,7 +158,7 @@ void ui_SetTimerScr_screen_init(void)
     
     ui_minRoller = lv_roller_create(ui_SetTimerScreen);
     lv_roller_set_options(ui_minRoller, setRollerOptions(60), LV_ROLLER_MODE_INFINITE);
-    lv_roller_set_selected(ui_minRoller, 00, LV_ANIM_OFF);
+    lv_roller_set_selected(ui_minRoller, storedValue[1], LV_ANIM_OFF);
     lv_obj_set_height(ui_minRoller, 136);
     lv_obj_set_width(ui_minRoller, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_x(ui_minRoller, 5);
@@ -203,7 +203,7 @@ void ui_SetTimerScr_screen_init(void)
     
     ui_secRoller = lv_roller_create(ui_SetTimerScreen);
     lv_roller_set_options(ui_secRoller, setRollerOptions(60), LV_ROLLER_MODE_INFINITE);
-    lv_roller_set_selected(ui_secRoller, 00, LV_ANIM_OFF);
+    lv_roller_set_selected(ui_secRoller, storedValue[2], LV_ANIM_OFF);
     lv_obj_set_height(ui_secRoller, 136);
     lv_obj_set_width(ui_secRoller, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_x(ui_secRoller, 119);
@@ -459,9 +459,9 @@ char* labelString(int num)
 void setRollersValue()
 {
     // int selectedIndex = lv_roller_get_selected(ui_secRoller);
-    storedValue[0] = lv_roller_get_selected(ui_hrRoller) + 1;  // Convert index to actual number
-    storedValue[1] = lv_roller_get_selected(ui_minRoller) + 1;  // Convert index to actual number
-    storedValue[2] = lv_roller_get_selected(ui_secRoller) + 1;  // Convert index to actual number
+    storedValue[0] = lv_roller_get_selected(ui_hrRoller);  // Convert index to actual number
+    storedValue[1] = lv_roller_get_selected(ui_minRoller);  // Convert index to actual number
+    storedValue[2] = lv_roller_get_selected(ui_secRoller);  // Convert index to actual number
     // printf("Selected time: %dHr : %dMin : %dSec\n", storedValue[0], storedValue[1], storedValue[2]);
     lv_label_set_text(ui_clkHr,  labelString(storedValue[0]));
     lv_label_set_text(ui_clkMin, labelString(storedValue[1]));
