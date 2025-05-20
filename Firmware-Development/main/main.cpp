@@ -54,7 +54,7 @@ void lvglTask(void *pvParameters)
     // Initialize screen and set background with 50% brightness
     Core.InitializeScreen();
     Core.setupPWM();
-    lv_disp_load_scr(ui_SetTimerScreen);
+    lv_disp_load_scr(ui_FavScreen);
     lv_timer_handler(); /* let the GUI do its work */
 
     /*Initialize the Input device driver*/

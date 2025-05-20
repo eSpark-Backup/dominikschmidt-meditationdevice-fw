@@ -644,7 +644,7 @@ void selectSoundPanel(bool focus)
             // Switch focus to the panel group
             if (indev) lv_indev_set_group(indev, SoundPanelGroup);
             lv_group_focus_obj(ui_NoSoundBtn);
-            ScreenGroup[1] = SoundPanelGroup;
+            ScreenGroup[3] = SoundPanelGroup;
             currentGroup = SoundPanelGroup;
         } 
         else
@@ -660,7 +660,7 @@ void selectSoundPanel(bool focus)
                 lv_group_del(SoundPanelGroup);
                 SoundPanelGroup = NULL;
             }
-            ScreenGroup[1] = SoundGroup;
+            ScreenGroup[3] = SoundGroup;
             currentGroup = SoundGroup;
             lv_group_add_obj(SoundGroup, ui_HiddenSoundBtn);
             lv_group_focus_obj(ui_SoundPanel);

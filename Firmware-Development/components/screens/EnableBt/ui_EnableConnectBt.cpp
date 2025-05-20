@@ -337,7 +337,6 @@ void ui_EnableConnectBt_screen_init(void)
 void ui_event_btEnableSwitch(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    // printf("Event code: %d\n",event_code);
     if(event_code == LV_EVENT_VALUE_CHANGED || event_code == LV_EVENT_PRESSED ) {
         _ui_state_modify(ui_btEnableSwitch, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
         _ui_state_modify(ui_btEnablePanel, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
@@ -363,6 +362,10 @@ void ui_event_btEnableSwitch(lv_event_t * e)
         }
         lv_group_focus_obj(ui_btEnableBtn);
     }
+    else if(event_code == LV_EVENT_RELEASED) {
+        EnableBtFocus(false);
+        _ui_screen_change(&ui_BluetoothScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_BluetoothScreen_screen_init);
+    }
 }
 
 void EnableBtFocus(bool focus)
@@ -375,7 +378,7 @@ void EnableBtFocus(bool focus)
     if (indev) lv_indev_set_group(indev, focus ? EnableBtGroup : BTGroup);
     if (focus) lv_group_focus_obj(ui_btEnableBtn);
     else lv_group_focus_obj(ui_HiddenBTScrBtn);
-    ScreenGroup[6] = focus ? EnableBtGroup : BTGroup;
+    ScreenGroup[1] = focus ? EnableBtGroup : BTGroup;
     currentGroup = focus ? EnableBtGroup : BTGroup;
 }
 

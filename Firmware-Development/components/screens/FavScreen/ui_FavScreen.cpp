@@ -447,6 +447,8 @@ void ui_FavScreen_screen_init(void)
     lv_obj_set_y(ui_FavLabel, -74);
     lv_obj_set_align(ui_FavLabel, LV_ALIGN_CENTER);
     lv_label_set_text(ui_FavLabel, "Favourite");
+    lv_obj_set_style_text_color(ui_FavLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_FavLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui_FavLabel, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_line_space(ui_FavLabel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_FavLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -541,7 +543,7 @@ void selectFavPanel(bool focus)
         // Switch focus to the panel group
         if (indev) lv_indev_set_group(indev, FavPanelGroup);
         lv_group_focus_obj(ui_Fav1);
-        ScreenGroup[3] = FavPanelGroup;
+        ScreenGroup[0] = FavPanelGroup;
         currentGroup = FavPanelGroup;
     } 
     else
@@ -557,7 +559,7 @@ void selectFavPanel(bool focus)
             lv_group_del(FavPanelGroup);
             FavPanelGroup = NULL;
         }
-        ScreenGroup[3] = FavScrGroup;
+        ScreenGroup[0] = FavScrGroup;
         currentGroup = FavScrGroup;
         lv_group_add_obj(FavScrGroup, ui_HiddenFavScrBtn);
         lv_group_focus_obj(ui_FavsPanel);

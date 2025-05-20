@@ -75,39 +75,41 @@ void System::EncoderInit()
 void System::InitializeScreen(void)
 {
     lv_obj_clean(lv_screen_active());
+    ui_FavScreen_screen_init();
+    ui_BluetoothScreen_screen_init();
+    ui_EnableConnectBt_screen_init();
     ui_SetTimerScr_screen_init();
     ui_SoundScreen_screen_init();
     ui_EndGong1_screen_init();
-    ui_FavScreen_screen_init();
+    ui_MeditationScreen_screen_init();
     ui_FavEditScreen_screen_init();
     ui_FavPreview_screen_init();
-    ui_BluetoothScreen_screen_init();
-    ui_EnableConnectBt_screen_init();
-    ui_MeditationScreen_screen_init();
 }
 
 void System::loadScreens(void)
 {
-    Screen[0] = ui_SetTimerScreen;
-    Screen[1] = ui_SoundScreen;
-    Screen[2] = ui_EndGong1;
-    Screen[3] = ui_FavScreen;
-    Screen[4] = ui_FavEditScreen;
-    Screen[5] = ui_FavPreviewScreen;
-    Screen[6] = ui_BluetoothScreen;
-    Screen[7] = ui_MeditationScreen;
+    Screen[0] = ui_FavScreen;
+    Screen[1] = ui_BluetoothScreen;
+    Screen[2] = ui_SetTimerScreen;
+    Screen[3] = ui_SoundScreen;
+    Screen[4] = ui_EndGong1;
+    Screen[5] = ui_MeditationScreen;
+    Screen[6] = ui_FavEditScreen;
+    Screen[7] = ui_FavPreviewScreen;
+    Screen[8] = ui_EnableConnectBt;
 }
 
 void System::loadScreenGroups(void)
 {
-    ScreenGroup[0] = TimerScrGroup;
-    ScreenGroup[1] = SoundGroup;
-    ScreenGroup[2] = EndGongGroup;
-    ScreenGroup[3] = FavScrGroup;
-    ScreenGroup[4] = FavEditGroup;
-    ScreenGroup[5] = FavPrevGroup;
-    ScreenGroup[6] = BTGroup;
-    ScreenGroup[7] = MeditationGroup;
+    ScreenGroup[0] = FavScrGroup;
+    ScreenGroup[1] = BTGroup;
+    ScreenGroup[2] = TimerScrGroup;
+    ScreenGroup[3] = SoundGroup;
+    ScreenGroup[4] = EndGongGroup;
+    ScreenGroup[5] = MeditationGroup;
+    ScreenGroup[6] = FavEditGroup;
+    ScreenGroup[7] = FavPrevGroup;
+    ScreenGroup[8] = EnableBtGroup;
 }
 
 // Function to read the button state for all buttons
@@ -146,7 +148,7 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
         Btn_A = {A, button1.getState()};
         Btn_B = {B, button2.getState()};
         
-        if (Btn_A.State == BUTTON_SINGLE_CLICK && controlScreen == NULL) {
+        if (Btn_A.State == BUTTON_SINGLE_CLICK) {
             NavigateScreens(Btn_A, encDiff);
             // if(deviceConnected) 
             // {
@@ -203,8 +205,8 @@ void System::NavigateScreens(ButtonData btnData, int encData)
             screenCount += encDiff;
             screenChanged = true;
             
-            if (screenCount > 7) screenCount = 0;
-            if (screenCount < 0) screenCount = 7;
+            if (screenCount > 1) screenCount = 0;
+            if (screenCount < 0) screenCount = 1;
             
             if (screenChanged) {
                 _ui_screen_change(&Screen[screenCount], LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 0, 0, NULL);  // Load new screen
@@ -292,11 +294,11 @@ void System::sendEvents(ButtonData btn, int screenCount)
     if (!focusedObj) return; // If no object is focused, exit
     
     lv_event_code_t event_code;
-    if(btn.State == BUTTON_SINGLE_CLICK && screenCount < TotalScreens)
+    if(btn.State == BUTTON_SINGLE_CLICK)
     {
         event_code = LV_EVENT_PRESSED;
     }
-    else if(btn.State == BUTTON_NONE && screenCount == -1)
+    else if(btn.State == BUTTON_NONE)
     {
         event_code = LV_EVENT_CANCEL;
     }
