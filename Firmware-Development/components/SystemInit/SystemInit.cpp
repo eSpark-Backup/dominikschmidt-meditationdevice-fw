@@ -75,41 +75,39 @@ void System::EncoderInit()
 void System::InitializeScreen(void)
 {
     lv_obj_clean(lv_screen_active());
-    ui_FavScreen_screen_init();
-    ui_BluetoothScreen_screen_init();
-    ui_EnableConnectBt_screen_init();
     ui_SetTimerScr_screen_init();
     ui_SoundScreen_screen_init();
     ui_EndGong1_screen_init();
-    ui_MeditationScreen_screen_init();
+    ui_FavScreen_screen_init();
     ui_FavEditScreen_screen_init();
     ui_FavPreview_screen_init();
+    ui_BluetoothScreen_screen_init();
+    ui_EnableConnectBt_screen_init();
+    ui_MeditationScreen_screen_init();
 }
 
 void System::loadScreens(void)
 {
-    Screen[0] = ui_FavScreen;
-    Screen[1] = ui_BluetoothScreen;
-    Screen[2] = ui_SetTimerScreen;
-    Screen[3] = ui_SoundScreen;
-    Screen[4] = ui_EndGong1;
-    Screen[5] = ui_MeditationScreen;
-    Screen[6] = ui_FavEditScreen;
-    Screen[7] = ui_FavPreviewScreen;
-    Screen[8] = ui_EnableConnectBt;
+    Screen[0] = ui_SetTimerScreen;
+    Screen[1] = ui_SoundScreen;
+    Screen[2] = ui_EndGong1;
+    Screen[3] = ui_FavScreen;
+    Screen[4] = ui_FavEditScreen;
+    Screen[5] = ui_FavPreviewScreen;
+    Screen[6] = ui_BluetoothScreen;
+    Screen[7] = ui_MeditationScreen;
 }
 
 void System::loadScreenGroups(void)
 {
-    ScreenGroup[0] = FavScrGroup;
-    ScreenGroup[1] = BTGroup;
-    ScreenGroup[2] = TimerScrGroup;
-    ScreenGroup[3] = SoundGroup;
-    ScreenGroup[4] = EndGongGroup;
-    ScreenGroup[5] = MeditationGroup;
-    ScreenGroup[6] = FavEditGroup;
-    ScreenGroup[7] = FavPrevGroup;
-    ScreenGroup[8] = EnableBtGroup;
+    ScreenGroup[0] = TimerScrGroup;
+    ScreenGroup[1] = SoundGroup;
+    ScreenGroup[2] = EndGongGroup;
+    ScreenGroup[3] = FavScrGroup;
+    ScreenGroup[4] = FavEditGroup;
+    ScreenGroup[5] = FavPrevGroup;
+    ScreenGroup[6] = BTGroup;
+    ScreenGroup[7] = MeditationGroup;
 }
 
 // Function to read the button state for all buttons
@@ -169,6 +167,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
     static int screenCount = 0;
     bool screenChanged = false;
     static lv_obj_t *lastScreen = lv_screen_active();
+    printf("btnID: %d btnState: %d: encData: %d, screen: %d\n",btnData.ID, btnData.State, encData, screenCount);
 
     if(lastScreen != lv_screen_active() && controlScreen == NULL)
     {
@@ -205,8 +204,8 @@ void System::NavigateScreens(ButtonData btnData, int encData)
             screenCount += encDiff;
             screenChanged = true;
             
-            if (screenCount > 1) screenCount = 0;
-            if (screenCount < 0) screenCount = 1;
+            if (screenCount > 7) screenCount = 0;
+            if (screenCount < 0) screenCount = 7;
             
             if (screenChanged) {
                 _ui_screen_change(&Screen[screenCount], LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 0, 0, NULL);  // Load new screen

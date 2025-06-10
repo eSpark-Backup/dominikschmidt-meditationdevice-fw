@@ -380,7 +380,7 @@ void EnableBtFocus(bool focus)
     if (indev) lv_indev_set_group(indev, focus ? EnableBtGroup : BTGroup);
     if (focus) lv_group_focus_obj(ui_btEnableBtn);
     else lv_group_focus_obj(ui_HiddenBTScrBtn);
-    ScreenGroup[1] = focus ? EnableBtGroup : BTGroup;
+    ScreenGroup[6] = focus ? EnableBtGroup : BTGroup;
     currentGroup = focus ? EnableBtGroup : BTGroup;
 }
 
