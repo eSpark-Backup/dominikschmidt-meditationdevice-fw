@@ -216,6 +216,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
                 _ui_screen_change(&Screen[screenCount], LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 0, 0, NULL);  // Load new screen
 
                 lastScreen = lv_screen_active();
+                if(meditation_timer != NULL) pauseMeditationTimer();
                 
                 lv_indev_t *indev = lv_indev_get_next(NULL);
                 if (indev && ScreenGroup[screenCount]) {

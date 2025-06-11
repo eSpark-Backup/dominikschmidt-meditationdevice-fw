@@ -25,6 +25,7 @@ char timeRemainStr[15];
 char timePassedStr[15];
 uint32_t arcTimeInSec = 0;
 uint32_t totalTimeInSec = 0;
+char pausedSoundNumber[50];
 
 void ui_MeditationScreen_screen_init(void)
 {
@@ -123,7 +124,7 @@ void ui_MeditationScreen_screen_init(void)
 
     //Events
     lv_obj_add_event_cb(ui_MeditationScreen, ui_event_medScreenEvent, LV_EVENT_ALL, NULL);
-    // lv_obj_add_event_cb(ui_medPauseBtn,      ui_event_medPauseBtn,    LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_medPauseBtn,      ui_event_medPauseBtn,    LV_EVENT_ALL, NULL);
 
     //Hidden Object to shift focus
     ui_HiddenMedScrBtn = lv_obj_create(ui_MeditationScreen);
@@ -165,12 +166,13 @@ void ui_event_medPauseBtn(lv_event_t * e)
     // static int lastMaxArcValue = maxArcValue;
     if (event_code == LV_EVENT_PRESSED) {
         _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-
+        controlMedTimer();
+        focusEnable = false;
     }
-    else if (event_code == LV_EVENT_LONG_PRESSED) {
-        resetTimerParams();
-        timerIsUp(true, true);
-    }
+    // else if (event_code == LV_EVENT_LONG_PRESSED) {
+    //     resetTimerParams();
+    //     timerIsUp(true, true);
+    // }
     else{
         return;
     }
@@ -268,14 +270,21 @@ void controlMedTimer()
     if (!timerRunning) {
         timerRunning = true;
         startTime = TIME_IN_SEC - pausedTime;
+        char soundPath[100] = "/sdcard/audio/";
         // Create LVGL timer to update every second
         if (!meditation_timer) {  // Avoid multiple timers
+            totalTimeInSec = getRollerValue(ui_minRoller) * 60;
             meditation_timer = lv_timer_create((lv_timer_cb_t)updateTimer, 1000, NULL);
         }
         else
         {
+            totalTimeInSec = getRollerValue(ui_minRoller) * 60 - pausedTime;
+            arcTimeInSec = pausedTime;
             lv_timer_resume(meditation_timer);
         }
+        // printf("Here pause time: %d and Start time %d\n",startTime, pausedTime);
+        snprintf(soundPath, sizeof(soundPath),"/sdcard/audio/%s", soundNumber);
+        btAudio.A2dpAudioStart(soundPath, totalTimeInSec);
         timerIsUp(true, true);
     } else {
         timerRunning = false;
@@ -283,7 +292,21 @@ void controlMedTimer()
         // Pause the timer
         if (meditation_timer) {
             lv_timer_pause(meditation_timer);
+            strncpy(pausedSoundNumber, soundNumber, sizeof(pausedSoundNumber));
             pausedTime = TIME_IN_SEC - startTime;
+            btAudio.A2dpAudioStop();
         }
     }
+}
+
+void pauseMeditationTimer()
+{
+    timerRunning = false;
+    // Pause the timer
+    lv_timer_pause(meditation_timer);
+    strncpy(pausedSoundNumber, soundNumber, sizeof(pausedSoundNumber));
+    pausedTime = TIME_IN_SEC - startTime;
+    // printf(" pause time: %d\n",pausedTime);
+    _ui_state_modify(ui_medPauseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+    btAudio.A2dpAudioStop();
 }

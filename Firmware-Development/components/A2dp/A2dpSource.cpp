@@ -23,7 +23,7 @@ char filePath[256];
 
 static const char *TAG = "BLUETOOTH_A2DP";
 bool deviceConnected = false;
-
+bool stopAudio = false;
 ScannedDevice A2DP::scanned_devices[MAX_SCANNED_DEVICES];
 int A2DP::scanned_device_count = 0;
 TaskHandle_t xBtTaskHandler;
@@ -408,7 +408,7 @@ void A2DP::A2dpAudioStart(char *filepath, int play_time_sec)
         strcpy(current_file_ext, ".wav");
     }
 
-    ESP_LOGW(TAG, "[Restarting] Setting new file: %s", filepath);
+    ESP_LOGW(TAG, "[Restarting] Setting new file: %s with time: %d", filepath, play_time_sec);
     if (xSemaphoreTake(xAudioMutex, pdMS_TO_TICKS(1000)))
     {
         if (AudioPlaying) A2dpAudioStop();
@@ -553,7 +553,7 @@ void A2DP::loopAudioTask(void *param)
             
             //     lastCount = audioCount;
             // }
-            if ((int64_t)(xTaskGetTickCount() - btAudio.start_time_us) >= btAudio.play_time_us) 
+            if (((int64_t)(xTaskGetTickCount() - btAudio.start_time_us) >= btAudio.play_time_us) || stopAudio)
             {
                 ESP_LOGW(TAG, "[Stopping] Playback time reached %u : %lld : %lld",xTaskGetTickCount(), btAudio.start_time_us, btAudio.play_time_us);
                 btAudio.AudioPlaying = false;
@@ -564,6 +564,7 @@ void A2DP::loopAudioTask(void *param)
                 audio_pipeline_reset_ringbuffer(btAudio.pipeline);
                 audio_pipeline_reset_elements(btAudio.pipeline);
                 audio_pipeline_reset_items_state(btAudio.pipeline);
+                stopAudio = false;
                 xSemaphoreGive(xAudioMutex);
                 break;
             }
@@ -603,18 +604,7 @@ bool A2DP::isAudioStarted()
 void A2DP::A2dpAudioStop()
 {
     ESP_LOGI(TAG, "[ 7 ] Stop audio_pipeline");
-    if (xBtTaskHandler != NULL) {
-        vTaskDelete(xBtTaskHandler);
-        xBtTaskHandler = NULL;
-    }
-    AudioPlaying = false;
-
-    audio_pipeline_stop(pipeline);
-    audio_pipeline_wait_for_stop(pipeline);
-    audio_pipeline_terminate(pipeline);
-//     audio_pipeline_reset_ringbuffer(pipeline);
-//     audio_pipeline_reset_elements(pipeline);
-//     audio_pipeline_reset_items_state(pipeline);
+    if(btAudio.AudioPlaying) stopAudio = true;
 }
 
 void A2DP::update_bt_dropdown(lv_obj_t *dropdown)

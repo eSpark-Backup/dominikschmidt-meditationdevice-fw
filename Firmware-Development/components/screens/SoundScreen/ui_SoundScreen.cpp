@@ -16,7 +16,6 @@ lv_obj_t *ui_NatureSoundBtn;
 lv_obj_t *ui_NatureSoundCb;
 lv_obj_t *ui_NatureSoundIcon;
 lv_obj_t *ui_NatureSoundLbl;
-lv_obj_t *;
 lv_obj_t *ui_SoundDropList;
 lv_obj_t *ui_WhiteNoiseBtn;
 lv_obj_t *ui_WhiteNoiseCb;
