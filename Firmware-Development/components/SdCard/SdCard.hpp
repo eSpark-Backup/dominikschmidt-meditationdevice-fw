@@ -23,6 +23,7 @@ class Storage
     public:
         void mountSDcard();
         void list_sdcard_files(const char *path);
+        void updateSoundListFromSdCard();
         esp_err_t ensureNvsInitialized();
         esp_err_t saveFavourite(const char* fav_name, const Favourite &fav);
         esp_err_t readFavourite(const char* fav_name, Favourite &fav);

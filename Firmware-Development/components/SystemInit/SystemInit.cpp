@@ -78,12 +78,13 @@ void System::InitializeScreen(void)
     ui_SetTimerScr_screen_init();
     ui_SoundScreen_screen_init();
     ui_EndGong1_screen_init();
-    ui_FavScreen_screen_init();
-    ui_FavEditScreen_screen_init();
-    ui_FavPreview_screen_init();
+    // ui_FavScreen_screen_init();
+    // ui_FavEditScreen_screen_init();
+    // ui_FavPreview_screen_init();
     ui_BluetoothScreen_screen_init();
     ui_EnableConnectBt_screen_init();
     ui_MeditationScreen_screen_init();
+    storagCard.updateSoundListFromSdCard();
 }
 
 void System::loadScreens(void)
@@ -91,11 +92,13 @@ void System::loadScreens(void)
     Screen[0] = ui_SetTimerScreen;
     Screen[1] = ui_SoundScreen;
     Screen[2] = ui_EndGong1;
-    Screen[3] = ui_FavScreen;
-    Screen[4] = ui_FavEditScreen;
-    Screen[5] = ui_FavPreviewScreen;
-    Screen[6] = ui_BluetoothScreen;
-    Screen[7] = ui_MeditationScreen;
+    Screen[3] = ui_BluetoothScreen;
+    Screen[4] = ui_MeditationScreen;
+    // Screen[3] = ui_FavScreen;
+    // Screen[4] = ui_FavEditScreen;
+    // Screen[5] = ui_FavPreviewScreen;
+    // Screen[6] = ui_BluetoothScreen;
+    // Screen[7] = ui_MeditationScreen;
 }
 
 void System::loadScreenGroups(void)
@@ -103,11 +106,13 @@ void System::loadScreenGroups(void)
     ScreenGroup[0] = TimerScrGroup;
     ScreenGroup[1] = SoundGroup;
     ScreenGroup[2] = EndGongGroup;
-    ScreenGroup[3] = FavScrGroup;
-    ScreenGroup[4] = FavEditGroup;
-    ScreenGroup[5] = FavPrevGroup;
-    ScreenGroup[6] = BTGroup;
-    ScreenGroup[7] = MeditationGroup;
+    ScreenGroup[3] = BTGroup;
+    ScreenGroup[4] = MeditationGroup;
+    // ScreenGroup[3] = FavScrGroup;
+    // ScreenGroup[4] = FavEditGroup;
+    // ScreenGroup[5] = FavPrevGroup;
+    // ScreenGroup[6] = BTGroup;
+    // ScreenGroup[7] = MeditationGroup;
 }
 
 // Function to read the button state for all buttons
@@ -204,8 +209,8 @@ void System::NavigateScreens(ButtonData btnData, int encData)
             screenCount += encDiff;
             screenChanged = true;
             
-            if (screenCount > 7) screenCount = 0;
-            if (screenCount < 0) screenCount = 7;
+            if (screenCount > 4) screenCount = 0;
+            if (screenCount < 0) screenCount = 4;
             
             if (screenChanged) {
                 _ui_screen_change(&Screen[screenCount], LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 0, 0, NULL);  // Load new screen
@@ -395,7 +400,8 @@ void System::memLog()
 void System::loadAudio()
 {
     int TimerValue = getRollerValue(ui_minRoller) * 60;
-    
+    char soundPath[100] = "/sdcard/audio/";
+
     if (strcmp(soundNumber, "Waves") == 0) {
         btAudio.A2dpAudioStart("/sdcard/audio/Waves 1.wav", TimerValue);
     }
@@ -413,6 +419,11 @@ void System::loadAudio()
     }
     else if (strcmp(soundNumber, "Birds") == 0) {
         btAudio.A2dpAudioStart("/sdcard/audio/Birds 1.wav", TimerValue);
+    }
+    else
+    {
+        snprintf(soundPath, sizeof(soundPath),"/sdcard/audio/%s", soundNumber);
+        btAudio.A2dpAudioStart(soundPath, TimerValue);
     }
 
     

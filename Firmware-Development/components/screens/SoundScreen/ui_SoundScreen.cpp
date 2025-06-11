@@ -16,6 +16,8 @@ lv_obj_t *ui_NatureSoundBtn;
 lv_obj_t *ui_NatureSoundCb;
 lv_obj_t *ui_NatureSoundIcon;
 lv_obj_t *ui_NatureSoundLbl;
+lv_obj_t *;
+lv_obj_t *ui_SoundDropList;
 lv_obj_t *ui_WhiteNoiseBtn;
 lv_obj_t *ui_WhiteNoiseCb;
 lv_obj_t *ui_WhiteNoiseIcon;
@@ -198,6 +200,31 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_set_style_text_font(ui_NatureSoundLbl, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_color(ui_NatureSoundLbl, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_text_opa(ui_NatureSoundLbl, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+
+    ui_SoundDropList = lv_dropdown_create(ui_SoundPanel);
+    lv_dropdown_set_options(ui_SoundDropList, "Option 1\nOption 2\nOption 3");
+    lv_obj_set_width(ui_SoundDropList, 286);
+    lv_obj_set_height(ui_SoundDropList, 58);
+    lv_obj_set_align(ui_SoundDropList, LV_ALIGN_CENTER);
+    addFlag(ui_SoundDropList, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    lv_obj_set_style_text_letter_space(ui_SoundDropList, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_SoundDropList, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_SoundDropList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_SoundDropList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_SoundDropList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_SoundDropList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_SoundDropList), lv_color_hex(0x424242),  LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_SoundDropList), 255,  LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_SoundDropList), lv_color_hex(0x424242),
+                              LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_SoundDropList), 255,  LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_SoundDropList), lv_color_hex(0x3A3A3A),
+                              LV_PART_SELECTED | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_SoundDropList), 255,  LV_PART_SELECTED | LV_STATE_CHECKED);
+
 
     ui_WhiteNoiseBtn = lv_button_create(ui_SoundPanel);
     lv_obj_set_width(ui_WhiteNoiseBtn, 286);
@@ -597,6 +624,7 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_add_event_cb(ui_SoundStartBtnBox, ui_event_startBtnBox, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_NoSoundBtn, ui_event_NoSoundBtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_NatureSoundBtn, ui_event_NatureSoundBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_SoundDropList, ui_event_NatureSoundBtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_WhiteNoiseBtn, ui_event_WhiteNoiseBtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_BinauralBeatBtn, ui_event_BinauralBeatBtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_SingingBowlsBtn, ui_event_SingingBowlsBtn, LV_EVENT_ALL, NULL);
@@ -609,6 +637,7 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_add_style(ui_SoundPanel,       &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_NoSoundBtn,       &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_NatureSoundBtn,   &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_SoundDropList,    &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_WhiteNoiseBtn,    &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_BinauralBeatBtn,  &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_SingingBowlsBtn,  &style_focus, LV_STATE_FOCUS_KEY);
@@ -626,6 +655,14 @@ void ui_SoundScreen_screen_init(void)
     }
 }
 
+void SoundSelected(bool flag)
+{
+    _ui_state_modify(ui_NatureSoundBtn, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_NatureSoundCb, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_NatureSoundIcon, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_NatureSoundLbl, LV_STATE_CHECKED, !flag);
+}
+
 void selectSoundPanel(bool focus)
 {
     static lv_group_t *SoundPanelGroup = NULL;
@@ -635,7 +672,7 @@ void selectSoundPanel(bool focus)
             // Create a new focus group for the panel
             SoundPanelGroup = lv_group_create();
             lv_group_add_obj(SoundPanelGroup, ui_NoSoundBtn);
-            lv_group_add_obj(SoundPanelGroup, ui_NatureSoundBtn);
+            lv_group_add_obj(SoundPanelGroup, list_selected ? ui_SoundDropList : ui_NatureSoundBtn);
             lv_group_add_obj(SoundPanelGroup, ui_WhiteNoiseBtn);
             lv_group_add_obj(SoundPanelGroup, ui_BinauralBeatBtn);
             lv_group_add_obj(SoundPanelGroup, ui_SingingBowlsBtn);
@@ -662,6 +699,7 @@ void selectSoundPanel(bool focus)
             }
             ScreenGroup[1] = SoundGroup;
             currentGroup = SoundGroup;
+            SoundSelected(false);
             lv_group_add_obj(SoundGroup, ui_HiddenSoundBtn);
             lv_group_focus_obj(ui_SoundPanel);
         }
@@ -699,13 +737,35 @@ void ui_event_NatureSoundBtn(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_PRESSED) {
-        _ui_state_modify(ui_NatureSoundBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_NatureSoundCb, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_NatureSoundIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_NatureSoundLbl, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
+    if(!list_selected) {
+        _ui_flag_modify(ui_SoundDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        _ui_flag_modify(ui_NatureSoundBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        lv_dropdown_open(ui_SoundDropList);
+        list_selected = true;
+        ui_curDropdownList = ui_SoundDropList;
+    }
+    else if(list_selected)
+    {
+        lv_dropdown_close(ui_SoundDropList);
+        list_selected = false;
+        lv_dropdown_get_selected_str(ui_SoundDropList, soundNumber, sizeof(soundNumber));
+        if(strlen(soundNumber) != 0) {
+            SoundSelected(true);
+        }
+        _ui_flag_modify(ui_SoundDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        _ui_flag_modify(ui_NatureSoundBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+    }
+        selectSoundPanel(true);
+        lv_group_focus_obj(list_selected ? ui_SoundDropList : ui_NatureSoundBtn);
     }
     else if(event_code == LV_EVENT_RELEASED)
+    {
         selectSoundPanel(false);
+        lv_dropdown_close(ui_SoundDropList);
+        list_selected = false;
+        _ui_flag_modify(ui_SoundDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        _ui_flag_modify(ui_NatureSoundBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+    }
 }
 
 void ui_event_WhiteNoiseBtn(lv_event_t * e)

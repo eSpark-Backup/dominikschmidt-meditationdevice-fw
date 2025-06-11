@@ -504,9 +504,9 @@ void ui_event_resetSetTimerEvent(lv_event_t * e)
         _ui_flag_modify(ui_clkSec,      LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         // _ui_flag_modify(ui_secRoller,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
 
-        lv_group_remove_obj(ui_hrRoller);
+        // lv_group_remove_obj(ui_hrRoller);
         lv_group_remove_obj(ui_minRoller);
-        lv_group_remove_obj(ui_secRoller);
+        // lv_group_remove_obj(ui_secRoller);
 
     }
 }

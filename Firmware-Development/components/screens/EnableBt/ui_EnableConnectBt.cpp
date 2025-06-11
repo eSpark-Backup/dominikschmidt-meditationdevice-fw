@@ -22,6 +22,7 @@ void ui_event_btScanBtn(lv_event_t * e);
 void ui_event_btBackBtn(lv_event_t * e);
 lv_obj_t * ui_btEnableSwitch;
 lv_obj_t * ui_ScannedDevDropdown;
+lv_obj_t * ui_curDropdownList;
 lv_obj_t * ui_btScanBtn;
 lv_obj_t * ui_btScanBtnIcon;
 lv_obj_t * ui_btScanBtnLabel;
@@ -380,7 +381,7 @@ void EnableBtFocus(bool focus)
     if (indev) lv_indev_set_group(indev, focus ? EnableBtGroup : BTGroup);
     if (focus) lv_group_focus_obj(ui_btEnableBtn);
     else lv_group_focus_obj(ui_HiddenBTScrBtn);
-    ScreenGroup[6] = focus ? EnableBtGroup : BTGroup;
+    ScreenGroup[3] = focus ? EnableBtGroup : BTGroup;
     currentGroup = focus ? EnableBtGroup : BTGroup;
 }
 
@@ -389,6 +390,7 @@ void ui_event_btListSwitch(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_PRESSED && strcmp(lv_dropdown_get_text(ui_ScannedDevDropdown), "Scanning Devices") != 0) {
+        ui_curDropdownList = ui_ScannedDevDropdown;
         if(list_selected == false)
         {
             lv_dropdown_open(ui_ScannedDevDropdown);
@@ -426,6 +428,7 @@ void ui_event_btScanBtn(lv_event_t * e)
 
     if(event_code == LV_EVENT_PRESSED)
     {
+        ui_curDropdownList = ui_ScannedDevDropdown;
         lv_dropdown_set_text(ui_ScannedDevDropdown, "Scanning Devices");
         btAudio.start_bt_scan();
     }
@@ -446,10 +449,10 @@ void rotateScannedDropdown(int diff)
     if (diff != 0)
     {
         // Get the current selected index
-        int current_index = lv_dropdown_get_selected(ui_ScannedDevDropdown);
+        int current_index = lv_dropdown_get_selected(ui_curDropdownList);
         
         // Get the total number of options
-        const char *options = lv_dropdown_get_options(ui_ScannedDevDropdown);
+        const char *options = lv_dropdown_get_options(ui_curDropdownList);
         int total_options = 0;
         
         // Count the number of options by counting '\n' occurrences
@@ -469,7 +472,7 @@ void rotateScannedDropdown(int diff)
         new_index = 0; // Wrap around to the first item
         
         // Set new selected index
-        lv_dropdown_set_selected(ui_ScannedDevDropdown, new_index);
+        lv_dropdown_set_selected(ui_curDropdownList, new_index);
     } 
 }
 
@@ -477,6 +480,7 @@ void resetConnectionParams()
 {
     lv_dropdown_set_options(ui_ScannedDevDropdown, "");
     lv_dropdown_set_text(ui_ScannedDevDropdown, "Select Device");
+    ui_curDropdownList = ui_ScannedDevDropdown;
     memset(deviceName, 0, NAME_BUF);
 }
 

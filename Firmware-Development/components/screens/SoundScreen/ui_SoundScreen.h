@@ -30,6 +30,7 @@ extern lv_obj_t * ui_NatureSoundBtn;
 extern lv_obj_t * ui_NatureSoundCb;
 extern lv_obj_t * ui_NatureSoundIcon;
 extern lv_obj_t * ui_NatureSoundLbl;
+extern lv_obj_t * ui_SoundDropList;
 extern lv_obj_t * ui_WhiteNoiseBtn;
 extern lv_obj_t * ui_WhiteNoiseCb;
 extern lv_obj_t * ui_WhiteNoiseIcon;

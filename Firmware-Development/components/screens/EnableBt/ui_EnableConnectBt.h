@@ -25,6 +25,7 @@ extern lv_obj_t * ui_btEnableBtnIcon;
 extern lv_obj_t * ui_btEnableBtnLabel;
 extern lv_obj_t * ui_btEnableSwitch;
 extern lv_obj_t * ui_ScannedDevDropdown;
+extern lv_obj_t * ui_curDropdownList;
 extern lv_obj_t * ui_btScanBtn;
 extern lv_obj_t * ui_btScanBtnIcon;
 extern lv_obj_t * ui_btScanBtnLabel;

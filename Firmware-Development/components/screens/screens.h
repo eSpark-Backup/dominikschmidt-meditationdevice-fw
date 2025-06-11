@@ -28,8 +28,8 @@ extern "C"
 #include "EnableBt/ui_EnableConnectBt.h"
 #include "A2dpSource.hpp"
 
-extern lv_obj_t *Screen[8];
-extern lv_group_t *ScreenGroup[8];
+extern lv_obj_t *Screen[5];
+extern lv_group_t *ScreenGroup[5];
 
 
 #ifdef __cplusplus
