@@ -180,14 +180,14 @@ void setTimeLabels(uint32_t remainingTime, uint32_t passedTime)
 {
     int min = MIN_FROM_SEC(remainingTime);
     int sec = SEC_REMAIN(remainingTime);
-    if (min < 0 || min > 59) min = 60;
+    if (min < 0 || min > 599) min = 600;
     if (sec < 0 || sec > 59) sec = 60;
     sprintf(timeRemainStr, "%02d:%02d", min, sec);
     lv_label_set_text(ui_medTimeRemain, timeRemainStr);
     
     min = MIN_FROM_SEC(passedTime);
     sec = SEC_REMAIN(passedTime);
-    if (min < 0 || min > 59) min = 60;
+    if (min < 0 || min > 599) min = 600;
     if (sec < 0 || sec > 59) sec = 60;
     sprintf(timePassedStr, "- %02d:%02d", min, sec);
     lv_label_set_text(ui_medTimePassed, timePassedStr);

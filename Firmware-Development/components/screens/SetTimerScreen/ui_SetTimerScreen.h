@@ -26,6 +26,7 @@ void rotateRoller(int diff);
 char* setRollerOptions(int maxRange);
 char* labelString(int num);
 void setRollersValue();
+int getRollerValue(lv_obj_t * roller);
 extern lv_obj_t *ui_SetTimerScreen;
 extern lv_obj_t *ui_startBtnBox1;
 extern lv_obj_t *ui_startLabel1;

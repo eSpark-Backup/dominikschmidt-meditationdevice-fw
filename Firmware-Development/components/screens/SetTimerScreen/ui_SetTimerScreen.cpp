@@ -36,7 +36,7 @@ lv_obj_t *ui_HiddenTimerScrBtn;
 lv_group_t *TimerScrGroup;
 lv_obj_t* roller = NULL;
 bool roller_selected = false;
-int storedValue[3] = {0, 10, 25};
+int storedValue[3] = {0, 10, 00};
 
 void ui_SetTimerScr_screen_init(void)
 {
@@ -486,6 +486,10 @@ void setRollersValue()
     lv_label_set_text(ui_clkSec, labelString(storedValue[2]));
 }
 
+int getRollerValue(lv_obj_t * roller)
+{
+    return lv_roller_get_selected(roller);
+}
 
 void ui_event_resetSetTimerEvent(lv_event_t * e)
 {
