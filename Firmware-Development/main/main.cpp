@@ -46,10 +46,11 @@ void lvglTask(void *pvParameters)
     /*Set a tick source so that LVGL will know how much time elapsed. */
     lv_tick_set_cb(my_tick);
     static void *buf0 = (lv_color_t *)heap_caps_malloc(DRAW_BUF_SIZE, MALLOC_CAP_SPIRAM);
-    assert(buf0 != NULL);
+    static void *buf1 = (lv_color_t *)heap_caps_malloc(DRAW_BUF_SIZE, MALLOC_CAP_SPIRAM);
+    assert(buf0 && buf1);
     uint32_t size_in_px = DRAW_BUF_SIZE;    
     lv_display_t * disp;
-    disp = lv_tft_espi_create(TFT_HOR_RES, TFT_VER_RES, buf0, NULL, size_in_px, LV_DISPLAY_RENDER_MODE_PARTIAL);
+    disp = lv_tft_espi_create(TFT_HOR_RES, TFT_VER_RES, buf0, buf1, size_in_px, LV_DISPLAY_RENDER_MODE_PARTIAL);
 
     // Initialize screen and set background with 50% brightness
     Core.InitializeScreen();

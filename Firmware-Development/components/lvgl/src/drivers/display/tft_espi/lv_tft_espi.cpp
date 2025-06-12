@@ -58,7 +58,7 @@ lv_display_t *lv_tft_espi_create(uint32_t hor_res, uint32_t ver_res, void *buf0,
     lv_display_set_driver_data(disp, (void *)dsc);
     lv_display_set_flush_cb(disp, flush_cb);
     lv_display_add_event_cb(disp, resolution_changed_event_cb, LV_EVENT_RESOLUTION_CHANGED, NULL);
-    lv_display_set_buffers(disp, (void *)buf0, (void *)buf0, buf_size_bytes, mode);
+    lv_display_set_buffers(disp, (void *)buf0, (void *)buf1, buf_size_bytes, mode);
     return disp;
 }
 
