@@ -393,7 +393,7 @@ void A2DP::A2dpServiceInit()
     xAudioMutex = xSemaphoreCreateMutex();
 }
 
-void A2DP::A2dpAudioStart(char *filepath, int play_time_sec) 
+void A2DP::A2dpAudioStart(char *filepath, int play_time_sec, bool Gong) 
 {
     strncpy(filePath, filepath, sizeof(filePath) - 1);
     filePath[sizeof(filePath) - 1] = '\0';  // ensure null-termination
@@ -455,9 +455,9 @@ void A2DP::A2dpAudioStart(char *filepath, int play_time_sec)
 
         AudioPlaying = true;
 
-        if (play_time_sec > 10)
+        if (play_time_sec > 1)
         {
-            setTimerValues(play_time_sec, true);
+            if (Gong == false) setTimerValues(play_time_sec, true);
             play_time_us = (int64_t)play_time_sec * 1000;
             xTaskCreatePinnedToCore(loopAudioTask, "Audio_Monitor", 4096, NULL, 4, &xBtTaskHandler, 0);
         }

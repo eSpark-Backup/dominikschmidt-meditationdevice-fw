@@ -224,6 +224,7 @@ void updateTimer()
         if (arcTimeInSec >= totalTimeInSec) {
             timerRunning = false;  // Stop when countdown ends
             resetTimerParams();
+            if(lv_obj_has_state(ui_onButton, LV_STATE_CHECKED)) btAudio.A2dpAudioStart("/sdcard/audio/EndGong/End Gong 2.wav", 5, true);
             timerIsUp(false, false);
         }
     }

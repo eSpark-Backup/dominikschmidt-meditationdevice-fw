@@ -54,7 +54,7 @@ class A2DP
     //Methods
     public:
         void A2dpServiceInit();
-        void A2dpAudioStart(char *filepath, int play_time_sec = 0);
+        void A2dpAudioStart(char *filepath, int play_time_sec = 0, bool Gong = false);
         void A2dpAudioStop();
         bool isAudioStarted();
         void update_dropdown_options(lv_obj_t *dropdown, char **options, int option_count);

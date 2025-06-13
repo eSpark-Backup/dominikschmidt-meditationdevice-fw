@@ -793,6 +793,8 @@ void ui_SoundScreen_screen_init(void)
     if(indev) {
         lv_indev_set_group(indev, SoundGroup);
     }
+
+    NatureSoundSelected(true);
 }
 
 void NoSoundSelected(bool flag)
