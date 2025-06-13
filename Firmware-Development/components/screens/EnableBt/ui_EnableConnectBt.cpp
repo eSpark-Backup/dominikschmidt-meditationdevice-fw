@@ -420,6 +420,11 @@ void ui_event_btListSwitch(lv_event_t * e)
             }
         }
     }
+    else if(event_code == LV_EVENT_RELEASED)
+    {
+        lv_dropdown_close(ui_ScannedDevDropdown);
+        list_selected = false;
+    }
 }
 
 void ui_event_btScanBtn(lv_event_t * e)

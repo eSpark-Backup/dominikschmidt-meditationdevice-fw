@@ -137,8 +137,8 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     {
         if ((roller_selected && roller != NULL) || list_selected)  // Only update if roller is in selection mode
         {
-            if (list_selected == true)     {printf("rotate Scanned Dropdown\n"); rotateScannedDropdown(encDiff);return;}
-            else if (roller_selected == true)        {printf("rotate roller\n"); rotateRoller(encDiff);return;}
+            if (list_selected == true)          {rotateScannedDropdown(encDiff);    return;}
+            else if (roller_selected == true)   {rotateRoller(encDiff);             return;}
         }
         if (roller_selected == false || list_selected == false) {
             Btn_A.ID = UNDEFINED;
