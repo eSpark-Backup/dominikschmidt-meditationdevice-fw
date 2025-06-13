@@ -11,6 +11,7 @@ lv_obj_t *ui_startLabel;
 lv_obj_t *ui_startIcon;
 lv_obj_t *ui_onButton;
 lv_obj_t *ui_onBtnLabel;
+lv_obj_t *ui_endGongSwitch;
 lv_obj_t *ui_offButton;
 lv_obj_t *ui_offBtnLabel;
 lv_obj_t *ui_endGong1Label;
@@ -64,9 +65,9 @@ void ui_EndGong1_screen_init(void)
     lv_obj_set_style_bg_image_src(ui_startIcon, &ui_img_31_blackstarticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_onButton = lv_button_create(ui_EndGong1);
-    lv_obj_set_width(ui_onButton, 100);
+    lv_obj_set_width(ui_onButton, 130);
     lv_obj_set_height(ui_onButton, 100);
-    lv_obj_set_x(ui_onButton, -61);
+    lv_obj_set_x(ui_onButton, 0);
     lv_obj_set_y(ui_onButton, 6);
     lv_obj_set_align(ui_onButton, LV_ALIGN_CENTER);
     addFlag(ui_onButton, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
@@ -81,33 +82,68 @@ void ui_EndGong1_screen_init(void)
     lv_obj_set_width(ui_onBtnLabel, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_onBtnLabel, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_align(ui_onBtnLabel, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_onBtnLabel, "On");
+    lv_obj_set_x(ui_onBtnLabel, 0);
+    lv_obj_set_y(ui_onBtnLabel, -22);
+    lv_label_set_text(ui_onBtnLabel, "Gong 1");
     lv_obj_set_style_text_font(ui_onBtnLabel, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_offButton = lv_button_create(ui_EndGong1);
-    lv_obj_set_width(ui_offButton, 100);
-    lv_obj_set_height(ui_offButton, 100);
-    lv_obj_set_x(ui_offButton, 61);
-    lv_obj_set_y(ui_offButton, 6);
-    lv_obj_set_align(ui_offButton, LV_ALIGN_CENTER);
-    addFlag(ui_offButton, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
-    removeFlag(ui_offButton, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_offButton, 15, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_offButton, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_offButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_offButton, lv_color_hex(0x94D28B), LV_PART_MAIN | LV_STATE_CHECKED);
-    lv_obj_set_style_bg_opa(ui_offButton, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+    
+    ui_endGongSwitch = lv_switch_create(ui_onButton);
+    lv_obj_set_width(ui_endGongSwitch, 50);
+    lv_obj_set_height(ui_endGongSwitch, 25);
+    lv_obj_set_x(ui_endGongSwitch, 0);
+    lv_obj_set_y(ui_endGongSwitch, 22);
+    lv_obj_set_align(ui_endGongSwitch, LV_ALIGN_CENTER);
+    lv_obj_set_style_bg_color(ui_endGongSwitch, lv_color_hex(0x9C9994), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_endGongSwitch, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui_endGongSwitch, -2, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_endGongSwitch, -2, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_endGongSwitch, -2, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_endGongSwitch, -2, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_endGongSwitch, lv_color_hex(0x9C9994), LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_border_opa(ui_endGongSwitch, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_border_width(ui_endGongSwitch, 2, LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_pad_left(ui_endGongSwitch, -2, LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_pad_right(ui_endGongSwitch, -2, LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_pad_top(ui_endGongSwitch, -2, LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_pad_bottom(ui_endGongSwitch, -2, LV_PART_MAIN | LV_STATE_CHECKED);
 
-    ui_offBtnLabel = lv_label_create(ui_offButton);
-    lv_obj_set_width(ui_offBtnLabel, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_offBtnLabel, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_offBtnLabel, -2);
-    lv_obj_set_y(ui_offBtnLabel, 0);
-    lv_obj_set_align(ui_offBtnLabel, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_offBtnLabel, "Off");
-    lv_obj_set_style_text_color(ui_offBtnLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_offBtnLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_offBtnLabel, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_endGongSwitch, lv_color_hex(0x9C9994), LV_PART_INDICATOR | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(ui_endGongSwitch, 255, LV_PART_INDICATOR | LV_STATE_CHECKED);
+
+    lv_obj_set_style_pad_left(ui_endGongSwitch, -2, LV_PART_KNOB | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_endGongSwitch, -2, LV_PART_KNOB | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_endGongSwitch, -2, LV_PART_KNOB | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_endGongSwitch, -2, LV_PART_KNOB | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui_endGongSwitch, -2, LV_PART_KNOB | LV_STATE_CHECKED);
+    lv_obj_set_style_pad_right(ui_endGongSwitch, -2, LV_PART_KNOB | LV_STATE_CHECKED);
+    lv_obj_set_style_pad_top(ui_endGongSwitch, -2, LV_PART_KNOB | LV_STATE_CHECKED);
+    lv_obj_set_style_pad_bottom(ui_endGongSwitch, -2, LV_PART_KNOB | LV_STATE_CHECKED);
+
+    // ui_offButton = lv_button_create(ui_EndGong1);
+    // lv_obj_set_width(ui_offButton, 100);
+    // lv_obj_set_height(ui_offButton, 100);
+    // lv_obj_set_x(ui_offButton, 61);
+    // lv_obj_set_y(ui_offButton, 6);
+    // lv_obj_set_align(ui_offButton, LV_ALIGN_CENTER);
+    // addFlag(ui_offButton, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    // removeFlag(ui_offButton, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    // lv_obj_set_style_radius(ui_offButton, 15, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_bg_color(ui_offButton, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_bg_opa(ui_offButton, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_bg_color(ui_offButton, lv_color_hex(0x94D28B), LV_PART_MAIN | LV_STATE_CHECKED);
+    // lv_obj_set_style_bg_opa(ui_offButton, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+
+    // ui_offBtnLabel = lv_label_create(ui_offButton);
+    // lv_obj_set_width(ui_offBtnLabel, LV_SIZE_CONTENT);   /// 1
+    // lv_obj_set_height(ui_offBtnLabel, LV_SIZE_CONTENT);    /// 1
+    // lv_obj_set_x(ui_offBtnLabel, -2);
+    // lv_obj_set_y(ui_offBtnLabel, 0);
+    // lv_obj_set_align(ui_offBtnLabel, LV_ALIGN_CENTER);
+    // lv_label_set_text(ui_offBtnLabel, "Off");
+    // lv_obj_set_style_text_color(ui_offBtnLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_opa(ui_offBtnLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_font(ui_offBtnLabel, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_endGong1Label = lv_label_create(ui_EndGong1);
     lv_obj_set_width(ui_endGong1Label, LV_SIZE_CONTENT);   /// 1
@@ -280,7 +316,7 @@ void ui_EndGong1_screen_init(void)
 
     //Events
     lv_obj_add_event_cb(ui_onButton, ui_event_onButton, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_offButton, ui_event_offButton, LV_EVENT_ALL, NULL);
+    // lv_obj_add_event_cb(ui_offButton, ui_event_offButton, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_startBtnBox, ui_event_startBtnBox, LV_EVENT_ALL, NULL);
     
     //Hidden Object to shift focus
@@ -290,12 +326,12 @@ void ui_EndGong1_screen_init(void)
     //Style of Focus
     lv_obj_add_style(ui_startBtnBox, &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_onButton, &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_offButton, &style_focus, LV_STATE_FOCUS_KEY);
+    // lv_obj_add_style(ui_offButton, &style_focus, LV_STATE_FOCUS_KEY);
     
     //EngGong Screen Group of objects for Focus and Events
     EndGongGroup = lv_group_create();
     lv_group_add_obj(EndGongGroup, ui_onButton);
-    lv_group_add_obj(EndGongGroup, ui_offButton);
+    // lv_group_add_obj(EndGongGroup, ui_offButton);
     lv_group_add_obj(EndGongGroup, ui_startBtnBox);
     lv_group_add_obj(EndGongGroup, ui_HiddenEndGongBtn);
 
@@ -313,7 +349,8 @@ void ui_event_onButton(lv_event_t * e)
 
     if(event_code == LV_EVENT_PRESSED) {
         _ui_state_modify(ui_onButton, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_offButton, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
+        _ui_state_modify(ui_endGongSwitch, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
+        // _ui_state_modify(ui_offButton, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
         focusEnable = false;
     }
 }
