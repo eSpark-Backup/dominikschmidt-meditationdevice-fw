@@ -247,6 +247,7 @@ void setTimerValues(uint32_t time, bool startTimer)
     {
         resetTimerParams();
         timerRunning = false;
+        timerIsUp(true, false);
     }
 
     if (!timerRunning) {
