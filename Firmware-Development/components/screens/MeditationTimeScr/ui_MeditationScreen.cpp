@@ -29,7 +29,7 @@ char pausedSoundNumber[50];
 
 void ui_MeditationScreen_screen_init(void)
 {
-    totalTimeInSec = HRS_TO_SEC(storedValue[0]) + MIN_TO_SEC(storedValue[1]) + storedValue[2];
+    totalTimeInSec = MIN_TO_SEC(minVal);
     
     ui_MeditationScreen = lv_obj_create(NULL);
     removeFlag(ui_MeditationScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags

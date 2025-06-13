@@ -35,16 +35,10 @@ extern lv_obj_t *ui_rightGong;
 extern lv_obj_t *ui_midRightTune;
 extern lv_obj_t *ui_midTime;
 extern lv_obj_t *ui_mainCntr;
-extern lv_obj_t *ui_clkColon1;
-extern lv_obj_t *ui_clkColon2;
 extern lv_obj_t *ui_clkTopLabel;
 extern lv_obj_t *ui_clkBtmLabel;
-extern lv_obj_t *ui_clkHr;
-extern lv_obj_t *ui_hrRoller;
 extern lv_obj_t *ui_clkMin;
 extern lv_obj_t *ui_minRoller;
-extern lv_obj_t *ui_clkSec;
-extern lv_obj_t *ui_secRoller;
 extern lv_obj_t *ui_pgCntr;
 extern lv_obj_t *ui_pg1;
 extern lv_obj_t *ui_pg2;
@@ -56,7 +50,7 @@ extern lv_obj_t *ui_HiddenTimerScrBtn;
 extern lv_group_t *TimerScrGroup;
 extern lv_obj_t* roller;
 extern bool roller_selected;
-extern int storedValue[3];
+extern int minVal;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus
