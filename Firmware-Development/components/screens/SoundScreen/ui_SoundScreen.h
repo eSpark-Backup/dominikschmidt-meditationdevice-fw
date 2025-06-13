@@ -19,6 +19,7 @@ void ui_event_NoSoundBtn(lv_event_t * e);
 void ui_event_NatureSoundBtn(lv_event_t * e);
 void ui_event_WhiteNoiseBtn(lv_event_t * e);
 void ui_event_BinauralBeatBtn(lv_event_t * e);
+void ui_event_LessonsBtn(lv_event_t * e);
 void ui_event_SingingBowlsBtn(lv_event_t * e);
 extern lv_obj_t * ui_SoundScreen;
 extern lv_obj_t * ui_SoundPanel;
@@ -30,7 +31,10 @@ extern lv_obj_t * ui_NatureSoundBtn;
 extern lv_obj_t * ui_NatureSoundCb;
 extern lv_obj_t * ui_NatureSoundIcon;
 extern lv_obj_t * ui_NatureSoundLbl;
-extern lv_obj_t * ui_SoundDropList;
+extern lv_obj_t * ui_NatureSoundDropList;
+extern lv_obj_t * ui_WhiteNoiseDropList;
+extern lv_obj_t * ui_BinauralBeatDropList;
+extern lv_obj_t * ui_LessonsDropList;
 extern lv_obj_t * ui_WhiteNoiseBtn;
 extern lv_obj_t * ui_WhiteNoiseCb;
 extern lv_obj_t * ui_WhiteNoiseIcon;
@@ -64,7 +68,18 @@ extern lv_obj_t *ui_HiddenSoundBtn;
 extern lv_group_t *SoundGroup;
 // CUSTOM VARIABLES
 
+typedef enum
+{
+    NONE_SELECTED,
+    NO_SOUND,
+    NATURE_SOUND,
+    WHITE_NOISE,
+    BINAURAL_BEATS,
+    LESSONS
 
+} SoundType;
+
+extern SoundType selSoundOpt;
 
 #ifdef __cplusplus
 }

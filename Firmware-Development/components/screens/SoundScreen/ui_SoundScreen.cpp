@@ -16,15 +16,22 @@ lv_obj_t *ui_NatureSoundBtn;
 lv_obj_t *ui_NatureSoundCb;
 lv_obj_t *ui_NatureSoundIcon;
 lv_obj_t *ui_NatureSoundLbl;
-lv_obj_t *ui_SoundDropList;
+lv_obj_t *ui_NatureSoundDropList;
 lv_obj_t *ui_WhiteNoiseBtn;
 lv_obj_t *ui_WhiteNoiseCb;
 lv_obj_t *ui_WhiteNoiseIcon;
 lv_obj_t *ui_WhiteNoiseLbl;
+lv_obj_t *ui_WhiteNoiseDropList;
 lv_obj_t *ui_BinauralBeatBtn;
 lv_obj_t *ui_BinauralBeatCb;
 lv_obj_t *ui_BinauralBeatIcon;
 lv_obj_t *ui_BinauralBeatLbl;
+lv_obj_t *ui_BinauralBeatDropList;
+lv_obj_t *ui_LessonsBtn;
+lv_obj_t *ui_LessonsCb;
+lv_obj_t *ui_LessonsIcon;
+lv_obj_t *ui_LessonsLbl;
+lv_obj_t *ui_LessonsDropList;
 lv_obj_t *ui_SingingBowlsBtn;
 lv_obj_t *ui_SingingBowlsCb;
 lv_obj_t *ui_SingingBowlsIcon;
@@ -48,6 +55,7 @@ lv_obj_t *ui_SoundStartIcon;
 lv_obj_t *ui_SoundLabel;
 lv_obj_t *ui_HiddenSoundBtn;
 lv_group_t *SoundGroup;
+SoundType selSoundOpt;
 // CUSTOM VARIABLES
 
 
@@ -200,30 +208,27 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_set_style_text_color(ui_NatureSoundLbl, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_text_opa(ui_NatureSoundLbl, 255, LV_PART_MAIN | LV_STATE_CHECKED);
 
-    ui_SoundDropList = lv_dropdown_create(ui_SoundPanel);
-    lv_dropdown_set_options(ui_SoundDropList, "Option 1\nOption 2\nOption 3");
-    lv_obj_set_width(ui_SoundDropList, 286);
-    lv_obj_set_height(ui_SoundDropList, 58);
-    lv_obj_set_align(ui_SoundDropList, LV_ALIGN_CENTER);
-    addFlag(ui_SoundDropList, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);
-    lv_obj_set_style_text_letter_space(ui_SoundDropList, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_line_space(ui_SoundDropList, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_SoundDropList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_SoundDropList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_SoundDropList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_opa(ui_SoundDropList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_NatureSoundDropList = lv_dropdown_create(ui_SoundPanel);
+    lv_dropdown_set_options(ui_NatureSoundDropList, "Option 1\nOption 2\nOption 3");
+    lv_obj_set_width(ui_NatureSoundDropList, 286);
+    lv_obj_set_height(ui_NatureSoundDropList, 58);
+    lv_obj_set_align(ui_NatureSoundDropList, LV_ALIGN_CENTER);
+    addFlag(ui_NatureSoundDropList, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    lv_obj_set_style_text_letter_space(ui_NatureSoundDropList, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_NatureSoundDropList, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_NatureSoundDropList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_NatureSoundDropList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_NatureSoundDropList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_NatureSoundDropList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_NatureSoundDropList, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_NatureSoundDropList), lv_color_hex(0x424242),  LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_NatureSoundDropList), 255,  LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_SoundDropList), lv_color_hex(0x424242),  LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_SoundDropList), 255,  LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    
-    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_SoundDropList), lv_color_hex(0x424242),
-                              LV_PART_SELECTED | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_SoundDropList), 255,  LV_PART_SELECTED | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_SoundDropList), lv_color_hex(0x3A3A3A),
-                              LV_PART_SELECTED | LV_STATE_CHECKED);
-    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_SoundDropList), 255,  LV_PART_SELECTED | LV_STATE_CHECKED);
-
+    lv_obj_set_style_text_font(lv_dropdown_get_list(ui_NatureSoundDropList), &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_NatureSoundDropList), lv_color_hex(0x424242), LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_NatureSoundDropList), 255,  LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_NatureSoundDropList), lv_color_hex(0x3A3A3A), LV_PART_SELECTED | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_NatureSoundDropList), 255,  LV_PART_SELECTED | LV_STATE_CHECKED);
 
     ui_WhiteNoiseBtn = lv_button_create(ui_SoundPanel);
     lv_obj_set_width(ui_WhiteNoiseBtn, 286);
@@ -287,6 +292,28 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_set_style_text_color(ui_WhiteNoiseLbl, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_text_opa(ui_WhiteNoiseLbl, 255, LV_PART_MAIN | LV_STATE_CHECKED);
 
+    ui_WhiteNoiseDropList = lv_dropdown_create(ui_SoundPanel);
+    lv_dropdown_set_options(ui_WhiteNoiseDropList, "Option 1\nOption 2\nOption 3");
+    lv_obj_set_width(ui_WhiteNoiseDropList, 286);
+    lv_obj_set_height(ui_WhiteNoiseDropList, 58);
+    lv_obj_set_align(ui_WhiteNoiseDropList, LV_ALIGN_CENTER);
+    addFlag(ui_WhiteNoiseDropList, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    lv_obj_set_style_text_letter_space(ui_WhiteNoiseDropList, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_WhiteNoiseDropList, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_WhiteNoiseDropList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_WhiteNoiseDropList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_WhiteNoiseDropList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_WhiteNoiseDropList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_WhiteNoiseDropList, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_WhiteNoiseDropList), lv_color_hex(0x424242),  LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_WhiteNoiseDropList), 255,  LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_set_style_text_font(lv_dropdown_get_list(ui_WhiteNoiseDropList), &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);    
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_WhiteNoiseDropList), lv_color_hex(0x424242), LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_WhiteNoiseDropList), 255,  LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_WhiteNoiseDropList), lv_color_hex(0x3A3A3A), LV_PART_SELECTED | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_WhiteNoiseDropList), 255,  LV_PART_SELECTED | LV_STATE_CHECKED);
+
     ui_BinauralBeatBtn = lv_button_create(ui_SoundPanel);
     lv_obj_set_width(ui_BinauralBeatBtn, 286);
     lv_obj_set_height(ui_BinauralBeatBtn, 58);
@@ -348,6 +375,112 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_set_style_text_font(ui_BinauralBeatLbl, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_color(ui_BinauralBeatLbl, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_text_opa(ui_BinauralBeatLbl, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+
+    ui_BinauralBeatDropList = lv_dropdown_create(ui_SoundPanel);
+    lv_dropdown_set_options(ui_BinauralBeatDropList, "Option 1\nOption 2\nOption 3");
+    lv_obj_set_width(ui_BinauralBeatDropList, 286);
+    lv_obj_set_height(ui_BinauralBeatDropList, 58);
+    lv_obj_set_align(ui_BinauralBeatDropList, LV_ALIGN_CENTER);
+    addFlag(ui_BinauralBeatDropList, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    lv_obj_set_style_text_letter_space(ui_BinauralBeatDropList, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_BinauralBeatDropList, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_BinauralBeatDropList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_BinauralBeatDropList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_BinauralBeatDropList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_BinauralBeatDropList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_BinauralBeatDropList, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_BinauralBeatDropList), lv_color_hex(0x424242),  LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_BinauralBeatDropList), 255,  LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_set_style_text_font(lv_dropdown_get_list(ui_BinauralBeatDropList), &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_BinauralBeatDropList), lv_color_hex(0x424242), LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_BinauralBeatDropList), 255,  LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_BinauralBeatDropList), lv_color_hex(0x3A3A3A), LV_PART_SELECTED | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_BinauralBeatDropList), 255,  LV_PART_SELECTED | LV_STATE_CHECKED);
+
+    ui_LessonsBtn = lv_button_create(ui_SoundPanel);
+    lv_obj_set_width(ui_LessonsBtn, 286);
+    lv_obj_set_height(ui_LessonsBtn, 58);
+    lv_obj_set_x(ui_LessonsBtn, 1);
+    lv_obj_set_y(ui_LessonsBtn, -25);
+    lv_obj_set_align(ui_LessonsBtn, LV_ALIGN_CENTER);
+    addFlag(ui_LessonsBtn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    removeFlag(ui_LessonsBtn, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_LessonsBtn, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_LessonsBtn, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_LessonsBtn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_LessonsBtn, lv_color_hex(0x62DA41), LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(ui_LessonsBtn, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_color(ui_LessonsBtn, lv_color_hex(0x62DA41), LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(ui_LessonsBtn, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+
+    ui_LessonsCb = lv_checkbox_create(ui_LessonsBtn);
+    lv_obj_set_width(ui_LessonsCb, 21);
+    lv_obj_set_height(ui_LessonsCb, 21);
+    lv_obj_set_x(ui_LessonsCb, 110);
+    lv_obj_set_y(ui_LessonsCb, 2);
+    lv_obj_set_align(ui_LessonsCb, LV_ALIGN_CENTER);
+    addFlag(ui_LessonsCb, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+
+    lv_obj_set_style_radius(ui_LessonsCb, 10, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_LessonsCb, lv_color_hex(0x000000), LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_LessonsCb, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_LessonsCb, lv_color_hex(0xFFFFFF), LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_LessonsCb, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_LessonsCb, 1, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_LessonsCb, lv_color_hex(0x000000), LV_PART_INDICATOR | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(ui_LessonsCb, 255, LV_PART_INDICATOR | LV_STATE_CHECKED);
+    lv_obj_set_style_border_color(ui_LessonsCb, lv_color_hex(0x000000), LV_PART_INDICATOR | LV_STATE_CHECKED);
+    lv_obj_set_style_border_opa(ui_LessonsCb, 255, LV_PART_INDICATOR | LV_STATE_CHECKED);
+
+    ui_LessonsIcon = lv_obj_create(ui_LessonsBtn);
+    lv_obj_remove_style_all(ui_LessonsIcon);
+    lv_obj_set_width(ui_LessonsIcon, 32);
+    lv_obj_set_height(ui_LessonsIcon, 32);
+    lv_obj_set_x(ui_LessonsIcon, -115);
+    lv_obj_set_y(ui_LessonsIcon, -1);
+    lv_obj_set_align(ui_LessonsIcon, LV_ALIGN_CENTER);
+    removeFlag(ui_LessonsIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_image_src(ui_LessonsIcon, &ui_img_30binauralbeats_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor(ui_LessonsIcon, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor_opa(ui_LessonsIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor(ui_LessonsIcon, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_image_recolor_opa(ui_LessonsIcon, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+
+    ui_LessonsLbl = lv_label_create(ui_LessonsBtn);
+    lv_obj_set_width(ui_LessonsLbl, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_LessonsLbl, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_LessonsLbl, -14);
+    lv_obj_set_y(ui_LessonsLbl, 0);
+    lv_obj_set_align(ui_LessonsLbl, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_LessonsLbl, "Lessons");
+    lv_obj_set_style_text_color(ui_LessonsLbl, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_LessonsLbl, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_LessonsLbl, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_LessonsLbl, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_text_opa(ui_LessonsLbl, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+
+    ui_LessonsDropList = lv_dropdown_create(ui_SoundPanel);
+    lv_dropdown_set_options(ui_LessonsDropList, "Option 1\nOption 2\nOption 3");
+    lv_obj_set_width(ui_LessonsDropList, 286);
+    lv_obj_set_height(ui_LessonsDropList, 58);
+    lv_obj_set_align(ui_LessonsDropList, LV_ALIGN_CENTER);
+    addFlag(ui_LessonsDropList, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    lv_obj_set_style_text_letter_space(ui_LessonsDropList, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_LessonsDropList, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_LessonsDropList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_LessonsDropList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_LessonsDropList, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_LessonsDropList, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_LessonsDropList, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_LessonsDropList), lv_color_hex(0x424242),  LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_LessonsDropList), 255,  LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_set_style_text_font(lv_dropdown_get_list(ui_LessonsDropList), &lv_font_montserrat_16, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_LessonsDropList), lv_color_hex(0x424242), LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_LessonsDropList), 255,  LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(lv_dropdown_get_list(ui_LessonsDropList), lv_color_hex(0x3A3A3A), LV_PART_SELECTED | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_opa(lv_dropdown_get_list(ui_LessonsDropList), 255,  LV_PART_SELECTED | LV_STATE_CHECKED);
 
     ui_SingingBowlsBtn = lv_button_create(ui_SoundPanel);
     lv_obj_set_width(ui_SingingBowlsBtn, 286);
@@ -623,9 +756,13 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_add_event_cb(ui_SoundStartBtnBox, ui_event_startBtnBox, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_NoSoundBtn, ui_event_NoSoundBtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_NatureSoundBtn, ui_event_NatureSoundBtn, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_SoundDropList, ui_event_NatureSoundBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_NatureSoundDropList, ui_event_NatureSoundBtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_WhiteNoiseBtn, ui_event_WhiteNoiseBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_WhiteNoiseDropList, ui_event_WhiteNoiseBtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_BinauralBeatBtn, ui_event_BinauralBeatBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_BinauralBeatDropList, ui_event_BinauralBeatBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_LessonsBtn, ui_event_LessonsBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_LessonsDropList, ui_event_LessonsBtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_SingingBowlsBtn, ui_event_SingingBowlsBtn, LV_EVENT_ALL, NULL);
     
     //Hidden Object to shift focus
@@ -633,14 +770,18 @@ void ui_SoundScreen_screen_init(void)
     addFlag(ui_HiddenSoundBtn, LV_OBJ_FLAG_HIDDEN);
     
     //Style of Focus
-    lv_obj_add_style(ui_SoundPanel,       &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_NoSoundBtn,       &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_NatureSoundBtn,   &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_SoundDropList,    &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_WhiteNoiseBtn,    &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_BinauralBeatBtn,  &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_SingingBowlsBtn,  &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_SoundStartBtnBox, &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_SoundPanel,             &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_NoSoundBtn,             &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_NatureSoundBtn,         &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_NatureSoundDropList,    &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_WhiteNoiseBtn,          &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_WhiteNoiseDropList,     &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_BinauralBeatBtn,        &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_BinauralBeatDropList,   &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_LessonsBtn,             &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_LessonsDropList,        &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_SingingBowlsBtn,        &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_SoundStartBtnBox,       &style_focus, LV_STATE_FOCUS_KEY);
     
     //Sound Screen Group of objects for Focus and Events
     SoundGroup = lv_group_create();
@@ -654,12 +795,53 @@ void ui_SoundScreen_screen_init(void)
     }
 }
 
-void SoundSelected(bool flag)
+void NoSoundSelected(bool flag)
+{
+    _ui_state_modify(ui_NoSoundBtn, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_NoSoundCb, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_NoSoundIcon, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_NoSoundLabel, LV_STATE_CHECKED, !flag);
+}
+
+void NatureSoundSelected(bool flag)
 {
     _ui_state_modify(ui_NatureSoundBtn, LV_STATE_CHECKED, !flag);
     _ui_state_modify(ui_NatureSoundCb, LV_STATE_CHECKED, !flag);
     _ui_state_modify(ui_NatureSoundIcon, LV_STATE_CHECKED, !flag);
     _ui_state_modify(ui_NatureSoundLbl, LV_STATE_CHECKED, !flag);
+}
+
+void WhiteNoiseSelected(bool flag)
+{
+    _ui_state_modify(ui_WhiteNoiseBtn, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_WhiteNoiseCb, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_WhiteNoiseIcon, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_WhiteNoiseLbl, LV_STATE_CHECKED, !flag);
+}
+
+void BinauralBeatSelected(bool flag)
+{
+    _ui_state_modify(ui_BinauralBeatBtn, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_BinauralBeatCb, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_BinauralBeatIcon, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_BinauralBeatLbl, LV_STATE_CHECKED, !flag);
+}
+
+void LessonsSelected(bool flag)
+{
+    _ui_state_modify(ui_LessonsBtn, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_LessonsCb, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_LessonsIcon, LV_STATE_CHECKED, !flag);
+    _ui_state_modify(ui_LessonsLbl, LV_STATE_CHECKED, !flag);
+}
+
+void soundSelected(bool flag)
+{
+    NoSoundSelected(selSoundOpt == NO_SOUND);
+    NatureSoundSelected(selSoundOpt == NATURE_SOUND);
+    WhiteNoiseSelected(selSoundOpt == WHITE_NOISE);
+    BinauralBeatSelected(selSoundOpt == BINAURAL_BEATS);
+    LessonsSelected(selSoundOpt == LESSONS);
 }
 
 void selectSoundPanel(bool focus)
@@ -671,9 +853,10 @@ void selectSoundPanel(bool focus)
             // Create a new focus group for the panel
             SoundPanelGroup = lv_group_create();
             lv_group_add_obj(SoundPanelGroup, ui_NoSoundBtn);
-            lv_group_add_obj(SoundPanelGroup, list_selected ? ui_SoundDropList : ui_NatureSoundBtn);
-            lv_group_add_obj(SoundPanelGroup, ui_WhiteNoiseBtn);
-            lv_group_add_obj(SoundPanelGroup, ui_BinauralBeatBtn);
+            lv_group_add_obj(SoundPanelGroup, selSoundOpt == NATURE_SOUND ?   ui_NatureSoundDropList  : ui_NatureSoundBtn);
+            lv_group_add_obj(SoundPanelGroup, selSoundOpt == WHITE_NOISE ?    ui_WhiteNoiseDropList   : ui_WhiteNoiseBtn);
+            lv_group_add_obj(SoundPanelGroup, selSoundOpt == BINAURAL_BEATS ? ui_BinauralBeatDropList : ui_BinauralBeatBtn);
+            lv_group_add_obj(SoundPanelGroup, selSoundOpt == LESSONS ?        ui_LessonsDropList      : ui_LessonsBtn);
             lv_group_add_obj(SoundPanelGroup, ui_SingingBowlsBtn);
             lv_group_add_obj(SoundPanelGroup, ui_HiddenSoundBtn);
             
@@ -698,7 +881,6 @@ void selectSoundPanel(bool focus)
             }
             ScreenGroup[1] = SoundGroup;
             currentGroup = SoundGroup;
-            SoundSelected(false);
             lv_group_add_obj(SoundGroup, ui_HiddenSoundBtn);
             lv_group_focus_obj(ui_SoundPanel);
         }
@@ -721,10 +903,9 @@ void ui_event_NoSoundBtn(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_PRESSED) {
-        _ui_state_modify(ui_NoSoundBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_NoSoundCb, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_NoSoundIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_NoSoundLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
+        selSoundOpt = NO_SOUND;
+        soundSelected(true);
+        memset(soundNumber, 0, sizeof(soundNumber));
     }
     else if(event_code == LV_EVENT_RELEASED) {
         selectSoundPanel(false);
@@ -735,34 +916,39 @@ void ui_event_NatureSoundBtn(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if(event_code == LV_EVENT_PRESSED) {
-    if(!list_selected) {
-        _ui_flag_modify(ui_SoundDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-        _ui_flag_modify(ui_NatureSoundBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-        lv_dropdown_open(ui_SoundDropList);
-        list_selected = true;
-        ui_curDropdownList = ui_SoundDropList;
-    }
-    else if(list_selected)
+    if(event_code == LV_EVENT_PRESSED)
     {
-        lv_dropdown_close(ui_SoundDropList);
-        list_selected = false;
-        lv_dropdown_get_selected_str(ui_SoundDropList, soundNumber, sizeof(soundNumber));
-        if(strlen(soundNumber) != 0) {
-            SoundSelected(true);
+        if(!list_selected) {
+            _ui_flag_modify(ui_NatureSoundDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+            _ui_flag_modify(ui_NatureSoundBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+            lv_dropdown_open(ui_NatureSoundDropList);
+            list_selected = true;
+            selSoundOpt = NATURE_SOUND;
+            ui_curDropdownList = ui_NatureSoundDropList;
         }
-        _ui_flag_modify(ui_SoundDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-        _ui_flag_modify(ui_NatureSoundBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-    }
+        else if(list_selected)
+        {
+            lv_dropdown_close(ui_NatureSoundDropList);
+            list_selected = false;
+            lv_dropdown_get_selected_str(ui_NatureSoundDropList, soundNumber, sizeof(soundNumber));
+            if(strlen(soundNumber) != 0) {
+                soundSelected(true);
+            }
+            selSoundOpt = NONE_SELECTED;
+            lv_group_remove_obj(ui_NatureSoundDropList);
+            _ui_flag_modify(ui_NatureSoundDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+            _ui_flag_modify(ui_NatureSoundBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        }
         selectSoundPanel(true);
-        lv_group_focus_obj(list_selected ? ui_SoundDropList : ui_NatureSoundBtn);
+        lv_group_focus_obj(list_selected ? ui_NatureSoundDropList : ui_NatureSoundBtn);
     }
     else if(event_code == LV_EVENT_RELEASED)
     {
         selectSoundPanel(false);
-        lv_dropdown_close(ui_SoundDropList);
+        lv_dropdown_close(ui_NatureSoundDropList);
         list_selected = false;
-        _ui_flag_modify(ui_SoundDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        lv_group_remove_obj(ui_NatureSoundDropList);
+        _ui_flag_modify(ui_NatureSoundDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_NatureSoundBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
     }
 }
@@ -771,28 +957,124 @@ void ui_event_WhiteNoiseBtn(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if(event_code == LV_EVENT_PRESSED) {
-        _ui_state_modify(ui_WhiteNoiseBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_WhiteNoiseCb, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_WhiteNoiseIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_WhiteNoiseLbl, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
+    if(event_code == LV_EVENT_PRESSED)
+    {
+        if(!list_selected) {
+            _ui_flag_modify(ui_WhiteNoiseDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+            _ui_flag_modify(ui_WhiteNoiseBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+            lv_dropdown_open(ui_WhiteNoiseDropList);
+            list_selected = true;
+            selSoundOpt = WHITE_NOISE;
+            ui_curDropdownList = ui_WhiteNoiseDropList;
+        }
+        else if(list_selected)
+        {
+            lv_dropdown_close(ui_WhiteNoiseDropList);
+            list_selected = false;
+            lv_dropdown_get_selected_str(ui_WhiteNoiseDropList, soundNumber, sizeof(soundNumber));
+            if(strlen(soundNumber) != 0) {
+                soundSelected(true);
+            }
+            selSoundOpt = NONE_SELECTED;
+            lv_group_remove_obj(ui_WhiteNoiseDropList);
+            _ui_flag_modify(ui_WhiteNoiseDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+            _ui_flag_modify(ui_WhiteNoiseBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        }
+        selectSoundPanel(true);
+        lv_group_focus_obj(list_selected ? ui_WhiteNoiseDropList : ui_WhiteNoiseBtn);
     }
     else if(event_code == LV_EVENT_RELEASED)
+    {
         selectSoundPanel(false);
+        lv_dropdown_close(ui_WhiteNoiseDropList);
+        list_selected = false;
+        lv_group_remove_obj(ui_WhiteNoiseDropList);
+        _ui_flag_modify(ui_WhiteNoiseDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        _ui_flag_modify(ui_WhiteNoiseBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+    }
 }
 
 void ui_event_BinauralBeatBtn(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if(event_code == LV_EVENT_PRESSED) {
-        _ui_state_modify(ui_BinauralBeatBtn, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_BinauralBeatCb, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_BinauralBeatIcon, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
-        _ui_state_modify(ui_BinauralBeatLbl, LV_STATE_CHECKED, _UI_MODIFY_STATE_TOGGLE);
+    if(event_code == LV_EVENT_PRESSED)
+    {
+        if(!list_selected) {
+            _ui_flag_modify(ui_BinauralBeatDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+            _ui_flag_modify(ui_BinauralBeatBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+            lv_dropdown_open(ui_BinauralBeatDropList);
+            list_selected = true;
+            selSoundOpt = BINAURAL_BEATS;
+            ui_curDropdownList = ui_BinauralBeatDropList;
+        }
+        else if(list_selected)
+        {
+            lv_dropdown_close(ui_BinauralBeatDropList);
+            list_selected = false;
+            lv_dropdown_get_selected_str(ui_BinauralBeatDropList, soundNumber, sizeof(soundNumber));
+            if(strlen(soundNumber) != 0) {
+                soundSelected(true);
+            }
+            selSoundOpt = NONE_SELECTED;
+            lv_group_remove_obj(ui_BinauralBeatDropList);
+            _ui_flag_modify(ui_BinauralBeatDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+            _ui_flag_modify(ui_BinauralBeatBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        }
+        selectSoundPanel(true);
+        lv_group_focus_obj(list_selected ? ui_BinauralBeatDropList : ui_BinauralBeatBtn);
     }
     else if(event_code == LV_EVENT_RELEASED)
+    {
         selectSoundPanel(false);
+        lv_dropdown_close(ui_BinauralBeatDropList);
+        list_selected = false;
+        lv_group_remove_obj(ui_BinauralBeatDropList);
+        _ui_flag_modify(ui_BinauralBeatDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        _ui_flag_modify(ui_BinauralBeatBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+    }
+}
+
+void ui_event_LessonsBtn(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED)
+    {
+        if(!list_selected) {
+            _ui_flag_modify(ui_LessonsDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+            _ui_flag_modify(ui_LessonsBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+            lv_dropdown_open(ui_LessonsDropList);
+            list_selected = true;
+            selSoundOpt = LESSONS;
+            ui_curDropdownList = ui_LessonsDropList;
+        }
+        else if(list_selected)
+        {
+            lv_dropdown_close(ui_LessonsDropList);
+            list_selected = false;
+            lv_dropdown_get_selected_str(ui_LessonsDropList, soundNumber, sizeof(soundNumber));
+            printf("soundNumber: %s\n",soundNumber);
+            if(strlen(soundNumber) != 0) {
+                soundSelected(true);
+            }
+            selSoundOpt = NONE_SELECTED;
+            lv_group_remove_obj(ui_LessonsDropList);
+            _ui_flag_modify(ui_LessonsDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+            _ui_flag_modify(ui_LessonsBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        }
+        selectSoundPanel(true);
+        lv_group_focus_obj(list_selected ? ui_LessonsDropList : ui_LessonsBtn);
+    }
+    else if(event_code == LV_EVENT_RELEASED)
+    {
+        selectSoundPanel(false);
+        lv_dropdown_close(ui_LessonsDropList);
+        list_selected = false;
+        lv_group_remove_obj(ui_LessonsDropList);
+        _ui_flag_modify(ui_LessonsDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        _ui_flag_modify(ui_LessonsBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+    }
 }
 
 void ui_event_SingingBowlsBtn(lv_event_t * e)

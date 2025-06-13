@@ -10,6 +10,7 @@
 #include "cJSON.h"
 #include "esp_peripherals.h"
 #include "nvs_flash.h"
+#include "lvgl.h"
 
 typedef struct {
     int timer;
@@ -29,7 +30,7 @@ class Storage
         esp_err_t readFavourite(const char* fav_name, Favourite &fav);
     private:
         bool check_sd_card();
-
+        void loadFolderToDropdown(const char *folderName, lv_obj_t *dropdown);
 };
 
 extern Storage storagCard;

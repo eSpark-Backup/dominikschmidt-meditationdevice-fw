@@ -41,33 +41,31 @@ void Storage::list_sdcard_files(const char *path)
     closedir(dir);
 }
 
-void Storage::updateSoundListFromSdCard() {
-    DIR *dir = opendir(AUDIO_PATH);
-    if (!dir) {
-        printf("Failed to open directory: %s\n", AUDIO_PATH);
-        return;
-    }
+void Storage::loadFolderToDropdown(const char *folderName, lv_obj_t *dropdown)
+{
+    char path[256];
+    snprintf(path, sizeof(path), "%s/%s", AUDIO_PATH, folderName);
 
-    // Temporarily store file names
-    char *filenames[256]; // Adjust as needed
-    int count = 0;
-    size_t total_length = 1; // For null terminator
+    DIR *dir = opendir(path);
+    if (!dir) return;
+
     struct dirent *entry;
+    char *filenames[256];
+    int count = 0;
+    size_t total_length = 1;
 
-    printf("Listing files in: %s\n", AUDIO_PATH);
     while ((entry = readdir(dir)) != NULL && count < 256) {
-        if (entry->d_type == DT_REG) { // Regular file
+        if (entry->d_type == DT_REG) {
             size_t len = strlen(entry->d_name);
             filenames[count] = (char *)malloc(len + 1);
             if (filenames[count]) {
                 strcpy(filenames[count], entry->d_name);
-                total_length += len + 1; // +1 for '\n'
+                total_length += len + 1;
                 count++;
             }
         }
     }
 
-    // Build the options string
     char *option_str = (char *)malloc(total_length);
     if (!option_str) {
         for (int i = 0; i < count; i++) free(filenames[i]);
@@ -79,12 +77,19 @@ void Storage::updateSoundListFromSdCard() {
     for (int i = 0; i < count; i++) {
         strcat(option_str, filenames[i]);
         if (i < count - 1) strcat(option_str, "\n");
-        free(filenames[i]); // Free individual filename after use
+        free(filenames[i]);
     }
-
-    lv_dropdown_set_options(ui_SoundDropList, option_str);
+    lv_dropdown_set_options(dropdown, option_str);
     free(option_str);
     closedir(dir);
+}
+
+void Storage::updateSoundListFromSdCard()
+{
+    loadFolderToDropdown("Nature", ui_NatureSoundDropList);
+    loadFolderToDropdown("BinauralBeats", ui_BinauralBeatDropList);
+    loadFolderToDropdown("WhiteNoise", ui_WhiteNoiseDropList);
+    loadFolderToDropdown("Lessons", ui_LessonsDropList);
 }
 
 esp_err_t Storage::saveFavourite(const char* fav_name, const Favourite &fav)

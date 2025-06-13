@@ -34,7 +34,7 @@ FavLbl loadFav;
 char globalTimeLbl[20] = "10 min";
 char globalGongLbl[4] = "On";
 char soundType[50];
-char soundNumber[50] = "Waves 1.wav";
+char soundNumber[100] = "Waves 1.wav";
 // CUSTOM VARIABLES
 
 

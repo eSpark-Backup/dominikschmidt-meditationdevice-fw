@@ -270,7 +270,7 @@ void controlMedTimer()
     if (!timerRunning) {
         timerRunning = true;
         startTime = TIME_IN_SEC - pausedTime;
-        char soundPath[100] = "/sdcard/audio/";
+        char soundPath[256] = "/sdcard/audio/";
         // Create LVGL timer to update every second
         if (!meditation_timer) {  // Avoid multiple timers
             totalTimeInSec = getRollerValue(ui_minRoller) * 60;

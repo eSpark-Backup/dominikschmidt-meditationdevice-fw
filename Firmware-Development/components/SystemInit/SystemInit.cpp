@@ -137,10 +137,10 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     {
         if ((roller_selected && roller != NULL) || list_selected)  // Only update if roller is in selection mode
         {
-            if (roller_selected)        {rotateRoller(encDiff);return;}
-            else if (list_selected)     {rotateScannedDropdown(encDiff);return;}
+            if (list_selected == true)     {printf("rotate Scanned Dropdown\n"); rotateScannedDropdown(encDiff);return;}
+            else if (roller_selected == true)        {printf("rotate roller\n"); rotateRoller(encDiff);return;}
         }
-        if (!roller_selected || !list_selected) {
+        if (roller_selected == false || list_selected == false) {
             Btn_A.ID = UNDEFINED;
             NavigateScreens(Btn_A, encDiff);
         }
@@ -172,7 +172,6 @@ void System::NavigateScreens(ButtonData btnData, int encData)
     static int screenCount = 0;
     bool screenChanged = false;
     static lv_obj_t *lastScreen = lv_screen_active();
-    printf("btnID: %d btnState: %d: encData: %d, screen: %d\n",btnData.ID, btnData.State, encData, screenCount);
 
     if(lastScreen != lv_screen_active() && controlScreen == NULL)
     {
@@ -401,7 +400,7 @@ void System::memLog()
 void System::loadAudio()
 {
     int TimerValue = getRollerValue(ui_minRoller) * 60;
-    char soundPath[100] = "/sdcard/audio/";
+    char soundPath[256] = "/sdcard/audio/";
 
     if (strcmp(soundNumber, "Waves") == 0) {
         btAudio.A2dpAudioStart("/sdcard/audio/Waves 1.wav", TimerValue);
@@ -421,20 +420,11 @@ void System::loadAudio()
     else if (strcmp(soundNumber, "Birds") == 0) {
         btAudio.A2dpAudioStart("/sdcard/audio/Birds 1.wav", TimerValue);
     }
-    else
+    else if(soundNumber[0] != '\0')
     {
         snprintf(soundPath, sizeof(soundPath),"/sdcard/audio/%s", soundNumber);
         btAudio.A2dpAudioStart(soundPath, TimerValue);
     }
-
-    
-    // Favourite fav1 = {1500, "Nature Sounds", "Waves", true}; // 25:03
-    // Favourite fav2 = {220, "Nature Sounds", "Thunder", true}; // 3:50
-    // Favourite fav3 = {170, "Nature Sounds", "Garden Rain", true}; // 3:00
-    // Favourite fav4 = {115, "Nature Sounds", "Streams", false}; // 2:02
-    // Favourite fav5 = {145, "Nature Sounds", "Forest Rain", false}; // 2:32
-    // Favourite fav6 = {145, "Nature Sounds", "Birds", false}; //2:30
-
 }
 
 void System::updateBluetoothSettings()
