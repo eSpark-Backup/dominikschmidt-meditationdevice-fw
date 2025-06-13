@@ -93,7 +93,7 @@ void System::loadScreens(void)
     Screen[1] = ui_SoundScreen;
     Screen[2] = ui_EndGong1;
     Screen[3] = ui_BluetoothScreen;
-    Screen[4] = ui_MeditationScreen;
+    // Screen[4] = ui_MeditationScreen;
     // Screen[3] = ui_FavScreen;
     // Screen[4] = ui_FavEditScreen;
     // Screen[5] = ui_FavPreviewScreen;
@@ -107,7 +107,7 @@ void System::loadScreenGroups(void)
     ScreenGroup[1] = SoundGroup;
     ScreenGroup[2] = EndGongGroup;
     ScreenGroup[3] = BTGroup;
-    ScreenGroup[4] = MeditationGroup;
+    // ScreenGroup[4] = MeditationGroup;
     // ScreenGroup[3] = FavScrGroup;
     // ScreenGroup[4] = FavEditGroup;
     // ScreenGroup[5] = FavPrevGroup;
@@ -208,8 +208,8 @@ void System::NavigateScreens(ButtonData btnData, int encData)
             screenCount += encDiff;
             screenChanged = true;
             
-            if (screenCount > 4) screenCount = 0;
-            if (screenCount < 0) screenCount = 4;
+            if (screenCount > 3) screenCount = 0;
+            if (screenCount < 0) screenCount = 3;
             
             if (screenChanged) {
                 _ui_screen_change(&Screen[screenCount], LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 0, 0, NULL);  // Load new screen
@@ -399,7 +399,7 @@ void System::memLog()
     
 void System::loadAudio()
 {
-    int TimerValue = getRollerValue(ui_minRoller) * 60;
+    int TimerValue = (getRollerValue(ui_minRoller)+1) * 60;
     char soundPath[256] = "/sdcard/audio/";
 
     if (strcmp(soundNumber, "Waves") == 0) {
@@ -422,7 +422,7 @@ void System::loadAudio()
     }
     else if(soundNumber[0] != '\0')
     {
-        snprintf(soundPath, sizeof(soundPath),"/sdcard/audio/%s", soundNumber);
+        snprintf(soundPath, sizeof(soundPath), "%s/%s", soundDirectory, soundNumber);
         btAudio.A2dpAudioStart(soundPath, TimerValue);
     }
 }
@@ -435,4 +435,3 @@ void System::updateBluetoothSettings()
     }
     checkBtDeviceConnectivity();
 }
-    

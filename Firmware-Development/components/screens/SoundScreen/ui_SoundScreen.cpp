@@ -933,6 +933,7 @@ void ui_event_NatureSoundBtn(lv_event_t * e)
             lv_dropdown_get_selected_str(ui_NatureSoundDropList, soundNumber, sizeof(soundNumber));
             if(strlen(soundNumber) != 0) {
                 soundSelected(true);
+                strncpy(soundDirectory,"/sdcard/audio/Nature/", sizeof(soundDirectory));
             }
             selSoundOpt = NONE_SELECTED;
             lv_group_remove_obj(ui_NatureSoundDropList);
@@ -974,6 +975,7 @@ void ui_event_WhiteNoiseBtn(lv_event_t * e)
             lv_dropdown_get_selected_str(ui_WhiteNoiseDropList, soundNumber, sizeof(soundNumber));
             if(strlen(soundNumber) != 0) {
                 soundSelected(true);
+                strncpy(soundDirectory,"/sdcard/audio/WhiteNoise/", sizeof(soundDirectory));
             }
             selSoundOpt = NONE_SELECTED;
             lv_group_remove_obj(ui_WhiteNoiseDropList);
@@ -1015,6 +1017,7 @@ void ui_event_BinauralBeatBtn(lv_event_t * e)
             lv_dropdown_get_selected_str(ui_BinauralBeatDropList, soundNumber, sizeof(soundNumber));
             if(strlen(soundNumber) != 0) {
                 soundSelected(true);
+                strncpy(soundDirectory,"/sdcard/audio/BinauralBeats/", sizeof(soundDirectory));
             }
             selSoundOpt = NONE_SELECTED;
             lv_group_remove_obj(ui_BinauralBeatDropList);
@@ -1057,6 +1060,7 @@ void ui_event_LessonsBtn(lv_event_t * e)
             printf("soundNumber: %s\n",soundNumber);
             if(strlen(soundNumber) != 0) {
                 soundSelected(true);
+                strncpy(soundDirectory,"/sdcard/audio/Lessons/", sizeof(soundDirectory));
             }
             selSoundOpt = NONE_SELECTED;
             lv_group_remove_obj(ui_LessonsDropList);
