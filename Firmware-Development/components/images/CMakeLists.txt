@@ -47,6 +47,7 @@ idf_component_register(
          "ui_img_30_blackbirdicon_png.c" 
          "ui_img_30editicon_png.c" 
          "ui_img_30deleteicon_png.c" 
+         "ui_img_checkmark_Icon.c" 
          "ui_img_playbutton_png.c" 
          "ui_img_powerBtn_png.c" 
          "ui_img_bt_scan_png.c" 

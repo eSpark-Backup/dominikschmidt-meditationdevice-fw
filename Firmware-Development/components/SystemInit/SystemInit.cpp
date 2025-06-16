@@ -153,11 +153,6 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
         
         if (Btn_A.State == BUTTON_SINGLE_CLICK) {
             NavigateScreens(Btn_A, encDiff);
-            // if(deviceConnected) 
-            // {
-            //     audioCount++;
-            //     if(audioCount>5) audioCount = 1;
-            // }
         } 
         else if (Btn_B.State == BUTTON_SINGLE_CLICK) {
             NavigateScreens(Btn_B, encDiff);
