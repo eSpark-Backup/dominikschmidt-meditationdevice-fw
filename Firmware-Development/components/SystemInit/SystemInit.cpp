@@ -363,7 +363,7 @@ void System::setupPWM()
     ledc_channel_config(&ledc_channel);
     
     // Set initial brightness to 50%
-    setBrightness(50);
+    setBrightness(75);
 }
 
 uint32_t getCurrentDuty()

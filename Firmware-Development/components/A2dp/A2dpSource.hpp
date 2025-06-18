@@ -35,7 +35,8 @@ class A2DP
 {
     //Variables
     public:
-    
+        static ScannedDevice scanned_devices[MAX_SCANNED_DEVICES];
+        static int scanned_device_count;
     private:
         int64_t play_time_us = 0;
         int64_t start_time_us = 0;
@@ -47,12 +48,11 @@ class A2DP
         esp_periph_handle_t bt_periph;
         audio_event_iface_handle_t evt;
         esp_periph_set_handle_t set;
-        static ScannedDevice scanned_devices[MAX_SCANNED_DEVICES];
-        static int scanned_device_count;
         typedef uint8_t esp_peer_bdname_t[ESP_BT_GAP_MAX_BDNAME_LEN + 1];
 
     //Methods
     public:
+        A2DP();
         void A2dpServiceInit();
         void A2dpAudioStart(char *filepath, int play_time_sec = 0, bool Gong = false);
         void A2dpAudioStop();
@@ -70,7 +70,6 @@ class A2DP
         static void filter_inquiry_scan_result(esp_bt_gap_cb_param_t *param);
         static bool get_name_from_eir(uint8_t *eir, uint8_t *bdname, uint8_t *bdname_len);
         static char *bda2str(esp_bd_addr_t bda, char *str, size_t size);
-        static void update_bt_dropdown(lv_obj_t *dropdown);
 
 };
 
@@ -84,4 +83,5 @@ typedef struct {
 extern A2DP btAudio;
 extern bool deviceConnected;
 extern int audioCount;
+extern xQueueHandle xQueueDevData;
 #endif /*A2DPSOURCE_H */

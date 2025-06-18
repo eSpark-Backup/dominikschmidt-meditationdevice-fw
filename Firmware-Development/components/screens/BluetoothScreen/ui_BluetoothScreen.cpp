@@ -4,21 +4,40 @@
 // Project name: EndGongSquareLine_Project
 
 #include "ui_BluetoothScreen.h"
+#include "SdCard.hpp"
 
 // SCREEN: ui_BluetoothScreen
 lv_obj_t *ui_BluetoothScreen;
 lv_obj_t * ui_btLabel;
+lv_obj_t * ui_deviceDataCntr;
 lv_obj_t * ui_btDeviceNameLbl;
 lv_obj_t * ui_btConnectionIcon;
 lv_obj_t * ui_BtConnectionStatus;
 lv_obj_t * ui_TapBtConnectLbl;
 lv_obj_t * ui_btFindDevicesBtn;
 lv_obj_t * ui_btFindDevicesBtnLbl;
-lv_obj_t *ui_leftGong2;
-lv_obj_t *ui_midLeftHeart;
-lv_obj_t *ui_midBt;
-lv_obj_t *ui_HiddenBTScrBtn;
+lv_obj_t * ui_leftGong2;
+lv_obj_t * ui_midLeftHeart;
+lv_obj_t * ui_midBt;
+lv_obj_t * ui_HiddenBTScrBtn;
 lv_group_t *BTGroup;
+lv_obj_t * ui_btTapBtnPanel;
+lv_obj_t * ui_ConnectBtnCntr;
+lv_obj_t * ui_ConnectBtnLbl;
+lv_obj_t * ui_ConnectBtnIcon;
+lv_obj_t * ui_ForgetDevBtnCntr;
+lv_obj_t * ui_ForgetDevBtnLbl;
+lv_obj_t * ui_ForgetDevBtnCntrIcon;
+lv_obj_t * ui_BtReconnectionStatus;
+
+typedef enum
+{
+    FIND_DEVICE,
+    HAS_HISTORY,
+    TAP_PANEL
+} BluetoothScrMode;
+
+BluetoothScrMode btMode;
 // CUSTOM VARIABLES
 
 void ui_BluetoothScreen_screen_init(void)
@@ -42,11 +61,18 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_text_line_space(ui_btLabel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_btLabel, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_btDeviceNameLbl = lv_label_create(ui_BluetoothScreen);
-    lv_obj_set_width(ui_btDeviceNameLbl, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_btDeviceNameLbl, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_btDeviceNameLbl, 0);
-    lv_obj_set_y(ui_btDeviceNameLbl, -3);
+    ui_deviceDataCntr = lv_obj_create(ui_BluetoothScreen);
+    lv_obj_remove_style_all(ui_deviceDataCntr);
+    lv_obj_set_width(ui_deviceDataCntr, 310);
+    lv_obj_set_height(ui_deviceDataCntr, 110);
+    lv_obj_set_x(ui_deviceDataCntr, 0);
+    lv_obj_set_y(ui_deviceDataCntr, 15);
+    lv_obj_set_align(ui_deviceDataCntr, LV_ALIGN_CENTER);
+    removeFlag(ui_deviceDataCntr, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_btDeviceNameLbl = lv_label_create(ui_deviceDataCntr);
+    lv_obj_set_size(ui_btDeviceNameLbl, LV_SIZE_CONTENT, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_pos(ui_btDeviceNameLbl, 2, -19);
     lv_obj_set_align(ui_btDeviceNameLbl, LV_ALIGN_CENTER);
     lv_label_set_text(ui_btDeviceNameLbl, "George Headphones");
     lv_obj_set_style_text_opa(ui_btDeviceNameLbl, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -54,12 +80,10 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_text_line_space(ui_btDeviceNameLbl, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_btDeviceNameLbl, &lv_font_montserrat_32, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_btConnectionIcon = lv_obj_create(ui_BluetoothScreen);
+    ui_btConnectionIcon = lv_obj_create(ui_deviceDataCntr);
     lv_obj_remove_style_all(ui_btConnectionIcon);
-    lv_obj_set_width(ui_btConnectionIcon, 25);
-    lv_obj_set_height(ui_btConnectionIcon, 25);
-    lv_obj_set_x(ui_btConnectionIcon, -68);
-    lv_obj_set_y(ui_btConnectionIcon, 42);
+    lv_obj_set_size(ui_btConnectionIcon, 25, 25);
+    lv_obj_set_pos(ui_btConnectionIcon, -68, 26);
     lv_obj_set_align(ui_btConnectionIcon, LV_ALIGN_CENTER);
     removeFlag(ui_btConnectionIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_btConnectionIcon, 25, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -67,11 +91,9 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_bg_opa(ui_btConnectionIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_btConnectionIcon, &ui_img_checkmark_Icon, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_BtConnectionStatus = lv_label_create(ui_BluetoothScreen);
-    lv_obj_set_width(ui_BtConnectionStatus, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_BtConnectionStatus, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_BtConnectionStatus, 135);
-    lv_obj_set_y(ui_BtConnectionStatus, -126);
+    ui_BtConnectionStatus = lv_label_create(ui_deviceDataCntr);
+    lv_obj_set_size(ui_BtConnectionStatus, LV_SIZE_CONTENT, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_pos(ui_BtConnectionStatus, 111, -16);
     lv_obj_set_align(ui_BtConnectionStatus, LV_ALIGN_BOTTOM_LEFT);
     lv_label_set_text(ui_BtConnectionStatus, "Connected");
     lv_obj_set_style_text_color(ui_BtConnectionStatus, lv_color_hex(0x31BA6A), LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -81,9 +103,9 @@ void ui_BluetoothScreen_screen_init(void)
     ui_TapBtConnectLbl = lv_label_create(ui_BluetoothScreen);
     lv_obj_set_width(ui_TapBtConnectLbl, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_TapBtConnectLbl, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_TapBtConnectLbl, 100);
-    lv_obj_set_y(ui_TapBtConnectLbl, -52);
-    lv_obj_set_align(ui_TapBtConnectLbl, LV_ALIGN_BOTTOM_LEFT);
+    lv_obj_set_x(ui_TapBtConnectLbl, 0);
+    lv_obj_set_y(ui_TapBtConnectLbl, 119);
+    lv_obj_set_align(ui_TapBtConnectLbl, LV_ALIGN_CENTER);
     lv_label_set_text(ui_TapBtConnectLbl, "Tap to Disconnect");
     lv_obj_set_style_text_letter_space(ui_TapBtConnectLbl, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_line_space(ui_TapBtConnectLbl, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -96,10 +118,10 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_x(ui_btFindDevicesBtn, 0);
     lv_obj_set_y(ui_btFindDevicesBtn, 16);
     lv_obj_set_align(ui_btFindDevicesBtn, LV_ALIGN_CENTER);
-    lv_obj_remove_flag(ui_btFindDevicesBtn, LV_OBJ_FLAG_SCROLLABLE);
+    removeFlag(ui_btFindDevicesBtn, LV_OBJ_FLAG_SCROLLABLE);
     addFlag(ui_btFindDevicesBtn, LV_OBJ_FLAG_CHECKABLE | LV_OBJ_FLAG_HIDDEN);
     lv_obj_set_style_radius(ui_btFindDevicesBtn, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_btFindDevicesBtn, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_btFindDevicesBtn, lv_color_hex(GREY), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_btFindDevicesBtn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_btFindDevicesBtnLbl = lv_label_create(ui_btFindDevicesBtn);
@@ -230,8 +252,102 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_bg_color(ui_pg15, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_pg15, 250, LV_PART_MAIN | LV_STATE_DEFAULT);
     
+    ///========================== TAP OPTIONS PANEL ===========================
+
+    ui_btTapBtnPanel = lv_obj_create(ui_btTapBtnPanel);
+    lv_obj_remove_style_all(ui_btTapBtnPanel);
+    lv_obj_set_width(ui_btTapBtnPanel, 289);
+    lv_obj_set_height(ui_btTapBtnPanel, 152);
+    lv_obj_set_x(ui_btTapBtnPanel, 4);
+    lv_obj_set_y(ui_btTapBtnPanel, 16);
+    lv_obj_set_align(ui_btTapBtnPanel, LV_ALIGN_CENTER);
+    addFlag(ui_btTapBtnPanel, LV_OBJ_FLAG_CHECKABLE | LV_OBJ_FLAG_HIDDEN);     /// Flags
+    removeFlag(ui_btTapBtnPanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_ConnectBtnCntr = lv_obj_create(ui_btTapBtnPanel);
+    lv_obj_remove_style_all(ui_ConnectBtnCntr);
+    lv_obj_set_width(ui_ConnectBtnCntr, 228);
+    lv_obj_set_height(ui_ConnectBtnCntr, 53);
+    lv_obj_set_x(ui_ConnectBtnCntr, 0);
+    lv_obj_set_y(ui_ConnectBtnCntr, -40);
+    lv_obj_set_align(ui_ConnectBtnCntr, LV_ALIGN_CENTER);
+    removeFlag(ui_ConnectBtnCntr, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_ConnectBtnCntr, 25, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_ConnectBtnCntr, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_ConnectBtnCntr, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_ConnectBtnCntr, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ConnectBtnLbl = lv_label_create(ui_ConnectBtnCntr);
+    lv_obj_set_width(ui_ConnectBtnLbl, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_ConnectBtnLbl, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_ConnectBtnLbl, 58);
+    lv_obj_set_y(ui_ConnectBtnLbl, -13);
+    lv_obj_set_align(ui_ConnectBtnLbl, LV_ALIGN_BOTTOM_LEFT);
+    lv_label_set_text(ui_ConnectBtnLbl, "Disconnect");
+    lv_obj_set_style_text_letter_space(ui_ConnectBtnLbl, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_ConnectBtnLbl, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_ConnectBtnLbl, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ConnectBtnIcon = lv_image_create(ui_ConnectBtnCntr);
+    lv_image_set_src(ui_ConnectBtnIcon, &ui_img_btDisconnect);
+    lv_obj_set_width(ui_ConnectBtnIcon, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_ConnectBtnIcon, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_ConnectBtnIcon, -86);
+    lv_obj_set_y(ui_ConnectBtnIcon, 1);
+    lv_obj_set_align(ui_ConnectBtnIcon, LV_ALIGN_CENTER);
+    addFlag(ui_ConnectBtnIcon, LV_OBJ_FLAG_CLICKABLE);     /// Flags
+    removeFlag(ui_ConnectBtnIcon, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_image_recolor(ui_ConnectBtnIcon, lv_color_hex(RED), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_image_recolor_opa(ui_ConnectBtnIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ForgetDevBtnCntr = lv_obj_create(ui_btTapBtnPanel);
+    lv_obj_remove_style_all(ui_ForgetDevBtnCntr);
+    lv_obj_set_width(ui_ForgetDevBtnCntr, 228);
+    lv_obj_set_height(ui_ForgetDevBtnCntr, 53);
+    lv_obj_set_x(ui_ForgetDevBtnCntr, 0);
+    lv_obj_set_y(ui_ForgetDevBtnCntr, 22);
+    lv_obj_set_align(ui_ForgetDevBtnCntr, LV_ALIGN_CENTER);
+    removeFlag(ui_ForgetDevBtnCntr, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_ForgetDevBtnCntr, 25, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_ForgetDevBtnCntr, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_ForgetDevBtnCntr, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_ForgetDevBtnCntr, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ForgetDevBtnLbl = lv_label_create(ui_ForgetDevBtnCntr);
+    lv_obj_set_width(ui_ForgetDevBtnLbl, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_ForgetDevBtnLbl, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_ForgetDevBtnLbl, 54);
+    lv_obj_set_y(ui_ForgetDevBtnLbl, -13);
+    lv_obj_set_align(ui_ForgetDevBtnLbl, LV_ALIGN_BOTTOM_LEFT);
+    lv_label_set_text(ui_ForgetDevBtnLbl, "Forget Device");
+    lv_obj_set_style_text_letter_space(ui_ForgetDevBtnLbl, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_ForgetDevBtnLbl, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_ForgetDevBtnLbl, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_ForgetDevBtnCntrIcon = lv_image_create(ui_ForgetDevBtnCntr);
+    lv_image_set_src(ui_ForgetDevBtnCntrIcon, &ui_img_minus_png);
+    lv_obj_set_width(ui_ForgetDevBtnCntrIcon, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_ForgetDevBtnCntrIcon, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_ForgetDevBtnCntrIcon, -86);
+    lv_obj_set_y(ui_ForgetDevBtnCntrIcon, 1);
+    lv_obj_set_align(ui_ForgetDevBtnCntrIcon, LV_ALIGN_CENTER);
+    addFlag(ui_ForgetDevBtnCntrIcon, LV_OBJ_FLAG_CLICKABLE);     /// Flags
+    removeFlag(ui_ForgetDevBtnCntrIcon, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_image_recolor(ui_ForgetDevBtnCntrIcon, lv_color_hex(RED), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_image_recolor_opa(ui_ForgetDevBtnCntrIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_BtReconnectionStatus = lv_label_create(ui_btTapBtnPanel);
+    lv_obj_set_width(ui_BtReconnectionStatus, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_BtReconnectionStatus, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_BtReconnectionStatus, 53);
+    lv_obj_set_y(ui_BtReconnectionStatus, 0);
+    lv_obj_set_align(ui_BtReconnectionStatus, LV_ALIGN_BOTTOM_LEFT);
+    lv_label_set_text(ui_BtReconnectionStatus, "Disconnecting Device...");
 
     //Events
+    lv_obj_add_event_cb(ui_BluetoothScreen, ui_event_btTap, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ConnectBtnCntr, ui_event_btConnectDisconnect, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_ForgetDevBtnCntr, ui_event_btForgetDevice, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_btFindDevicesBtn, ui_event_btFindDevicesBtn, LV_EVENT_ALL, NULL);
 
     //Hidden Object to shift focus
@@ -239,7 +355,9 @@ void ui_BluetoothScreen_screen_init(void)
     addFlag(ui_HiddenBTScrBtn, LV_OBJ_FLAG_HIDDEN);
     
     //Style of Focus
-    // lv_obj_add_style(ui_btFindDevicesBtn, &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_btFindDevicesBtn, &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_ForgetDevBtnCntr, &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_ConnectBtnCntr,   &style_focus, LV_STATE_FOCUS_KEY);
     
     //Bluetooth Screen Group of objects for Focus and Events
     BTGroup = lv_group_create();
@@ -251,13 +369,73 @@ void ui_BluetoothScreen_screen_init(void)
     }
 }
 
-void ui_event_connectBtnBox(lv_event_t * e)
+void setFlag(bool flag)
+{
+    _ui_flag_modify(ui_btFindDevicesBtn, LV_OBJ_FLAG_HIDDEN, !flag);
+    _ui_flag_modify(ui_deviceDataCntr,   LV_OBJ_FLAG_HIDDEN, flag);
+}
+
+void syncBtScreen()
+{
+    lv_group_remove_all_objs(BTGroup);
+    bool readSuccessful = !(bool)storagCard.readBtDevice(deviceName);
+    
+    // printf("Name read: %d %s\n", readSuccessful, deviceName);
+    char conLbl[15] = "Disconnected";
+    if(deviceConnected) snprintf(conLbl, sizeof(conLbl), "Connected");
+    
+    lv_obj_set_style_bg_color(ui_btConnectionIcon, lv_color_hex(deviceConnected ? GREEN : RED), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_label_set_text_fmt(ui_BtConnectionStatus, "%s", conLbl);
+    lv_obj_set_style_text_color(ui_BtConnectionStatus, lv_color_hex(deviceConnected ? GREEN : RED), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_label_set_text_fmt(ui_TapBtConnectLbl, "Tap to %s", deviceConnected?"disconnect":"connect");
+    setFlag(readSuccessful);
+    
+    if(readSuccessful)
+    {
+        lv_label_set_text_fmt(ui_btDeviceNameLbl, "%s", deviceName);
+        btMode = HAS_HISTORY;
+    }
+    else
+    {
+        btMode = FIND_DEVICE;
+        lv_group_add_obj(BTGroup, ui_btFindDevicesBtn);
+        lv_group_focus_obj(ui_btFindDevicesBtn);
+        navigatingWidgets = true;
+        currentGroup = BTGroup;
+    }
+    lv_group_add_obj(BTGroup, ui_HiddenBTScrBtn);
+}
+
+void ui_event_btTap(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
 
-    if(event_code == LV_EVENT_PRESSED) {
-        EnableBtFocus(true);
-        _ui_screen_change(&ui_EnableConnectBt, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_EnableConnectBt_screen_init);
+    if(event_code == LV_EVENT_PRESSED)
+    {
+        if(btMode == HAS_HISTORY)
+        {
+            lv_group_remove_all_objs(BTGroup);
+            lv_group_add_obj(BTGroup, ui_ConnectBtnCntr);
+            lv_group_add_obj(BTGroup, ui_ForgetDevBtnCntr);
+            lv_group_add_obj(BTGroup, ui_HiddenBTScrBtn);
+            
+            if(deviceConnected)
+            {
+                lv_label_set_text(ui_ConnectBtnLbl, "Disconnect");
+                lv_image_set_src(ui_ConnectBtnIcon, &ui_img_btDisconnect);
+                lv_obj_set_style_image_recolor(ui_ConnectBtnIcon, lv_color_hex(RED), LV_PART_MAIN | LV_STATE_DEFAULT);
+            }
+            else
+            {
+                lv_label_set_text(ui_ConnectBtnLbl, "Reconnect");
+                lv_image_set_src(ui_ConnectBtnIcon, &ui_img_24_blackbticon_png);
+                lv_obj_set_style_image_recolor(ui_ConnectBtnIcon, lv_color_hex(GREEN), LV_PART_MAIN | LV_STATE_DEFAULT);
+            }
+            btMode = TAP_PANEL;
+        }
+    }
+    else if(event_code == LV_EVENT_CANCEL) {
+        syncBtScreen();
     }
 }
 
@@ -266,5 +444,49 @@ void ui_event_btFindDevicesBtn(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_PRESSED) {
+        btAudio.start_bt_scan();
+        resetScanScrParams();
+        _ui_screen_change(&ui_EnableConnectBt, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_EnableConnectBt_screen_init);
+    }
+    if(event_code == LV_EVENT_RELEASED) {
+        navigatingWidgets = false;
+        // syncBtScreen();
+    }
+}
+
+void ui_event_btConnectDisconnect(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED)
+    {
+        if(deviceConnected)
+        {
+            btAudio.disconnect_to_bt_device(deviceName);
+        }
+        else
+        {
+            btAudio.connect_to_bt_device(deviceName);
+        }
+    }
+    else if(event_code == LV_EVENT_RELEASED)
+    {
+        syncBtScreen();
+    }
+}
+
+void ui_event_btForgetDevice(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED)
+    {
+        storagCard.saveBtDevice("");
+        btAudio.disconnect_to_bt_device(deviceName);
+        memset(deviceName, 0, sizeof(deviceName));
+    }
+    else if(event_code == LV_EVENT_RELEASED)
+    {
+        syncBtScreen();
     }
 }

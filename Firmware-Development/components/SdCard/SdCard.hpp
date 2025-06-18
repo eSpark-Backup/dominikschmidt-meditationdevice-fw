@@ -26,6 +26,8 @@ class Storage
         void list_sdcard_files(const char *path);
         void updateSoundListFromSdCard();
         esp_err_t ensureNvsInitialized();
+        esp_err_t saveBtDevice(const char* btDeviceName);
+        esp_err_t readBtDevice(char* devName);
         esp_err_t saveFavourite(const char* fav_name, const Favourite &fav);
         esp_err_t readFavourite(const char* fav_name, Favourite &fav);
     private:

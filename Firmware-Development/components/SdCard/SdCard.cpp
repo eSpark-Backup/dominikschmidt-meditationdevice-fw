@@ -92,6 +92,50 @@ void Storage::updateSoundListFromSdCard()
     loadFolderToDropdown("Lessons", ui_LessonsDropList);
 }
 
+esp_err_t Storage::saveBtDevice(const char* btDeviceName)
+{
+    nvs_handle_t handle;
+    esp_err_t ret = nvs_open("btDevice", NVS_READWRITE, &handle);
+    if (ret == ESP_OK) {
+        ret = nvs_set_str(handle, "Name", btDeviceName);
+        if (ret == ESP_OK) {
+            ret = nvs_commit(handle);
+        }
+        nvs_close(handle);
+    }
+
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to save Bluetooth Device Name '%s': %s", btDeviceName, esp_err_to_name(ret));
+    }
+
+    return ret;
+}
+
+esp_err_t Storage::readBtDevice(char* devName)
+{
+    nvs_handle_t handle;
+    esp_err_t ret = nvs_open("btDevice", NVS_READONLY, &handle);
+    if (ret == ESP_ERR_NVS_NOT_FOUND)
+    {
+        saveBtDevice("");
+    }
+    else if (ret == ESP_OK)
+    {
+        size_t required_size = 0;
+        ret = nvs_get_str(handle, "Name", nullptr, &required_size);
+        if (ret == ESP_OK) {
+            ret = nvs_get_str(handle, "Name", devName, &required_size);
+        }
+        if (required_size < 3) ret = ESP_FAIL;
+        nvs_close(handle);        
+    }
+    if (ret != ESP_OK) {
+        memset(devName, 0, BUF_SIZE);
+        ESP_LOGE(TAG, "Failed to read Saved Bluetooth Device Name %s", esp_err_to_name(ret));
+    }
+    return ret;
+}
+
 esp_err_t Storage::saveFavourite(const char* fav_name, const Favourite &fav)
 {
     nvs_handle_t handle;

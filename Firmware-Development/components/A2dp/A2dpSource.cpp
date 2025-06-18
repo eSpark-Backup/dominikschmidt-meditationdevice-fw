@@ -11,6 +11,7 @@
 #include "freertos/semphr.h"
 
 xSemaphoreHandle xAudioMutex;
+xQueueHandle xQueueDevData;
 
 const char *file_path = "/sdcard/audio/Waves 1.wav"; // MP3 Or WAV
 const char *file_path2 = "/sdcard/audio/Thunder 1.wav"; // MP3 Or WAV
@@ -30,6 +31,13 @@ TaskHandle_t xBtTaskHandler;
 A2DP btAudio; //class object
 
 ///======================== Class Methods ==========================///
+A2DP::A2DP()
+{
+    xQueueDevData = xQueueCreate(1, sizeof(scanned_devices));
+    if(xQueueDevData == NULL)
+        ESP_LOGE(TAG, "Failed to create Queue");
+}
+
 void A2DP::setSdcardPeriph(esp_periph_set_handle_t sd)
 {
     set = sd;
@@ -181,7 +189,8 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
                 // for (int i = 0; i < scanned_device_count; i++) {
                 //     ESP_LOGI(TAG, "[%d] Name: %s", i + 1, scanned_devices[i].name);
                 // }
-                update_bt_dropdown(ui_ScannedDevDropdown);
+                if(xQueueSend(xQueueDevData, &scanned_devices, (TickType_t) 100) != pdPASS)
+                    ESP_LOGE(TAG, "Failed to send Queue");
             } else if (param->disc_st_chg.state == ESP_BT_GAP_DISCOVERY_STARTED) {
                 ESP_LOGI(TAG, "Discovery started.");
                 scanned_device_count = 0;  // Reset list on new scan
@@ -607,49 +616,6 @@ void A2DP::A2dpAudioStop()
     if(btAudio.AudioPlaying) stopAudio = true;
 }
 
-void A2DP::update_bt_dropdown(lv_obj_t *dropdown)
-{
-    if (scanned_device_count == 0) {
-        ESP_LOGI(TAG, "No devices found.");
-        lv_dropdown_set_options(dropdown, "No Devices Found");
-        return;
-    }
-
-    size_t total_length = 13; // Start with 1 for null terminator + "Select None"
-    for (int i = 0; i < scanned_device_count; i++) {
-        total_length += strlen(scanned_devices[i].name) + 1;
-    }
-
-    char *dropdown_options = (char *)malloc(total_length);
-    if (dropdown_options == NULL) {
-        ESP_LOGE(TAG, "Memory allocation failed!");
-        return;
-    }
-
-    dropdown_options[0] = '\0';
-
-    // ESP_LOGI(TAG, "Final device list for dropdown:");
-    strcat(dropdown_options, "Select None\n");
-    for (int i = 0; i < scanned_device_count; i++) {
-        strcat(dropdown_options, scanned_devices[i].name);
-        if (i < scanned_device_count - 1) strcat(dropdown_options, "\n");
-        // ESP_LOGI(TAG, "[%d] %s", i + 1, scanned_devices[i].name);
-    }
-
-    ESP_LOGI(TAG, "Dropdown string: %s", dropdown_options);
-
-    // ✅ Debug log before setting options
-    // ESP_LOGI(TAG, "Updating dropdown with new options...");
-
-    lv_dropdown_set_options(ui_ScannedDevDropdown, dropdown_options);
-
-    // ✅ Force refresh the dropdown UI
-    lv_obj_invalidate(dropdown);
-    lv_obj_refresh_style(dropdown, LV_PART_MAIN, LV_STATE_DEFAULT);
-
-    free(dropdown_options);
-    lv_dropdown_set_text(ui_ScannedDevDropdown, "Select Device");
-}
 
 void A2DP::update_dropdown_options(lv_obj_t *dropdown, char **options, int option_count)
 {
