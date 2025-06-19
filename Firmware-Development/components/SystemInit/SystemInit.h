@@ -45,7 +45,6 @@ class System
     static void ButtonReadStatic(lv_indev_t * indev, lv_indev_data_t * data);
     void setBrightness(uint8_t brightness_percent);
     void setupPWM();
-    void updateBluetoothSettings();
     void memLog();
     
     private:
@@ -58,9 +57,10 @@ class System
     void NavigateScreens(ButtonData btnData, int encData);
     void navigateWidgets(ButtonState state, int screenCount, bool focus = false);
     void sendEvents(ButtonData btn, int screenCount);
-    void loadAudio();
 };
 
+void updateBluetoothSettings();
+void loadAudio();
 extern System Core;
 
 #endif /*SYSTEMINIT_H */

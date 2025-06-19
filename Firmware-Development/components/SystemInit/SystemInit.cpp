@@ -85,6 +85,7 @@ void System::InitializeScreen(void)
     ui_EnableConnectBt_screen_init();
     ui_MeditationScreen_screen_init();
     storagCard.updateSoundListFromSdCard();
+    lv_timer_t * btSettingsTimer = lv_timer_create((lv_timer_cb_t)updateBluetoothSettings, 500, NULL);
 }
 
 void System::loadScreens(void)
@@ -242,7 +243,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
     {
         if (btnData.State == BUTTON_SINGLE_CLICK) {
 
-            if((!focusEnable || focusEnable) && navigatingWidgets)
+            if(navigatingWidgets)
             {
                 focusEnable = true;
                 sendEvents(btnData, screenCount);
@@ -392,7 +393,7 @@ void System::memLog()
         getCurrentDuty());    
     }
     
-void System::loadAudio()
+void loadAudio()
 {
     int TimerValue = (getRollerValue(ui_minRoller)+1) * 60;
     char soundPath[256] = "/sdcard/audio/";
@@ -422,7 +423,7 @@ void System::loadAudio()
     }
 }
 
-void System::updateBluetoothSettings()
+void updateBluetoothSettings()
 {
     if(startMeditation)
     {   loadAudio();

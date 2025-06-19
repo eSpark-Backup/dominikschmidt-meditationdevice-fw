@@ -30,6 +30,7 @@ class Storage
         esp_err_t readBtDevice(char* devName);
         esp_err_t saveFavourite(const char* fav_name, const Favourite &fav);
         esp_err_t readFavourite(const char* fav_name, Favourite &fav);
+        char* getBtDevice();
     private:
         bool check_sd_card();
         void loadFolderToDropdown(const char *folderName, lv_obj_t *dropdown);

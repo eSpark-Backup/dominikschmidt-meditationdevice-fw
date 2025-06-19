@@ -136,6 +136,14 @@ esp_err_t Storage::readBtDevice(char* devName)
     return ret;
 }
 
+
+char* Storage::getBtDevice()
+{
+    static char deviceName[250];
+    readBtDevice(deviceName);
+    return deviceName;
+}
+
 esp_err_t Storage::saveFavourite(const char* fav_name, const Favourite &fav)
 {
     nvs_handle_t handle;

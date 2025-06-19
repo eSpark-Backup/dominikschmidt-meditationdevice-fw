@@ -29,14 +29,7 @@ lv_obj_t * ui_ForgetDevBtnCntr;
 lv_obj_t * ui_ForgetDevBtnLbl;
 lv_obj_t * ui_ForgetDevBtnCntrIcon;
 lv_obj_t * ui_BtReconnectionStatus;
-
-typedef enum
-{
-    FIND_DEVICE,
-    HAS_HISTORY,
-    TAP_PANEL
-} BluetoothScrMode;
-
+#define TIME_IN_SEC             (xTaskGetTickCount()/1000)
 BluetoothScrMode btMode;
 // CUSTOM VARIABLES
 
@@ -377,8 +370,27 @@ void setFlag(bool flag)
 
 void syncBtScreen()
 {
+    static long long syncCount = TIME_IN_SEC;
+    static bool waitForConnection = false;
+    static BluetoothScrMode lastBtMode = IDLE;
+
+    if ((lastBtMode == btMode) || (waitForConnection && (TIME_IN_SEC - syncCount < 5)))
+    return;
+
+
     lv_group_remove_all_objs(BTGroup);
-    bool readSuccessful = !(bool)storagCard.readBtDevice(deviceName);
+    bool readSuccessful = false;
+    if (btMode == CONNECTING)
+    {
+        if (strlen(deviceName) != 0)
+        {
+            readSuccessful = true;
+        }
+    }
+    else
+    {
+        readSuccessful = !(bool)storagCard.readBtDevice(deviceName);
+    }
     
     // printf("Name read: %d %s\n", readSuccessful, deviceName);
     char conLbl[15] = "Disconnected";
@@ -387,16 +399,23 @@ void syncBtScreen()
     lv_obj_set_style_bg_color(ui_btConnectionIcon, lv_color_hex(deviceConnected ? GREEN : RED), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_label_set_text_fmt(ui_BtConnectionStatus, "%s", conLbl);
     lv_obj_set_style_text_color(ui_BtConnectionStatus, lv_color_hex(deviceConnected ? GREEN : RED), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_label_set_text_fmt(ui_TapBtConnectLbl, "Tap to %s", deviceConnected?"disconnect":"connect");
+    lv_label_set_text_fmt(ui_TapBtConnectLbl, "Tap to %s",deviceConnected?"disconnect":"connect");
     setFlag(readSuccessful);
     
     if(readSuccessful)
     {
         lv_label_set_text_fmt(ui_btDeviceNameLbl, "%s", deviceName);
+        if (btMode == CONNECTING) 
+        {
+            lv_label_set_text(ui_TapBtConnectLbl, "Connecting ...");
+            waitForConnection = true;
+            storagCard.saveBtDevice(deviceName);
+        }
         btMode = HAS_HISTORY;
     }
     else
     {
+        waitForConnection = false;
         btMode = FIND_DEVICE;
         lv_group_add_obj(BTGroup, ui_btFindDevicesBtn);
         lv_group_focus_obj(ui_btFindDevicesBtn);
@@ -404,6 +423,8 @@ void syncBtScreen()
         currentGroup = BTGroup;
     }
     lv_group_add_obj(BTGroup, ui_HiddenBTScrBtn);
+    syncCount = TIME_IN_SEC;
+    if(!waitForConnection) lastBtMode = btMode;
 }
 
 void ui_event_btTap(lv_event_t * e)
@@ -471,7 +492,7 @@ void ui_event_btConnectDisconnect(lv_event_t * e)
     }
     else if(event_code == LV_EVENT_RELEASED)
     {
-        syncBtScreen();
+        // syncBtScreen();
     }
 }
 

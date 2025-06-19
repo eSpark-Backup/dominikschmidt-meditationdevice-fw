@@ -4,6 +4,7 @@
 // Project name: SquareLine_Project
 
 #include "ui_EnableConnectBt.h"
+#include "SdCard.hpp"
 
 // SCREEN: ui_EnableConnectBt
 void ui_EnableConnectBt_screen_init(void);
@@ -111,8 +112,6 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_flex_align(ui_btEnablePanel, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     removeFlag(ui_btEnablePanel, LV_OBJ_FLAG_CLICKABLE);      /// Flags
     addFlag(ui_btEnablePanel, LV_OBJ_FLAG_HIDDEN);      /// Flags
-    // lv_obj_set_scrollbar_mode(ui_btEnablePanel, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_set_scroll_dir(ui_btEnablePanel, LV_DIR_VER);
     lv_obj_set_style_radius(ui_btEnablePanel, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_btEnablePanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_btEnablePanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -192,6 +191,7 @@ void resetScanScrParams()
     _ui_flag_modify(ui_btScanLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
     _ui_flag_modify(ui_btEnablePanel, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
     navigatingWidgets = true;
+    focusEnable = false;
 }
 
 lv_obj_t* style_device_button() {
@@ -200,12 +200,13 @@ lv_obj_t* style_device_button() {
     lv_obj_set_size(btn, 280, 55);
     lv_obj_set_pos(btn, -2, 46);
     lv_obj_set_align(btn, LV_ALIGN_CENTER);
-    addFlag(btn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    // addFlag(btn, LV_OBJ_FLAG_SCROLL_ON_FOCUS);
+    removeFlag(btn, LV_OBJ_FLAG_SCROLLABLE);
+    addFlag(btn, LV_OBJ_FLAG_CHECKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);
     _ui_flag_modify(btn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
     lv_obj_set_style_radius(btn, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(btn, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(btn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_add_style(btn, &style_focus, LV_STATE_FOCUS_KEY);
     return btn;
 }
 
@@ -221,10 +222,11 @@ lv_obj_t* style_device_label(lv_obj_t *btn, const char* text) {
 
 void switchFocus(lv_obj_t *btn)
 {
+    // lv_group_focus_obj(ui_btDevice[0]);
     lv_group_add_obj(EnableBtGroup, ui_HiddenEnableBtScrBtn);
-    lv_group_focus_obj(ui_btDevice[0]);
     navigatingWidgets = true;
     currentGroup = EnableBtGroup;
+    ScreenGroup[3] = EnableBtGroup;
 }
 
 void ui_event_btEnableSwitch(lv_event_t * e)
@@ -391,9 +393,25 @@ void ui_event_btConnectBtn(lv_event_t * e)
     }
 }
 
+void ui_event_devNameEvents(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED)
+    {
+        memcpy(deviceName, (char*)lv_event_get_user_data(e), sizeof(deviceName));
+        btAudio.connect_to_bt_device(deviceName);
+        currentGroup = BTGroup;
+        ScreenGroup[3] = BTGroup;
+        btMode = CONNECTING;
+        syncBtScreen();
+        _ui_screen_change(&ui_BluetoothScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_BluetoothScreen_screen_init);
+    }
+}
+
 void checkBtDeviceConnectivity()
 {
-    if(lv_screen_active() == ui_EnableConnectBt && xQueueReceive(xQueueDevData, &gotDevices, (TickType_t) 10))
+    if(!(lv_obj_has_flag(ui_Spinner, LV_OBJ_FLAG_HIDDEN)) && xQueueReceive(xQueueDevData, &gotDevices, (TickType_t) 1))
     {
         printf("Queue Received\n");
         _ui_flag_modify(ui_Spinner, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
@@ -410,51 +428,27 @@ void checkBtDeviceConnectivity()
         {
             ui_btDevice[i] = style_device_button();
             ui_btDeviceLbl[i] = style_device_label(ui_btDevice[i], gotDevices[i].name);
+            lv_obj_add_style(ui_btDevice[i], &style_focus, LV_STATE_FOCUS_KEY);
             lv_group_add_obj(EnableBtGroup, ui_btDevice[i]);
+            lv_obj_add_event_cb(ui_btDevice[i], ui_event_devNameEvents, LV_EVENT_ALL, gotDevices[i].name);
         }
         _ui_flag_modify(ui_btScanLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_btEnablePanel, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-        printf("grp count: %d and btenable grp : %d and device_count %d\n", lv_group_get_obj_count(currentGroup), lv_group_get_obj_count(EnableBtGroup), btAudio.scanned_device_count);
-        switchFocus(ui_btDevice[0]);
-        if(currentGroup == EnableBtGroup)
-            printf("EnableBtGroup group\n");
-        else if(currentGroup == BTGroup)
-            printf("BTGroup group\n");
+        lv_group_add_obj(EnableBtGroup, ui_HiddenEnableBtScrBtn);
+        //Events
+        navigatingWidgets = true;
+        currentGroup = EnableBtGroup;
+        ScreenGroup[3] = EnableBtGroup;
+
+        lv_group_focus_obj(ui_btDevice[0]);
+        lv_obj_t * focusedObj = lv_group_get_focused(currentGroup); // Get the currently focused object
+        if(focusedObj == ui_btDevice[0])   
+            printf("ui_btDevice focused\n");        
     }
 
-    if(last_connectionStatus != deviceConnected)
+    if(lv_screen_active() == ui_BluetoothScreen && (last_connectionStatus != deviceConnected || !strcmp(deviceName, storagCard.getBtDevice())))
     {
-        // if(deviceConnected)
-        // {
-        //     lv_label_set_text(ui_btConnectLabel, "DISCONNECT");
-
-        //     if(lv_obj_has_state(ui_btConnectBtnBox, LV_STATE_DISABLED))
-        //     {
-        //         _ui_state_modify(ui_btConnectBtnBox, LV_STATE_DISABLED, _UI_MODIFY_STATE_REMOVE);
-        //     }
-
-        //     if(strlen(deviceName) != 0 && strcmp(deviceName, "Select None") != 0 &&
-        //       strcmp(lv_label_get_text(ui_btBtnLabel), "Bluetooth Connected") != 0)
-        //     {
-        //         lv_label_set_text(ui_btBtnLabel, "Bluetooth Connected");
-        //         lv_label_set_text_fmt(ui_btDeviceConLbl, "To : %s",deviceName);
-        //         _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-        //         _ui_state_modify(ui_btBtnIcon,  LV_STATE_CHECKED, _UI_MODIFY_STATE_ADD);
-        //         _ui_flag_modify(ui_btDeviceConLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-        //         resetConnectionParams();
-        //     }
-        // }
-        // else if(strcmp(lv_label_get_text(ui_btBtnLabel), "Bluetooth Not Connected") != 0)
-        // {
-        //     lv_label_set_text(ui_btConnectLabel, "CONNECT");
-        //     lv_group_remove_obj(ui_btConnectBtnBox);
-        //     lv_label_set_text(ui_btBtnLabel, "Bluetooth Not Connected");
-        //     _ui_state_modify(ui_btBtnLabel, LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
-        //     _ui_state_modify(ui_btBtnIcon,  LV_STATE_CHECKED, _UI_MODIFY_STATE_REMOVE);
-        //     _ui_flag_modify(ui_btDeviceConLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_STATE_ADD);
-        //     resetConnectionParams();
-        // }
-
+        syncBtScreen();
         last_connectionStatus = deviceConnected;
     }
 }
