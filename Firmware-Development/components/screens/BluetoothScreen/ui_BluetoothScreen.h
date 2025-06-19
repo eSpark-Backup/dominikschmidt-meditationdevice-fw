@@ -29,7 +29,7 @@ void ui_event_btFindDevicesBtn(lv_event_t * e);
 void ui_event_btTap(lv_event_t * e);
 void ui_event_btConnectDisconnect(lv_event_t * e);
 void ui_event_btForgetDevice(lv_event_t * e);
-void syncBtScreen();
+void syncBtScreen(bool byPass);
 extern lv_obj_t * ui_BluetoothScreen;
 extern lv_obj_t * ui_btLabel;
 extern lv_obj_t * ui_btDeviceNameLbl;

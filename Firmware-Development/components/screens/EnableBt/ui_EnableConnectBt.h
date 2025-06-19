@@ -47,7 +47,6 @@ lv_obj_t* style_device_button();
 lv_obj_t* style_device_label(lv_obj_t *btn, const char* text);
 extern bool list_selected;
 #define NAME_BUF  50
-extern char deviceName[NAME_BUF];
 #define MAX_SCANNED_DEVICES 6
 extern lv_obj_t * ui_btDevice[MAX_SCANNED_DEVICES];
 // CUSTOM VARIABLES

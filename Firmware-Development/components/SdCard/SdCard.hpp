@@ -11,6 +11,7 @@
 #include "esp_peripherals.h"
 #include "nvs_flash.h"
 #include "lvgl.h"
+#include "A2dpSource.hpp"
 
 typedef struct {
     int timer;
@@ -26,8 +27,8 @@ class Storage
         void list_sdcard_files(const char *path);
         void updateSoundListFromSdCard();
         esp_err_t ensureNvsInitialized();
-        esp_err_t saveBtDevice(const char* btDeviceName);
-        esp_err_t readBtDevice(char* devName);
+        esp_err_t saveBtDevice(ScannedDevice* btDevice);
+        esp_err_t readBtDevice(ScannedDevice* dev);
         esp_err_t saveFavourite(const char* fav_name, const Favourite &fav);
         esp_err_t readFavourite(const char* fav_name, Favourite &fav);
         char* getBtDevice();

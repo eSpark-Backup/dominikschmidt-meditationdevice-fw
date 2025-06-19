@@ -12,6 +12,7 @@
 
 xSemaphoreHandle xAudioMutex;
 xQueueHandle xQueueDevData;
+ScannedDevice btDevice;
 
 const char *file_path = "/sdcard/audio/Waves 1.wav"; // MP3 Or WAV
 const char *file_path2 = "/sdcard/audio/Thunder 1.wav"; // MP3 Or WAV
@@ -309,7 +310,7 @@ bool A2DP::connect_to_bt_device(const char *device_name)
             }
         }
     }
-    memset(deviceName, 0, BUF_SIZE);
+    memset(&btDevice, 0, sizeof(btDevice));
     ESP_LOGW(TAG, "Device %s not found.", device_name);
     return false;
 }
@@ -332,7 +333,7 @@ bool A2DP::disconnect_to_bt_device(const char *device_name)
             }
         }
     }
-    memset(deviceName, 0, BUF_SIZE);
+    memset(&btDevice, 0, sizeof(btDevice));
     ESP_LOGW(TAG, "Device %s not found.", device_name);
     deviceConnected = false;
     return false;

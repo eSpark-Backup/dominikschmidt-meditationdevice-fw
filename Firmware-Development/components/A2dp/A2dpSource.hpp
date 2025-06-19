@@ -84,4 +84,5 @@ extern A2DP btAudio;
 extern bool deviceConnected;
 extern int audioCount;
 extern xQueueHandle xQueueDevData;
+extern ScannedDevice btDevice;
 #endif /*A2DPSOURCE_H */
