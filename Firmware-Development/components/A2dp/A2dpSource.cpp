@@ -8,6 +8,7 @@
 */
 
 #include "A2dpSource.hpp"
+#include "SdCard.hpp"
 #include "freertos/semphr.h"
 
 xSemaphoreHandle xAudioMutex;
@@ -339,6 +340,26 @@ bool A2DP::disconnect_to_bt_device(const char *device_name)
     return false;
 }
 
+void A2DP::tryReconnect()
+{
+    if(storagCard.readBtDevice(&btDevice) == ESP_OK)
+    {
+        btMode = CONNECTING;
+        printf( "Device MAC: %02X:%02X:%02X:%02X:%02X:%02X\n",
+                    btDevice.bda[0], btDevice.bda[1], btDevice.bda[2], 
+                    btDevice.bda[3], btDevice.bda[4], btDevice.bda[5]);
+        if (esp_a2d_source_connect(btDevice.bda) == ESP_OK) {
+            printf("Reboot connection successful.\n");
+            deviceConnected = true;
+        } else {
+            printf("Reboot connection failed.\n");
+            deviceConnected = false;
+        }
+        syncBtScreen(true);
+    }
+    else
+        printf("Failed to read rebooted device.\n");
+}
 
 void A2DP::A2dpServiceInit()
 {
@@ -349,7 +370,6 @@ void A2DP::A2dpServiceInit()
     ESP_ERROR_CHECK(esp_bt_controller_enable(ESP_BT_MODE_CLASSIC_BT));
     ESP_ERROR_CHECK(esp_bluedroid_init());
     ESP_ERROR_CHECK(esp_bluedroid_enable());
-    print_bonded_devices();
 
     esp_bt_dev_set_device_name("ESP_DOMINIK");
     esp_bt_pin_type_t pin_type = ESP_BT_PIN_TYPE_FIXED;
@@ -401,6 +421,7 @@ void A2DP::A2dpServiceInit()
     audio_event_iface_set_listener(esp_periph_set_get_event_iface(set), evt);
 
     xAudioMutex = xSemaphoreCreateMutex();
+    tryReconnect();
 }
 
 void A2DP::A2dpAudioStart(char *filepath, int play_time_sec, bool Gong) 

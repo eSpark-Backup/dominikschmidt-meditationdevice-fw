@@ -28,7 +28,6 @@ lv_obj_t * ui_ConnectBtnIcon;
 lv_obj_t * ui_ForgetDevBtnCntr;
 lv_obj_t * ui_ForgetDevBtnLbl;
 lv_obj_t * ui_ForgetDevBtnCntrIcon;
-lv_obj_t * ui_BtReconnectionStatus;
 #define TIME_IN_SEC             (xTaskGetTickCount()/1000)
 BluetoothScrMode btMode;
 // CUSTOM VARIABLES
@@ -329,14 +328,6 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_image_recolor(ui_ForgetDevBtnCntrIcon, lv_color_hex(RED), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_image_recolor_opa(ui_ForgetDevBtnCntrIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_BtReconnectionStatus = lv_label_create(ui_btTapBtnPanel);
-    lv_obj_set_width(ui_BtReconnectionStatus, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_BtReconnectionStatus, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_BtReconnectionStatus, 53);
-    lv_obj_set_y(ui_BtReconnectionStatus, 0);
-    lv_obj_set_align(ui_BtReconnectionStatus, LV_ALIGN_BOTTOM_LEFT);
-    lv_label_set_text(ui_BtReconnectionStatus, "Disconnecting Device...");
-
     //Events
     lv_obj_add_event_cb(ui_BluetoothScreen, ui_event_btTap, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_ConnectBtnCntr, ui_event_btConnectDisconnect, LV_EVENT_ALL, NULL);
@@ -365,8 +356,9 @@ void ui_BluetoothScreen_screen_init(void)
 
 void setFlag(bool flag)
 {
-    _ui_flag_modify(ui_btFindDevicesBtn, LV_OBJ_FLAG_HIDDEN, !flag);
+    _ui_flag_modify(ui_btConnectionIcon, LV_OBJ_FLAG_HIDDEN, flag);
     _ui_flag_modify(ui_deviceDataCntr,   LV_OBJ_FLAG_HIDDEN, flag);
+    _ui_flag_modify(ui_btFindDevicesBtn, LV_OBJ_FLAG_HIDDEN, !flag);
 }
 
 void syncBtScreen(bool byPass)
@@ -377,20 +369,14 @@ void syncBtScreen(bool byPass)
 
     if (!byPass && ((lastBtMode == btMode || btMode == TAP_PANEL) || (waitForConnection && (TIME_IN_SEC - syncCount < 5)))) return;
     lv_group_remove_all_objs(BTGroup);
-    bool readSuccessful = false;
-    if (btMode == CONNECTING)
-    {
-        if (strlen(btDevice.name) != 0)
-        {
-            readSuccessful = true;
-        }
-    }
-    else
-    {
-        readSuccessful = !(bool)storagCard.readBtDevice(&btDevice);
-    }
     
-    // printf("Name read: %d %s\n", readSuccessful, btDevice.name);
+    bool readSuccessful = false;
+    
+    if (btMode == CONNECTING) {
+        if (strlen(btDevice.name) != 0) readSuccessful = true;}
+    else
+        readSuccessful = !(bool)storagCard.readBtDevice(&btDevice);
+    
     char conLbl[15] = "Disconnected";
     if(deviceConnected) snprintf(conLbl, sizeof(conLbl), "Connected");
     
@@ -420,13 +406,17 @@ void syncBtScreen(bool byPass)
         lv_group_add_obj(BTGroup, ui_btFindDevicesBtn);
         lv_group_focus_obj(ui_btFindDevicesBtn);
     }
-    navigatingWidgets = true;
-    currentGroup = BTGroup;
+    if (lv_screen_active() != ui_SetTimerScreen)
+    {
+        navigatingWidgets = true;
+        ScreenGroup[3] = BTGroup;
+        currentGroup = BTGroup;
+    }
     lv_group_add_obj(BTGroup, ui_HiddenBTScrBtn);
     syncCount = TIME_IN_SEC;
     if(!waitForConnection) lastBtMode = btMode;
     else lastBtMode = IDLE;
-    printf("sync was called\n");
+    printf("sync was called with mode: %d & nav: %d\n",btMode, navigatingWidgets);
 }
 
 void ui_event_btTap(lv_event_t * e)
@@ -491,10 +481,10 @@ void ui_event_btConnectDisconnect(lv_event_t * e)
         {
             if (esp_a2d_source_disconnect(btDevice.bda) == ESP_OK) {
                 printf("Disconnection successful.\n");
-                deviceConnected = true;
+                deviceConnected = false;
             } else {
                 printf("Disconnection failed.\n");
-                deviceConnected = false;
+                deviceConnected = true;
             }
             btMode = HAS_HISTORY;
         }
@@ -513,14 +503,14 @@ void ui_event_btConnectDisconnect(lv_event_t * e)
     }
     else if(event_code == LV_EVENT_RELEASED)
     {
-        // syncBtScreen(false);
         btMode = HAS_HISTORY;
     }
     else
         return;
     printf("ui_event_btConnectDisconnect\n");
-    _ui_flag_modify(ui_deviceDataCntr,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+    syncBtScreen(true);
     _ui_flag_modify(ui_btTapBtnPanel,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+    _ui_flag_modify(ui_deviceDataCntr,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
 
 }
 
@@ -537,12 +527,12 @@ void ui_event_btForgetDevice(lv_event_t * e)
     }
     else if(event_code == LV_EVENT_RELEASED)
     {
-        syncBtScreen(false);
     }
     else
         return;
     printf("ui_event_btForgetDevice\n");
     btMode = HAS_HISTORY;
-    _ui_flag_modify(ui_deviceDataCntr,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+    syncBtScreen(true);
     _ui_flag_modify(ui_btTapBtnPanel,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+    _ui_flag_modify(ui_deviceDataCntr,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
 }

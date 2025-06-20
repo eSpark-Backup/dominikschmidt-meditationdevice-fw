@@ -53,6 +53,7 @@ class A2DP
     //Methods
     public:
         A2DP();
+        void tryReconnect();
         void A2dpServiceInit();
         void A2dpAudioStart(char *filepath, int play_time_sec = 0, bool Gong = false);
         void A2dpAudioStop();

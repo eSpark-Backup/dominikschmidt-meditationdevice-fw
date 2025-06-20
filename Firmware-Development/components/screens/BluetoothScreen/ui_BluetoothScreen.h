@@ -50,7 +50,6 @@ extern lv_obj_t * ui_ConnectBtnIcon;
 extern lv_obj_t * ui_ForgetDevBtnCntr;
 extern lv_obj_t * ui_ForgetDevBtnLbl;
 extern lv_obj_t * ui_ForgetDevBtnCntrIcon;
-extern lv_obj_t * ui_BtReconnectionStatus;
 extern BluetoothScrMode btMode;
 // CUSTOM VARIABLES
 

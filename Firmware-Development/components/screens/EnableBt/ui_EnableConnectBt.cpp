@@ -123,6 +123,8 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_style_bg_color(ui_btEnablePanel, lv_color_hex(0x383838), LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_bg_opa(ui_btEnablePanel, 255, LV_PART_MAIN | LV_STATE_CHECKED);
     
+    EnableBtGroup = lv_group_create();
+
     for (int i = 0; i < MAX_SCANNED_DEVICES; i++)
     {
         ui_btDevice[i] = style_device_button();
@@ -132,9 +134,9 @@ void ui_EnableConnectBt_screen_init(void)
     ui_HiddenEnableBtScrBtn = lv_obj_create(ui_EnableConnectBt);
     addFlag(ui_HiddenEnableBtScrBtn, LV_OBJ_FLAG_HIDDEN);
 
-    //Events
-    lv_obj_add_event_cb(ui_EnableConnectBt,         ui_event_commonEvents, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_HiddenEnableBtScrBtn,    ui_event_commonEvents, LV_EVENT_ALL, NULL);
+    // //Events
+    // lv_obj_add_event_cb(ui_EnableConnectBt,         ui_event_commonEvents, LV_EVENT_ALL, NULL);
+    // lv_obj_add_event_cb(ui_HiddenEnableBtScrBtn,    ui_event_commonEvents, LV_EVENT_ALL, NULL);
 
     
     //Style of Focus
@@ -145,7 +147,7 @@ void ui_EnableConnectBt_screen_init(void)
     // lv_obj_add_style(ui_btConnectBtnBox,    &colored_style_focus, LV_STATE_FOCUS_KEY);
     
     //Enable BT Screen Group of objects for Focus and Events
-    EnableBtGroup = lv_group_create();
+    
     // lv_group_add_obj(EnableBtGroup, ui_btEnableBtn);
     lv_group_add_obj(EnableBtGroup, ui_HiddenEnableBtScrBtn);
 
@@ -182,7 +184,6 @@ void ui_event_commonEvents(lv_event_t * e)
 void resetScanScrParams()
 {
     printf("reset Scan Scr Params\n");
-    controlScreen = ui_EnableConnectBt;
     for (int i = 0; i < MAX_SCANNED_DEVICES; i++) {
         _ui_flag_modify(ui_btDevice[i], LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
     }
@@ -191,6 +192,9 @@ void resetScanScrParams()
     _ui_flag_modify(ui_btEnablePanel, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
     navigatingWidgets = true;
     focusEnable = false;
+    currentGroup = EnableBtGroup;
+    ScreenGroup[3] = EnableBtGroup;
+    controlScreen = ui_EnableConnectBt;
 }
 
 lv_obj_t* style_device_button() {
@@ -199,12 +203,14 @@ lv_obj_t* style_device_button() {
     lv_obj_set_size(btn, 280, 55);
     lv_obj_set_pos(btn, -2, 46);
     lv_obj_set_align(btn, LV_ALIGN_CENTER);
-    removeFlag(btn, LV_OBJ_FLAG_SCROLLABLE);
+    // removeFlag(btn, LV_OBJ_FLAG_SCROLLABLE);
     addFlag(btn, LV_OBJ_FLAG_CHECKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);
-    _ui_flag_modify(btn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
     lv_obj_set_style_radius(btn, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(btn, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(btn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    _ui_flag_modify(btn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+    lv_obj_add_style(btn, &style_focus, LV_STATE_FOCUSED | LV_STATE_FOCUS_KEY);
+    lv_group_add_obj(EnableBtGroup, btn);
     return btn;
 }
 
@@ -226,7 +232,6 @@ void switchFocus(lv_obj_t *btn)
     currentGroup = EnableBtGroup;
     ScreenGroup[3] = EnableBtGroup;
 }
-
 
 void rotateScannedDropdown(int diff)
 {
@@ -277,6 +282,7 @@ void ui_event_devNameEvents(lv_event_t * e)
         memcpy(&btDevice, (ScannedDevice*)lv_event_get_user_data(e), sizeof(btDevice));
         btAudio.connect_to_bt_device(btDevice.name);
         btMode = CONNECTING;
+        syncBtScreen(true);
     }
     else if(event_code == LV_EVENT_RELEASED)
     {
@@ -284,12 +290,8 @@ void ui_event_devNameEvents(lv_event_t * e)
     }
     else
         return;
-    
-    currentGroup = BTGroup;
-    ScreenGroup[3] = BTGroup;
-    syncBtScreen(true);
+
     controlScreen = NULL;
-    focusEnable = false;
     _ui_screen_change(&ui_BluetoothScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_BluetoothScreen_screen_init);
 }
 
@@ -308,26 +310,25 @@ void checkBtDeviceConnectivity()
         }
 
         lv_group_remove_all_objs(EnableBtGroup);
+        _ui_flag_modify(ui_btScanLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        _ui_flag_modify(ui_btEnablePanel, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         for (int i = 0; i < btAudio.scanned_device_count; i++)
         {
             ui_btDevice[i] = style_device_button();
             ui_btDeviceLbl[i] = style_device_label(ui_btDevice[i], gotDevices[i].name);
-            lv_obj_add_style(ui_btDevice[i], &style_focus, LV_STATE_FOCUS_KEY);
-            lv_group_add_obj(EnableBtGroup, ui_btDevice[i]);
+            
             lv_obj_add_event_cb(ui_btDevice[i], ui_event_devNameEvents, LV_EVENT_ALL, &gotDevices[i]);
         }
-        _ui_flag_modify(ui_btScanLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-        _ui_flag_modify(ui_btEnablePanel, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-        lv_group_add_obj(EnableBtGroup, ui_HiddenEnableBtScrBtn);
         //Events
-        navigatingWidgets = true;
-        currentGroup = EnableBtGroup;
+        // navigatingWidgets = true;
         ScreenGroup[3] = EnableBtGroup;
-
+        currentGroup = EnableBtGroup;
         lv_group_focus_obj(ui_btDevice[0]);
-        lv_obj_t * focusedObj = lv_group_get_focused(currentGroup); // Get the currently focused object
-        if(focusedObj == ui_btDevice[0])   
-            printf("ui_btDevice focused\n");        
+  
+        lv_group_add_obj(EnableBtGroup, ui_HiddenEnableBtScrBtn);
+    //     lv_obj_t * focusedObj = lv_group_get_focused(currentGroup); // Get the currently focused object
+    //     if(focusedObj == ui_btDevice[0])   
+    //         lv_group_focus_obj(ui_btDevice[0]);
     }
 
     if(lv_screen_active() == ui_BluetoothScreen)

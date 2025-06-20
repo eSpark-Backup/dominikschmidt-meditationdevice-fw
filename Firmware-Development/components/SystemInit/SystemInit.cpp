@@ -46,6 +46,7 @@ void System::Initialize(void)
     initScreens();
     btAudio.A2dpServiceInit();
     memLog();
+    if (!deviceConnected) btAudio.tryReconnect();
 }
 
 void System::initScreens(void)
@@ -195,7 +196,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
 
     if(encDiff != 0)
     {
-        if (navigatingWidgets) {
+        if (navigatingWidgets && !(lv_screen_active() == ui_BluetoothScreen && btMode != TAP_PANEL)) {
             navigateWidgets(BUTTON_PRESS, screenCount);  // Call a new function to navigate widgets
         }
         else
@@ -205,10 +206,12 @@ void System::NavigateScreens(ButtonData btnData, int encData)
             screenChanged = true;
             
             if (screenCount > 3) screenCount = 0;
-            if (screenCount < 0) screenCount = 3;
+            else if (screenCount < 0) screenCount = 3;
             
             if (screenChanged) {
                 _ui_screen_change(&Screen[screenCount], LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 0, 0, NULL);  // Load new screen
+                navigatingWidgets = false;
+                focusEnable = false;
 
                 lastScreen = lv_screen_active();
                 if(meditation_timer != NULL) pauseMeditationTimer();
@@ -230,7 +233,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
                 focusEnable = false;
                 sendEvents(btnData, screenCount);
             }
-            else if(navigatingWidgets && !focusEnable)
+            else if(navigatingWidgets && !focusEnable && lv_screen_active() != ui_BluetoothScreen)
             {
                 navigatingWidgets = false;
                 btnData.State = BUTTON_NONE;
@@ -257,6 +260,7 @@ void System::NavigateScreens(ButtonData btnData, int encData)
             }
         }
     }
+    printf("nav: %d and focus: %d\n",navigatingWidgets,focusEnable);
 }
 
 void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
