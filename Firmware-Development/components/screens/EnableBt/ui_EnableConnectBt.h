@@ -43,12 +43,14 @@ void rotateScannedDropdown(int diff);
 void checkBtDeviceConnectivity();
 void switchFocus(lv_obj_t *btn);
 void resetScanScrParams();
+void ui_event_devNameEvents(lv_event_t * e);
 lv_obj_t* style_device_button();
 lv_obj_t* style_device_label(lv_obj_t *btn, const char* text);
 extern bool list_selected;
 #define NAME_BUF  50
 #define MAX_SCANNED_DEVICES 6
 extern lv_obj_t * ui_btDevice[MAX_SCANNED_DEVICES];
+extern bool checkListFlag;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

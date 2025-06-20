@@ -416,7 +416,6 @@ void syncBtScreen(bool byPass)
     syncCount = TIME_IN_SEC;
     if(!waitForConnection) lastBtMode = btMode;
     else lastBtMode = IDLE;
-    printf("sync was called with mode: %d & nav: %d\n",btMode, navigatingWidgets);
 }
 
 void ui_event_btTap(lv_event_t * e)
@@ -507,7 +506,6 @@ void ui_event_btConnectDisconnect(lv_event_t * e)
     }
     else
         return;
-    printf("ui_event_btConnectDisconnect\n");
     syncBtScreen(true);
     _ui_flag_modify(ui_btTapBtnPanel,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
     _ui_flag_modify(ui_deviceDataCntr,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
@@ -530,7 +528,6 @@ void ui_event_btForgetDevice(lv_event_t * e)
     }
     else
         return;
-    printf("ui_event_btForgetDevice\n");
     btMode = HAS_HISTORY;
     syncBtScreen(true);
     _ui_flag_modify(ui_btTapBtnPanel,   LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);

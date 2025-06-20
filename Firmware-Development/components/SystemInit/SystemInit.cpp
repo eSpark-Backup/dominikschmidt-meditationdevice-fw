@@ -134,6 +134,12 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     int newCounter = enc.counter;
     encDiff = newCounter - last_encoder_counter;
     last_encoder_counter = newCounter;
+    if (checkListFlag)
+    {
+        printf("checkListFlag\n");
+        navigateWidgets(BUTTON_PRESS, 3);
+        checkListFlag = false;
+    }
 
     if(encDiff != 0)
     {
@@ -260,7 +266,6 @@ void System::NavigateScreens(ButtonData btnData, int encData)
             }
         }
     }
-    printf("nav: %d and focus: %d\n",navigatingWidgets,focusEnable);
 }
 
 void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
@@ -273,7 +278,7 @@ void System::navigateWidgets(ButtonState state, int screenCount, bool focus)
 
     static int curFocusedObj = 0;
 
-    if(state == BUTTON_NONE && controlScreen == NULL)
+    if(state == BUTTON_NONE)
     {
         curFocusedObj = 0;
         lv_group_focus_obj(lv_group_get_obj_by_index(currentGroup, focus ? 0 :  count));

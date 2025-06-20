@@ -543,7 +543,7 @@ void selectFavPanel(bool focus)
         // Switch focus to the panel group
         if (indev) lv_indev_set_group(indev, FavPanelGroup);
         lv_group_focus_obj(ui_Fav1);
-        ScreenGroup[3] = FavPanelGroup;
+        ScreenGroup[4] = FavPanelGroup;
         currentGroup = FavPanelGroup;
     } 
     else

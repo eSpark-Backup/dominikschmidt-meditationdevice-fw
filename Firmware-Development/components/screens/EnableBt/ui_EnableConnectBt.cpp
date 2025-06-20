@@ -7,6 +7,7 @@
 #include "SdCard.hpp"
 
 // SCREEN: ui_EnableConnectBt
+bool checkListFlag = false;
 void ui_EnableConnectBt_screen_init(void);
 lv_obj_t * ui_EnableConnectBt;
 lv_obj_t * ui_Spinner;
@@ -209,7 +210,6 @@ lv_obj_t* style_device_button() {
     lv_obj_set_style_bg_color(btn, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(btn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     _ui_flag_modify(btn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
-    lv_obj_add_style(btn, &style_focus, LV_STATE_FOCUSED | LV_STATE_FOCUS_KEY);
     lv_group_add_obj(EnableBtGroup, btn);
     return btn;
 }
@@ -265,14 +265,6 @@ void rotateScannedDropdown(int diff)
     } 
 }
 
-void resetConnectionParams()
-{
-    lv_dropdown_set_options(ui_ScannedDevDropdown, "");
-    lv_dropdown_set_text(ui_ScannedDevDropdown, "Select Device");
-    ui_curDropdownList = ui_ScannedDevDropdown;
-    memset(btDevice.name, 0, NAME_BUF);
-}
-
 void ui_event_devNameEvents(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -301,7 +293,6 @@ void checkBtDeviceConnectivity()
     {
         printf("Queue Received\n");
         _ui_flag_modify(ui_Spinner, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
-
         if (btAudio.scanned_device_count == 0) {
             printf("No devices found.\n");
             lv_label_set_text_fmt(ui_btScanLbl, "%s", "No devices found!");
@@ -312,28 +303,24 @@ void checkBtDeviceConnectivity()
         lv_group_remove_all_objs(EnableBtGroup);
         _ui_flag_modify(ui_btScanLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_btEnablePanel, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        ScreenGroup[3] = EnableBtGroup;
+        currentGroup = EnableBtGroup;
         for (int i = 0; i < btAudio.scanned_device_count; i++)
         {
             ui_btDevice[i] = style_device_button();
             ui_btDeviceLbl[i] = style_device_label(ui_btDevice[i], gotDevices[i].name);
             
             lv_obj_add_event_cb(ui_btDevice[i], ui_event_devNameEvents, LV_EVENT_ALL, &gotDevices[i]);
+            lv_obj_add_style(ui_btDevice[i], &style_focus, LV_STATE_FOCUS_KEY);
         }
-        //Events
-        // navigatingWidgets = true;
-        ScreenGroup[3] = EnableBtGroup;
-        currentGroup = EnableBtGroup;
-        lv_group_focus_obj(ui_btDevice[0]);
-  
+        
+        lv_group_focus_obj(ui_btDevice[0]);        
         lv_group_add_obj(EnableBtGroup, ui_HiddenEnableBtScrBtn);
-    //     lv_obj_t * focusedObj = lv_group_get_focused(currentGroup); // Get the currently focused object
-    //     if(focusedObj == ui_btDevice[0])   
-    //         lv_group_focus_obj(ui_btDevice[0]);
+        checkListFlag = true;
     }
 
     if(lv_screen_active() == ui_BluetoothScreen)
     {
         syncBtScreen(false);
-        // last_connectionStatus = deviceConnected;
     }
 }
