@@ -7,7 +7,7 @@
 
 
 lv_obj_t *ui_SetTimerScreen;
-lv_obj_t *ui_startBtnBox1;
+lv_obj_t *ui_SetTimerStartBtn;
 lv_obj_t *ui_startLabel1;
 lv_obj_t *ui_startIcon1;
 lv_obj_t *ui_rightGong;
@@ -19,13 +19,6 @@ lv_obj_t *ui_clkBtmLabel;
 lv_obj_t *ui_clkCntr;
 lv_obj_t *ui_clkMin;
 lv_obj_t *ui_minRoller;
-lv_obj_t *ui_pgCntr;
-lv_obj_t *ui_pg1;
-lv_obj_t *ui_pg2;
-lv_obj_t *ui_pg3;
-lv_obj_t *ui_pg4;
-lv_obj_t *ui_pg5;
-lv_obj_t *ui_pgSlider;
 lv_obj_t *ui_HiddenTimerScrBtn;
 lv_group_t *TimerScrGroup;
 lv_obj_t* roller = NULL;
@@ -170,46 +163,14 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_style_bg_opa(ui_midTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_midTime, &ui_img_44_blacktimeicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_startBtnBox1 = lv_button_create(ui_SetTimerScreen);
-    lv_obj_set_width(ui_startBtnBox1, 258);
-    lv_obj_set_height(ui_startBtnBox1, 88);
-    lv_obj_set_x(ui_startBtnBox1, 0);
-    lv_obj_set_y(ui_startBtnBox1, 142);
-    lv_obj_set_align(ui_startBtnBox1, LV_ALIGN_CENTER);
-    addFlag(ui_startBtnBox1, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
-    removeFlag(ui_startBtnBox1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_startBtnBox1, 12, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_startBtnBox1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_startBtnBox1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_startLabel1 = lv_label_create(ui_startBtnBox1);
-    lv_obj_set_width(ui_startLabel1, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_startLabel1, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_startLabel1, 22);
-    lv_obj_set_y(ui_startLabel1, -13);
-    lv_obj_set_align(ui_startLabel1, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_startLabel1, "START");
-    lv_obj_set_style_text_color(ui_startLabel1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_startLabel1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_startLabel1, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_startIcon1 = lv_obj_create(ui_startBtnBox1);
-    lv_obj_remove_style_all(ui_startIcon1);
-    lv_obj_set_width(ui_startIcon1, 35);
-    lv_obj_set_height(ui_startIcon1, 38);
-    lv_obj_set_x(ui_startIcon1, -48);
-    lv_obj_set_y(ui_startIcon1, -14);
-    lv_obj_set_align(ui_startIcon1, LV_ALIGN_CENTER);
-    removeFlag(ui_startIcon1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_image_src(ui_startIcon1, &ui_img_31_blackstarticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-
+    ui_SetTimerStartBtn = createStartBtnBox(ui_SetTimerScreen);
     createUiNavslider(ui_SetTimerScreen, 0);
 
     //Events
     lv_obj_add_event_cb(ui_SetTimerScreen,  ui_event_resetSetTimerEvent,LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_minRoller,       ui_event_minRoller,         LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_clkCntr,          ui_event_clkMin,            LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_startBtnBox1,    ui_event_startBtnBox,       LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_clkCntr,         ui_event_clkMin,            LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_SetTimerStartBtn,ui_event_startBtnBox,       LV_EVENT_ALL, NULL);
 
     //Hidden Object to shift focus
     ui_HiddenTimerScrBtn = lv_obj_create(ui_SetTimerScreen);
@@ -218,12 +179,12 @@ void ui_SetTimerScr_screen_init(void)
     //Style of Focus
     lv_obj_add_style(ui_clkCntr,         &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_minRoller,      &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_startBtnBox1,   &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_SetTimerStartBtn,   &style_focus, LV_STATE_FOCUS_KEY);
     
     //Set Timer Screen Group of objects for Focus and Events
     TimerScrGroup = lv_group_create();
     lv_group_add_obj(TimerScrGroup, ui_clkCntr);
-    lv_group_add_obj(TimerScrGroup, ui_startBtnBox1);
+    lv_group_add_obj(TimerScrGroup, ui_SetTimerStartBtn);
     lv_group_add_obj(TimerScrGroup, ui_HiddenTimerScrBtn);
 
     lv_indev_t * indev = lv_indev_get_next(NULL);

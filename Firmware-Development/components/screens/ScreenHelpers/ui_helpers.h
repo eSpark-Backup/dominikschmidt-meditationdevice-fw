@@ -157,6 +157,7 @@ void setFocusStyleColored(int color);
 void removeFlag(lv_obj_t * obj, int flag);
 void addFlag(lv_obj_t * obj, int flag);
 void createUiNavslider(lv_obj_t * screen, int sliderVal);
+lv_obj_t * createStartBtnBox(lv_obj_t * screen);
 
 #ifdef __cplusplus
 } /*extern "C"*/

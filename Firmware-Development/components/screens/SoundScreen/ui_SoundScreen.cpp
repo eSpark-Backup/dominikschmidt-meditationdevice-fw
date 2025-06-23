@@ -42,16 +42,7 @@ lv_obj_t *ui_leftheart;
 lv_obj_t *ui_midLeftGong;
 lv_obj_t *ui_midRightTimer;
 lv_obj_t *ui_midTune;
-lv_obj_t *ui_SoundpgCntr;
-lv_obj_t *ui_pgCntr2;
-lv_obj_t *ui_pg6;
-lv_obj_t *ui_pg7;
-lv_obj_t *ui_pg8;
-lv_obj_t *ui_pg9;
-lv_obj_t *ui_pg10;
-lv_obj_t *ui_SoundStartBtnBox;
-lv_obj_t *ui_SoundStartLabel;
-lv_obj_t *ui_SoundStartIcon;
+lv_obj_t *ui_SoundStartBtn;
 lv_obj_t *ui_SoundLabel;
 lv_obj_t *ui_HiddenSoundBtn;
 lv_group_t *SoundGroup;
@@ -637,39 +628,6 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_set_style_bg_opa(ui_midTune, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_midTune, &ui_img_44_blacktuneicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_SoundStartBtnBox = lv_button_create(ui_SoundScreen);
-    lv_obj_set_width(ui_SoundStartBtnBox, 258);
-    lv_obj_set_height(ui_SoundStartBtnBox, 88);
-    lv_obj_set_x(ui_SoundStartBtnBox, 0);
-    lv_obj_set_y(ui_SoundStartBtnBox, 142);
-    lv_obj_set_align(ui_SoundStartBtnBox, LV_ALIGN_CENTER);
-    addFlag(ui_SoundStartBtnBox, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
-    removeFlag(ui_SoundStartBtnBox, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_SoundStartBtnBox, 12, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_SoundStartBtnBox, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_SoundStartBtnBox, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_SoundStartLabel = lv_label_create(ui_SoundStartBtnBox);
-    lv_obj_set_width(ui_SoundStartLabel, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_SoundStartLabel, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_SoundStartLabel, 22);
-    lv_obj_set_y(ui_SoundStartLabel, -13);
-    lv_obj_set_align(ui_SoundStartLabel, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_SoundStartLabel, "START");
-    lv_obj_set_style_text_color(ui_SoundStartLabel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_SoundStartLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_SoundStartLabel, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_SoundStartIcon = lv_obj_create(ui_SoundStartBtnBox);
-    lv_obj_remove_style_all(ui_SoundStartIcon);
-    lv_obj_set_width(ui_SoundStartIcon, 35);
-    lv_obj_set_height(ui_SoundStartIcon, 38);
-    lv_obj_set_x(ui_SoundStartIcon, -48);
-    lv_obj_set_y(ui_SoundStartIcon, -14);
-    lv_obj_set_align(ui_SoundStartIcon, LV_ALIGN_CENTER);
-    removeFlag(ui_SoundStartIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_image_src(ui_SoundStartIcon, &ui_img_31_blackstarticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     ui_SoundLabel = lv_label_create(ui_SoundScreen);
     lv_obj_set_width(ui_SoundLabel, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_SoundLabel, LV_SIZE_CONTENT);    /// 1
@@ -682,11 +640,12 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_set_style_text_align(ui_SoundLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_SoundLabel, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_SoundStartBtn = createStartBtnBox(ui_SoundScreen);
     createUiNavslider(ui_SoundScreen, 1);
 
     //Events
     lv_obj_add_event_cb(ui_SoundPanel, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_SoundStartBtnBox, ui_event_startBtnBox, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_SoundStartBtn, ui_event_startBtnBox, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_NoSoundBtn, ui_event_NoSoundBtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_NatureSoundBtn, ui_event_NatureSoundBtn, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_NatureSoundDropList, ui_event_NatureSoundBtn, LV_EVENT_ALL, NULL);
@@ -714,12 +673,12 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_add_style(ui_LessonsBtn,             &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_LessonsDropList,        &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_SingingBowlsBtn,        &style_focus, LV_STATE_FOCUS_KEY);
-    lv_obj_add_style(ui_SoundStartBtnBox,       &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_SoundStartBtn,       &style_focus, LV_STATE_FOCUS_KEY);
     
     //Sound Screen Group of objects for Focus and Events
     SoundGroup = lv_group_create();
     lv_group_add_obj(SoundGroup, ui_SoundPanel);
-    lv_group_add_obj(SoundGroup, ui_SoundStartBtnBox);
+    lv_group_add_obj(SoundGroup, ui_SoundStartBtn);
     lv_group_add_obj(SoundGroup, ui_HiddenSoundBtn);
 
     lv_indev_t * indev = lv_indev_get_next(NULL);

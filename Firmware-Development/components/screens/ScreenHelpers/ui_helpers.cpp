@@ -471,3 +471,41 @@ void createUiNavslider(lv_obj_t * screen, int sliderVal)
     if(lv_obj_get_style_pad_top(ui_Slider, LV_PART_MAIN) > 0) lv_obj_set_style_pad_right(ui_Slider,
                                                                                              lv_obj_get_style_pad_right(ui_Slider, LV_PART_MAIN) + 1, LV_PART_MAIN);
 }
+
+lv_obj_t * createStartBtnBox(lv_obj_t * screen)
+{ 
+    lv_obj_t * ui_startBtnBox = lv_button_create(screen);
+    lv_obj_set_width(ui_startBtnBox, 258);
+    lv_obj_set_height(ui_startBtnBox, 88);
+    lv_obj_set_x(ui_startBtnBox, 0);
+    lv_obj_set_y(ui_startBtnBox, 142);
+    lv_obj_set_align(ui_startBtnBox, LV_ALIGN_CENTER);
+    addFlag(ui_startBtnBox, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    removeFlag(ui_startBtnBox, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_startBtnBox, 12, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_startBtnBox, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_startBtnBox, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_t * ui_startLabel = lv_label_create(ui_startBtnBox);
+    lv_obj_set_width(ui_startLabel, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_startLabel, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_startLabel, 22);
+    lv_obj_set_y(ui_startLabel, -13);
+    lv_obj_set_align(ui_startLabel, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_startLabel, "START");
+    lv_obj_set_style_text_color(ui_startLabel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui_startLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_startLabel, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_t * ui_startIcon = lv_obj_create(ui_startBtnBox);
+    lv_obj_remove_style_all(ui_startIcon);
+    lv_obj_set_width(ui_startIcon, 35);
+    lv_obj_set_height(ui_startIcon, 38);
+    lv_obj_set_x(ui_startIcon, -48);
+    lv_obj_set_y(ui_startIcon, -14);
+    lv_obj_set_align(ui_startIcon, LV_ALIGN_CENTER);
+    removeFlag(ui_startIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_image_src(ui_startIcon, &ui_img_31_blackstarticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    return ui_startBtnBox;
+}

@@ -6,9 +6,7 @@
 #include "ui_EndGong.h"
 
 lv_obj_t *ui_EndGong1;
-lv_obj_t *ui_startBtnBox;
-lv_obj_t *ui_startLabel;
-lv_obj_t *ui_startIcon;
+lv_obj_t *ui_endgongStartBtn;
 lv_obj_t *ui_onButton;
 lv_obj_t *ui_onBtnLabel;
 lv_obj_t *ui_endGongSwitch;
@@ -31,39 +29,7 @@ void ui_EndGong1_screen_init(void)
     lv_obj_set_style_bg_color(ui_EndGong1, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_EndGong1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_startBtnBox = lv_button_create(ui_EndGong1);
-    lv_obj_set_width(ui_startBtnBox, 258);
-    lv_obj_set_height(ui_startBtnBox, 88);
-    lv_obj_set_x(ui_startBtnBox, 0);
-    lv_obj_set_y(ui_startBtnBox, 142);
-    lv_obj_set_align(ui_startBtnBox, LV_ALIGN_CENTER);
-    addFlag(ui_startBtnBox, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
-    removeFlag(ui_startBtnBox, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_startBtnBox, 12, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_startBtnBox, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_startBtnBox, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_startLabel = lv_label_create(ui_startBtnBox);
-    lv_obj_set_width(ui_startLabel, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_startLabel, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_startLabel, 22);
-    lv_obj_set_y(ui_startLabel, -13);
-    lv_obj_set_align(ui_startLabel, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_startLabel, "START");
-    lv_obj_set_style_text_color(ui_startLabel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_startLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui_startLabel, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_startIcon = lv_obj_create(ui_startBtnBox);
-    lv_obj_remove_style_all(ui_startIcon);
-    lv_obj_set_width(ui_startIcon, 35);
-    lv_obj_set_height(ui_startIcon, 38);
-    lv_obj_set_x(ui_startIcon, -48);
-    lv_obj_set_y(ui_startIcon, -14);
-    lv_obj_set_align(ui_startIcon, LV_ALIGN_CENTER);
-    removeFlag(ui_startIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_image_src(ui_startIcon, &ui_img_31_blackstarticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-
+ 
     ui_onButton = lv_button_create(ui_EndGong1);
     lv_obj_set_width(ui_onButton, 130);
     lv_obj_set_height(ui_onButton, 100);
@@ -245,19 +211,20 @@ void ui_EndGong1_screen_init(void)
     lv_obj_set_style_bg_image_src(ui_midGong, &ui_img_44_blackgongicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 
+    ui_endgongStartBtn = createStartBtnBox(ui_EndGong1);
     createUiNavslider(ui_EndGong1, 2);
     
     //Events
     lv_obj_add_event_cb(ui_onButton, ui_event_onButton, LV_EVENT_ALL, NULL);
     // lv_obj_add_event_cb(ui_offButton, ui_event_offButton, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(ui_startBtnBox, ui_event_startBtnBox, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_endgongStartBtn, ui_event_startBtnBox, LV_EVENT_ALL, NULL);
     
     //Hidden Object to shift focus
     ui_HiddenEndGongBtn = lv_obj_create(ui_EndGong1);
     addFlag(ui_HiddenEndGongBtn, LV_OBJ_FLAG_HIDDEN);
     
     //Style of Focus
-    lv_obj_add_style(ui_startBtnBox, &style_focus, LV_STATE_FOCUS_KEY);
+    lv_obj_add_style(ui_endgongStartBtn, &style_focus, LV_STATE_FOCUS_KEY);
     lv_obj_add_style(ui_onButton, &style_focus, LV_STATE_FOCUS_KEY);
     // lv_obj_add_style(ui_offButton, &style_focus, LV_STATE_FOCUS_KEY);
     
@@ -265,7 +232,7 @@ void ui_EndGong1_screen_init(void)
     EndGongGroup = lv_group_create();
     lv_group_add_obj(EndGongGroup, ui_onButton);
     // lv_group_add_obj(EndGongGroup, ui_offButton);
-    lv_group_add_obj(EndGongGroup, ui_startBtnBox);
+    lv_group_add_obj(EndGongGroup, ui_endgongStartBtn);
     lv_group_add_obj(EndGongGroup, ui_HiddenEndGongBtn);
 
     lv_indev_t * indev = lv_indev_get_next(NULL);
