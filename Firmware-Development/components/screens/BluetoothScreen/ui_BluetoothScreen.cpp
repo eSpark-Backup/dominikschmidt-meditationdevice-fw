@@ -36,7 +36,7 @@ void ui_BluetoothScreen_screen_init(void)
 {    
     ui_BluetoothScreen = lv_obj_create(NULL);
     removeFlag(ui_BluetoothScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_BluetoothScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_BluetoothScreen, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_BluetoothScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 
@@ -47,7 +47,7 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_y(ui_btLabel, -74);
     lv_obj_set_align(ui_btLabel, LV_ALIGN_CENTER);
     lv_label_set_text(ui_btLabel, "Bluetooth");
-    lv_obj_set_style_text_color(ui_btLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_btLabel, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_btLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui_btLabel, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_line_space(ui_btLabel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -134,12 +134,12 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_align(ui_leftGong2, LV_ALIGN_CENTER);
     removeFlag(ui_leftGong2, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_leftGong2, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_leftGong2, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_leftGong2, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_leftGong2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_leftGong2, &ui_img_24_blacktuneicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_image_recolor(ui_leftGong2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor(ui_leftGong2, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_leftGong2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_leftGong2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_leftGong2, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_leftGong2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_leftGong2, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -152,12 +152,12 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_align(ui_midLeftHeart, LV_ALIGN_CENTER);
     removeFlag(ui_midLeftHeart, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_midLeftHeart, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_midLeftHeart, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_midLeftHeart, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_midLeftHeart, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_midLeftHeart, &ui_img_24_blackgongicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_image_recolor(ui_midLeftHeart, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor(ui_midLeftHeart, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_midLeftHeart, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_midLeftHeart, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_midLeftHeart, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_midLeftHeart, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_midLeftHeart, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -170,7 +170,7 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_align(ui_midBt, LV_ALIGN_CENTER);
     removeFlag(ui_midBt, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_midBt, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_midBt, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_midBt, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_midBt, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_midBt, &ui_img_44_blackbticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -196,7 +196,7 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_align(ui_ConnectBtnCntr, LV_ALIGN_CENTER);
     removeFlag(ui_ConnectBtnCntr, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_ConnectBtnCntr, 25, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_ConnectBtnCntr, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_ConnectBtnCntr, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_ConnectBtnCntr, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_ConnectBtnCntr, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -232,7 +232,7 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_align(ui_ForgetDevBtnCntr, LV_ALIGN_CENTER);
     removeFlag(ui_ForgetDevBtnCntr, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_ForgetDevBtnCntr, 25, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_ForgetDevBtnCntr, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_ForgetDevBtnCntr, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_ForgetDevBtnCntr, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_ForgetDevBtnCntr, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
 

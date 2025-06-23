@@ -354,7 +354,7 @@ void setFocusStyle(void)
     // Create a focus style
     lv_style_init(&style_focus);
     lv_style_set_outline_width(&style_focus, 2);
-    lv_style_set_outline_color(&style_focus, lv_color_hex(0x424242)); // Grey focus border
+    lv_style_set_outline_color(&style_focus, lv_color_hex(GREY)); // Grey focus border
     lv_style_set_outline_opa(&style_focus, LV_OPA_COVER);
     lv_style_set_outline_pad(&style_focus, 5); // Add spacing around the outline
 }
@@ -398,7 +398,7 @@ void createUiNavslider(lv_obj_t * screen, int sliderVal)
     lv_obj_set_align(ui_slider1, LV_ALIGN_CENTER);
     removeFlag(ui_slider1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_slider1, 25, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_slider1, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_slider1, lv_color_hex(GREY), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_slider1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t *ui_slider2 = lv_obj_create(ui_sliderCntr);
@@ -410,7 +410,7 @@ void createUiNavslider(lv_obj_t * screen, int sliderVal)
     lv_obj_set_align(ui_slider2, LV_ALIGN_CENTER);
     removeFlag(ui_slider2, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_slider2, 25, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_slider2, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_slider2, lv_color_hex(GREY), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_slider2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     // lv_obj_t *ui_slider3 = lv_obj_create(ui_sliderCntr); // open for 5 screens
@@ -420,7 +420,7 @@ void createUiNavslider(lv_obj_t * screen, int sliderVal)
     // lv_obj_set_align(ui_slider3, LV_ALIGN_CENTER);
     // removeFlag(ui_slider3, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     // lv_obj_set_style_radius(ui_slider3, 25, LV_PART_MAIN | LV_STATE_DEFAULT);
-    // lv_obj_set_style_bg_color(ui_slider3, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_bg_color(ui_slider3, lv_color_hex(GREY), LV_PART_MAIN | LV_STATE_DEFAULT);
     // lv_obj_set_style_bg_opa(ui_slider3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t *ui_slider4 = lv_obj_create(ui_sliderCntr);
@@ -432,7 +432,7 @@ void createUiNavslider(lv_obj_t * screen, int sliderVal)
     lv_obj_set_align(ui_slider4, LV_ALIGN_CENTER);
     removeFlag(ui_slider4, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_slider4, 25, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_slider4, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_slider4, lv_color_hex(GREY), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_slider4, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t *ui_slider5 = lv_obj_create(ui_sliderCntr);
@@ -444,7 +444,7 @@ void createUiNavslider(lv_obj_t * screen, int sliderVal)
     lv_obj_set_align(ui_slider5, LV_ALIGN_CENTER);
     removeFlag(ui_slider5, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_slider5, 25, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_slider5, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_slider5, lv_color_hex(GREY), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_slider5, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t *ui_Slider = lv_slider_create(ui_sliderCntr);
@@ -454,13 +454,13 @@ void createUiNavslider(lv_obj_t * screen, int sliderVal)
     lv_obj_set_width(ui_Slider, 64);
     lv_obj_set_height(ui_Slider, 0);
     lv_obj_set_align(ui_Slider, LV_ALIGN_CENTER);
-    lv_obj_set_style_bg_color(ui_Slider, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_Slider, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Slider, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_set_style_bg_color(ui_Slider, lv_color_hex(0x000000), LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_Slider, lv_color_hex(BLACK), LV_PART_INDICATOR | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Slider, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);
 
-    lv_obj_set_style_bg_color(ui_Slider, lv_color_hex(0xFFFFFF), LV_PART_KNOB | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_Slider, lv_color_hex(WHITE), LV_PART_KNOB | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_Slider, 255, LV_PART_KNOB | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(ui_Slider, 4, LV_PART_KNOB | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(ui_Slider, 4, LV_PART_KNOB | LV_STATE_DEFAULT);
@@ -483,7 +483,7 @@ lv_obj_t * createStartBtnBox(lv_obj_t * screen)
     addFlag(ui_startBtnBox, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
     removeFlag(ui_startBtnBox, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_startBtnBox, 12, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_startBtnBox, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_startBtnBox, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_startBtnBox, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_t * ui_startLabel = lv_label_create(ui_startBtnBox);
@@ -493,7 +493,7 @@ lv_obj_t * createStartBtnBox(lv_obj_t * screen)
     lv_obj_set_y(ui_startLabel, -13);
     lv_obj_set_align(ui_startLabel, LV_ALIGN_CENTER);
     lv_label_set_text(ui_startLabel, "START");
-    lv_obj_set_style_text_color(ui_startLabel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_startLabel, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_startLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_startLabel, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
 

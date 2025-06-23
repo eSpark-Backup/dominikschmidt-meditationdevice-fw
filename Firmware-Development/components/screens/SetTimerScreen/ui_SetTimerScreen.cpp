@@ -29,7 +29,7 @@ void ui_SetTimerScr_screen_init(void)
 {
     ui_SetTimerScreen = lv_obj_create(NULL);
     removeFlag(ui_SetTimerScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_SetTimerScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_SetTimerScreen, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_SetTimerScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_mainCntr = lv_obj_create(ui_SetTimerScreen);
@@ -58,7 +58,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_y(ui_clkBtmLabel, 48);
     lv_obj_set_align(ui_clkBtmLabel, LV_ALIGN_CENTER);
     lv_label_set_text(ui_clkBtmLabel, "MIN");
-    lv_obj_set_style_text_color(ui_clkBtmLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_clkBtmLabel, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_clkBtmLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_clkBtmLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_clkBtmLabel, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -96,22 +96,22 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_y(ui_minRoller, -11);
     lv_obj_set_align(ui_minRoller, LV_ALIGN_CENTER);
     addFlag(ui_minRoller, LV_OBJ_FLAG_HIDDEN);     /// Flags
-    lv_obj_set_style_text_color(ui_minRoller, lv_color_hex(0x94D28B), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_minRoller, lv_color_hex(LIGHT_GREEN), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_minRoller, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui_minRoller, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_line_space(ui_minRoller, 28, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_minRoller, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_minRoller, &lv_font_montserrat_24, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_minRoller, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_minRoller, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_minRoller, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_minRoller, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_minRoller, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_minRoller, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_set_style_text_color(ui_minRoller, lv_color_hex(0x94D28B), LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_minRoller, lv_color_hex(LIGHT_GREEN), LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_minRoller, 255, LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_minRoller, LV_TEXT_ALIGN_CENTER, LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_minRoller, &lv_font_montserrat_72, LV_PART_SELECTED | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_minRoller, lv_color_hex(0x000000), LV_PART_SELECTED | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_minRoller, lv_color_hex(BLACK), LV_PART_SELECTED | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_minRoller, 255, LV_PART_SELECTED | LV_STATE_DEFAULT);
 
     ui_rightGong = lv_obj_create(ui_SetTimerScreen);
@@ -123,12 +123,12 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_align(ui_rightGong, LV_ALIGN_CENTER);
     removeFlag(ui_rightGong, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_rightGong, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_rightGong, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_rightGong, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_rightGong, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_rightGong, &ui_img_24_blackgongicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_image_recolor(ui_rightGong, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor(ui_rightGong, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_rightGong, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_rightGong, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_rightGong, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_rightGong, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_rightGong, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -141,12 +141,12 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_align(ui_midRightTune, LV_ALIGN_CENTER);
     removeFlag(ui_midRightTune, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_midRightTune, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_midRightTune, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_midRightTune, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_midRightTune, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_midRightTune, &ui_img_30_blacktuneicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_image_recolor(ui_midRightTune, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor(ui_midRightTune, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_midRightTune, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_midRightTune, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_midRightTune, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_midRightTune, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_midRightTune, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -159,7 +159,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_align(ui_midTime, LV_ALIGN_CENTER);
     removeFlag(ui_midTime, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_midTime, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_midTime, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_midTime, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_midTime, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_midTime, &ui_img_44_blacktimeicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 

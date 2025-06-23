@@ -33,7 +33,7 @@ void ui_MeditationScreen_screen_init(void)
     
     ui_MeditationScreen = lv_obj_create(NULL);
     removeFlag(ui_MeditationScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_MeditationScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_MeditationScreen, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_MeditationScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     
     ui_meditationTimer = lv_arc_create(ui_MeditationScreen);
@@ -48,12 +48,12 @@ void ui_MeditationScreen_screen_init(void)
     lv_obj_set_style_arc_opa(ui_meditationTimer, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_arc_width(ui_meditationTimer, 8, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_set_style_arc_color(ui_meditationTimer, lv_color_hex(0x94D28B), LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_arc_color(ui_meditationTimer, lv_color_hex(LIGHT_GREEN), LV_PART_INDICATOR | LV_STATE_DEFAULT);
     lv_obj_set_style_arc_opa(ui_meditationTimer, 255, LV_PART_INDICATOR | LV_STATE_DEFAULT);
     lv_obj_set_style_arc_width(ui_meditationTimer, 8, LV_PART_INDICATOR | LV_STATE_DEFAULT);
     lv_obj_set_style_arc_rounded(ui_meditationTimer, false, LV_PART_INDICATOR | LV_STATE_DEFAULT);
     
-    lv_obj_set_style_bg_color(ui_meditationTimer, lv_color_hex(0x94D28B), LV_PART_KNOB | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_meditationTimer, lv_color_hex(LIGHT_GREEN), LV_PART_KNOB | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_meditationTimer, 0, LV_PART_KNOB | LV_STATE_DEFAULT);
     
     ui_ArcOverlay = lv_obj_create(ui_meditationTimer);
@@ -63,7 +63,7 @@ void ui_MeditationScreen_screen_init(void)
     lv_obj_set_align(ui_ArcOverlay, LV_ALIGN_CENTER);
     removeFlag(ui_ArcOverlay, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_image_src(ui_ArcOverlay, &ui_img_340_arcspaces_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_image_recolor(ui_ArcOverlay, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor(ui_ArcOverlay, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui_ArcOverlay, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     
     ui_medTimePassed = lv_label_create(ui_MeditationScreen);
@@ -73,7 +73,7 @@ void ui_MeditationScreen_screen_init(void)
     lv_obj_set_y(ui_medTimePassed, 15);
     lv_obj_set_align(ui_medTimePassed, LV_ALIGN_CENTER);
     // lv_label_set_text(ui_medTimePassed, timePassedStr);
-    lv_obj_set_style_text_color(ui_medTimePassed, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_medTimePassed, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_medTimePassed, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui_medTimePassed, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_line_space(ui_medTimePassed, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -86,7 +86,7 @@ void ui_MeditationScreen_screen_init(void)
     lv_obj_set_y(ui_medTimeRemain, -55);
     lv_obj_set_align(ui_medTimeRemain, LV_ALIGN_CENTER);
     // lv_label_set_text(ui_medTimeRemain, timeRemainStr);
-    lv_obj_set_style_text_color(ui_medTimeRemain, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_medTimeRemain, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_medTimeRemain, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_medTimeRemain, &lv_font_montserrat_48, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_transform_scale(ui_medTimeRemain, 360, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -100,7 +100,7 @@ void ui_MeditationScreen_screen_init(void)
     lv_obj_set_align(ui_medTimeIsUpLbl, LV_ALIGN_CENTER);
     _ui_flag_modify(ui_medTimeIsUpLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
     lv_label_set_text(ui_medTimeIsUpLbl, "Time Is Up!");
-    lv_obj_set_style_text_color(ui_medTimeIsUpLbl, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui_medTimeIsUpLbl, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_medTimeIsUpLbl, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_medTimeIsUpLbl, &lv_font_montserrat_40, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui_medTimeIsUpLbl, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -115,10 +115,10 @@ void ui_MeditationScreen_screen_init(void)
     addFlag(ui_medPauseBtn, LV_OBJ_FLAG_CLICKABLE);
     removeFlag(ui_medPauseBtn, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_medPauseBtn, 100, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_medPauseBtn, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_medPauseBtn, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_medPauseBtn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_medPauseBtn, &ui_img_playbutton_png, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_medPauseBtn, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_CHECKED);
+    lv_obj_set_style_bg_color(ui_medPauseBtn, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_bg_opa(ui_medPauseBtn, 255, LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_bg_image_src(ui_medPauseBtn, &ui_img_80_pauseicon_png, LV_PART_MAIN | LV_STATE_CHECKED);
 

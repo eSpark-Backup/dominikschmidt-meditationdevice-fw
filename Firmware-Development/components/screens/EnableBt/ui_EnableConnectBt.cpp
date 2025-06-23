@@ -46,7 +46,7 @@ void ui_EnableConnectBt_screen_init(void)
 {
     ui_EnableConnectBt = lv_obj_create(NULL);
     removeFlag(ui_EnableConnectBt, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_bg_color(ui_EnableConnectBt, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_EnableConnectBt, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_EnableConnectBt, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_midBt1 = lv_obj_create(ui_EnableConnectBt);
@@ -58,7 +58,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_align(ui_midBt1, LV_ALIGN_CENTER);
     removeFlag(ui_midBt1, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_midBt1, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_midBt1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_midBt1, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_midBt1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_midBt1, &ui_img_44_blackbticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 
@@ -69,7 +69,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_y(ui_btEnableLabel, -74);
     lv_obj_set_align(ui_btEnableLabel, LV_ALIGN_CENTER);
     lv_label_set_text(ui_btEnableLabel, "Devices List");
-    // lv_obj_set_style_text_color(ui_btEnableLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_color(ui_btEnableLabel, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     // lv_obj_set_style_text_opa(ui_btEnableLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui_btEnableLabel, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
     // lv_obj_set_style_text_line_space(ui_btEnableLabel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -96,7 +96,7 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_y(ui_btScanLbl, 54);
     lv_obj_set_align(ui_btScanLbl, LV_ALIGN_CENTER);
     lv_label_set_text(ui_btScanLbl, "Scanning ...");
-    // lv_obj_set_style_text_color(ui_btScanLbl, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_text_color(ui_btScanLbl, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     // lv_obj_set_style_text_opa(ui_btScanLbl, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     // lv_obj_set_style_text_letter_space(ui_btScanLbl, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
     // lv_obj_set_style_text_line_space(ui_btScanLbl, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -113,9 +113,9 @@ void ui_EnableConnectBt_screen_init(void)
     removeFlag(ui_btEnablePanel, LV_OBJ_FLAG_CLICKABLE);      /// Flags
     addFlag(ui_btEnablePanel, LV_OBJ_FLAG_HIDDEN);      /// Flags
     lv_obj_set_style_radius(ui_btEnablePanel, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_btEnablePanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_btEnablePanel, lv_color_hex(BLACK), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_btEnablePanel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_btEnablePanel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_btEnablePanel, lv_color_hex(WHITE), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_opa(ui_btEnablePanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(ui_btEnablePanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(ui_btEnablePanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -207,7 +207,7 @@ lv_obj_t* style_device_button() {
     // removeFlag(btn, LV_OBJ_FLAG_SCROLLABLE);
     addFlag(btn, LV_OBJ_FLAG_CHECKABLE | LV_OBJ_FLAG_SCROLL_ON_FOCUS);
     lv_obj_set_style_radius(btn, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(btn, lv_color_hex(0x424242), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(btn, lv_color_hex(GREY), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(btn, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     _ui_flag_modify(btn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
     lv_group_add_obj(EnableBtGroup, btn);

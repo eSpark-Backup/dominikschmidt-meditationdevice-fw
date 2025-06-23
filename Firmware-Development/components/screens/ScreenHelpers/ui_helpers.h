@@ -11,12 +11,14 @@ extern "C" {
 #endif
 
 #include "screens.h"
-#define TotalScreens 4
-#define WHITE   0xFFFFFF
-#define BLACK   0x000000
-#define GREEN   0x33BB6F
-#define RED     0xF44336
-#define GREY    0x424242
+#define TotalScreens    4
+#define WHITE           0xFFFFFF
+#define BLACK           0x000000
+#define GREEN           0x33BB6F
+// #define LIGHT_GREEN     0x94D28B
+#define LIGHT_GREEN     0x62DA41
+#define RED             0xF44336
+#define GREY            0x424242
 
 #define _UI_TEMPORARY_STRING_BUFFER_SIZE 32
 #define _UI_BAR_PROPERTY_VALUE 0
