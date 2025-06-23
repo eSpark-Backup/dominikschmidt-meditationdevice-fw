@@ -174,76 +174,7 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_bg_opa(ui_midBt, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui_midBt, &ui_img_44_blackbticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    
-    ui_FavpgCntr = lv_obj_create(ui_BluetoothScreen);
-    lv_obj_remove_style_all(ui_FavpgCntr);
-    lv_obj_set_width(ui_FavpgCntr, 80);
-    lv_obj_set_height(ui_FavpgCntr, 20);
-    lv_obj_set_x(ui_FavpgCntr, 0);
-    lv_obj_set_y(ui_FavpgCntr, 80);
-    lv_obj_set_align(ui_FavpgCntr, LV_ALIGN_CENTER);
-    removeFlag(ui_FavpgCntr, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_pg11 = lv_obj_create(ui_FavpgCntr);
-    lv_obj_remove_style_all(ui_pg11);
-    lv_obj_set_width(ui_pg11, 8);
-    lv_obj_set_height(ui_pg11, 8);
-    lv_obj_set_x(ui_pg11, -31);
-    lv_obj_set_y(ui_pg11, -1);
-    lv_obj_set_align(ui_pg11, LV_ALIGN_CENTER);
-    removeFlag(ui_pg11, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_pg11, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_pg11, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_pg11, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_pg12 = lv_obj_create(ui_FavpgCntr);
-    lv_obj_remove_style_all(ui_pg12);
-    lv_obj_set_width(ui_pg12, 8);
-    lv_obj_set_height(ui_pg12, 8);
-    lv_obj_set_x(ui_pg12, -16);
-    lv_obj_set_y(ui_pg12, -1);
-    lv_obj_set_align(ui_pg12, LV_ALIGN_CENTER);
-    removeFlag(ui_pg12, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_pg12, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_pg12, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_pg12, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_pg13 = lv_obj_create(ui_FavpgCntr);
-    lv_obj_remove_style_all(ui_pg13);
-    lv_obj_set_width(ui_pg13, 8);
-    lv_obj_set_height(ui_pg13, 8);
-    lv_obj_set_x(ui_pg13, 1);
-    lv_obj_set_y(ui_pg13, -1);
-    lv_obj_set_align(ui_pg13, LV_ALIGN_CENTER);
-    removeFlag(ui_pg13, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_pg13, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_pg13, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_pg13, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_pg14 = lv_obj_create(ui_FavpgCntr);
-    lv_obj_remove_style_all(ui_pg14);
-    lv_obj_set_width(ui_pg14, 8);
-    lv_obj_set_height(ui_pg14, 8);
-    lv_obj_set_x(ui_pg14, 16);
-    lv_obj_set_y(ui_pg14, -1);
-    lv_obj_set_align(ui_pg14, LV_ALIGN_CENTER);
-    removeFlag(ui_pg14, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_pg14, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_pg14, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_pg14, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_pg15 = lv_obj_create(ui_FavpgCntr);
-    lv_obj_remove_style_all(ui_pg15);
-    lv_obj_set_width(ui_pg15, 8);
-    lv_obj_set_height(ui_pg15, 8);
-    lv_obj_set_x(ui_pg15, 32);
-    lv_obj_set_y(ui_pg15, -1);
-    lv_obj_set_align(ui_pg15, LV_ALIGN_CENTER);
-    removeFlag(ui_pg15, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_pg15, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_pg15, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_pg15, 250, LV_PART_MAIN | LV_STATE_DEFAULT);
-    
     ///========================== TAP OPTIONS PANEL ===========================
 
     ui_btTapBtnPanel = lv_obj_create(ui_BluetoothScreen);
@@ -328,6 +259,8 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_image_recolor(ui_ForgetDevBtnCntrIcon, lv_color_hex(RED), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_image_recolor_opa(ui_ForgetDevBtnCntrIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    createUiNavslider(ui_BluetoothScreen, 3);
+    
     //Events
     lv_obj_add_event_cb(ui_BluetoothScreen, ui_event_btTap, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_ConnectBtnCntr, ui_event_btConnectDisconnect, LV_EVENT_ALL, NULL);

@@ -670,75 +670,6 @@ void ui_SoundScreen_screen_init(void)
     removeFlag(ui_SoundStartIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_bg_image_src(ui_SoundStartIcon, &ui_img_31_blackstarticon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_pgCntr2 = lv_obj_create(ui_SoundScreen);
-    lv_obj_remove_style_all(ui_pgCntr2);
-    lv_obj_set_width(ui_pgCntr2, 80);
-    lv_obj_set_height(ui_pgCntr2, 20);
-    lv_obj_set_x(ui_pgCntr2, 0);
-    lv_obj_set_y(ui_pgCntr2, 80);
-    lv_obj_set_align(ui_pgCntr2, LV_ALIGN_CENTER);
-    removeFlag(ui_pgCntr2, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-
-    ui_pg10 = lv_obj_create(ui_pgCntr2);
-    lv_obj_remove_style_all(ui_pg10);
-    lv_obj_set_width(ui_pg10, 8);
-    lv_obj_set_height(ui_pg10, 8);
-    lv_obj_set_x(ui_pg10, -31);
-    lv_obj_set_y(ui_pg10, -1);
-    lv_obj_set_align(ui_pg10, LV_ALIGN_CENTER);
-    removeFlag(ui_pg10, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_pg10, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_pg10, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_pg10, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_pg6 = lv_obj_create(ui_pgCntr2);
-    lv_obj_remove_style_all(ui_pg6);
-    lv_obj_set_width(ui_pg6, 8);
-    lv_obj_set_height(ui_pg6, 8);
-    lv_obj_set_x(ui_pg6, -16);
-    lv_obj_set_y(ui_pg6, -1);
-    lv_obj_set_align(ui_pg6, LV_ALIGN_CENTER);
-    removeFlag(ui_pg6, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_pg6, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_pg6, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_pg6, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_pg7 = lv_obj_create(ui_pgCntr2);
-    lv_obj_remove_style_all(ui_pg7);
-    lv_obj_set_width(ui_pg7, 8);
-    lv_obj_set_height(ui_pg7, 8);
-    lv_obj_set_x(ui_pg7, 1);
-    lv_obj_set_y(ui_pg7, -1);
-    lv_obj_set_align(ui_pg7, LV_ALIGN_CENTER);
-    removeFlag(ui_pg7, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_pg7, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_pg7, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_pg7, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_pg8 = lv_obj_create(ui_pgCntr2);
-    lv_obj_remove_style_all(ui_pg8);
-    lv_obj_set_width(ui_pg8, 8);
-    lv_obj_set_height(ui_pg8, 8);
-    lv_obj_set_x(ui_pg8, 16);
-    lv_obj_set_y(ui_pg8, -1);
-    lv_obj_set_align(ui_pg8, LV_ALIGN_CENTER);
-    removeFlag(ui_pg8, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_pg8, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_pg8, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_pg8, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-
-    ui_pg9 = lv_obj_create(ui_pgCntr2);
-    lv_obj_remove_style_all(ui_pg9);
-    lv_obj_set_width(ui_pg9, 8);
-    lv_obj_set_height(ui_pg9, 8);
-    lv_obj_set_x(ui_pg9, 32);
-    lv_obj_set_y(ui_pg9, -1);
-    lv_obj_set_align(ui_pg9, LV_ALIGN_CENTER);
-    removeFlag(ui_pg9, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_pg9, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_pg9, lv_color_hex(0x414041), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_pg9, 250, LV_PART_MAIN | LV_STATE_DEFAULT);
-
     ui_SoundLabel = lv_label_create(ui_SoundScreen);
     lv_obj_set_width(ui_SoundLabel, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_SoundLabel, LV_SIZE_CONTENT);    /// 1
@@ -750,6 +681,8 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_set_style_text_line_space(ui_SoundLabel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_SoundLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_SoundLabel, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    createUiNavslider(ui_SoundScreen, 1);
 
     //Events
     lv_obj_add_event_cb(ui_SoundPanel, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);
