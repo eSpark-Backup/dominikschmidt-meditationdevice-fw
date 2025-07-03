@@ -34,7 +34,8 @@ FavLbl loadFav;
 char globalTimeLbl[20] = "10 min";
 char globalGongLbl[4] = "On";
 char soundType[50];
-char soundNumber[100] = "/Nature/Waves 1.wav";
+char soundNumber[100] = {0}; // for No Sound
+// char soundNumber[100] = "/Nature/Waves 1.wav";
 char soundDirectory[100] = "/sdcard/audio/";
 // CUSTOM VARIABLES
 

@@ -31,6 +31,7 @@ lv_obj_t * ui_ForgetDevBtnCntrIcon;
 #define TIME_IN_SEC             (xTaskGetTickCount()/1000)
 BluetoothScrMode btMode;
 // CUSTOM VARIABLES
+static const char *TAG = "ui_BluetoothScreen";
 
 void ui_BluetoothScreen_screen_init(void)
 {    
@@ -381,10 +382,10 @@ void ui_event_btTap(lv_event_t * e)
             }
             btMode = TAP_PANEL;
         }
-        printf("Tap btMode: %d\n", btMode);
+        // printf("Tap btMode: %d\n", btMode);
     }
     else if(event_code == LV_EVENT_CANCEL) {
-        printf("Tap LV_EVENT_CANCEL\n");
+        // printf("Tap LV_EVENT_CANCEL\n");
         syncBtScreen(true);
     }
 }
@@ -412,10 +413,10 @@ void ui_event_btConnectDisconnect(lv_event_t * e)
         if(deviceConnected)
         {
             if (esp_a2d_source_disconnect(btDevice.bda) == ESP_OK) {
-                printf("Disconnection successful.\n");
+                ESP_LOGD(TAG, "Disconnection successful.\n");
                 deviceConnected = false;
             } else {
-                printf("Disconnection failed.\n");
+                ESP_LOGD(TAG, "Disconnection failed.\n");
                 deviceConnected = true;
             }
             btMode = HAS_HISTORY;
@@ -425,10 +426,10 @@ void ui_event_btConnectDisconnect(lv_event_t * e)
             btMode = CONNECTING;
             // btAudio.connect_to_bt_device(btDevice.name);
             if (esp_a2d_source_connect(btDevice.bda) == ESP_OK) {
-                printf("Reconnection successful.\n");
+                ESP_LOGD(TAG, "Reconnection successful.\n");
                 deviceConnected = true;
             } else {
-                printf("Reconnection failed.\n");
+                ESP_LOGD(TAG, "Reconnection failed.\n");
                 deviceConnected = false;
             }
         }

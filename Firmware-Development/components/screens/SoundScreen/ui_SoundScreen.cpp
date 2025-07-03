@@ -46,7 +46,7 @@ lv_obj_t *ui_SoundStartBtn;
 lv_obj_t *ui_SoundLabel;
 lv_obj_t *ui_HiddenSoundBtn;
 lv_group_t *SoundGroup;
-SoundType selSoundOpt;
+SoundType selSoundOpt = NO_SOUND;
 // CUSTOM VARIABLES
 
 
@@ -676,7 +676,7 @@ void ui_SoundScreen_screen_init(void)
         lv_indev_set_group(indev, SoundGroup);
     }
 
-    NatureSoundSelected(true);
+    NoSoundSelected(true);
 }
 
 void NoSoundSelected(bool flag)

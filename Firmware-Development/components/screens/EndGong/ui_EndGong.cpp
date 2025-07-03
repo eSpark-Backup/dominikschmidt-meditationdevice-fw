@@ -228,7 +228,12 @@ void ui_event_startBtnBox(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
 
     if(event_code == LV_EVENT_PRESSED) {
-        _ui_screen_change(&ui_MeditationScreen, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_MeditationScreen_screen_init);
-        startMeditation = true;
+        if(selSoundOpt != NO_SOUND && selSoundOpt != NONE_SELECTED)
+        {
+            _ui_screen_change(&ui_MeditationScreen, LV_SCR_LOAD_ANIM_FADE_ON, 100, 0, &ui_MeditationScreen_screen_init);
+            startMeditation = true;
+        }
+        else
+            focusEnable = false;
     }
 }
