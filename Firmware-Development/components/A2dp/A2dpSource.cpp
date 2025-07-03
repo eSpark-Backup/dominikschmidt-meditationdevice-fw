@@ -191,6 +191,8 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
                 // for (int i = 0; i < scanned_device_count; i++) {
                 //     ESP_LOGI(TAG, "[%d] Name: %s", i + 1, scanned_devices[i].name);
                 // }
+                memset(scanned_devices, 0, sizeof(scanned_devices)); //for testing purpose only
+                scanned_device_count = 0;
                 if(xQueueSend(xQueueDevData, &scanned_devices, (TickType_t) 100) != pdPASS)
                     ESP_LOGE(TAG, "Failed to send Queue");
             } else if (param->disc_st_chg.state == ESP_BT_GAP_DISCOVERY_STARTED) {

@@ -38,6 +38,7 @@ void ui_event_btListSwitch(lv_event_t * e);
 void ui_event_btScanBtn(lv_event_t * e);
 void ui_event_commonEvents(lv_event_t * e);
 void ui_event_btConnectBtn(lv_event_t * e);
+void ui_event_btTryAgainBtn(lv_event_t * e);
 void EnableBtFocus(bool focus);
 void rotateScannedDropdown(int diff);
 void checkBtDeviceConnectivity();

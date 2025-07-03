@@ -33,6 +33,8 @@ lv_obj_t * ui_btBackBtnLabel;
 lv_obj_t * ui_btConnectBtnBox;
 lv_obj_t * ui_btConnectLabel;
 lv_obj_t * ui_HiddenEnableBtScrBtn;
+lv_obj_t * ui_TryAgainBtnCntr;
+lv_obj_t * ui_TryAgainBtnLbl;
 lv_group_t * EnableBtGroup;
 bool list_selected = false;
 bool last_connectionStatus = false;
@@ -40,7 +42,7 @@ ScannedDevice gotDevices[MAX_SCANNED_DEVICES];
 lv_obj_t * ui_btDevice[MAX_SCANNED_DEVICES];
 lv_obj_t * ui_btDeviceLbl[MAX_SCANNED_DEVICES];
 // CUSTOM VARIABLES
-
+static const char *TAG = "ui_EnableConnectBt";
 
 void ui_EnableConnectBt_screen_init(void)
 {
@@ -123,7 +125,34 @@ void ui_EnableConnectBt_screen_init(void)
     lv_obj_set_style_pad_bottom(ui_btEnablePanel, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_btEnablePanel, lv_color_hex(0x383838), LV_PART_MAIN | LV_STATE_CHECKED);
     lv_obj_set_style_bg_opa(ui_btEnablePanel, 255, LV_PART_MAIN | LV_STATE_CHECKED);
+
+    ///========================== NO DEVICE FOUND OPTIONS ===========================
     
+    ui_TryAgainBtnCntr = lv_obj_create(ui_EnableConnectBt);
+    lv_obj_remove_style_all(ui_TryAgainBtnCntr);
+    lv_obj_set_width(ui_TryAgainBtnCntr, 228);
+    lv_obj_set_height(ui_TryAgainBtnCntr, 53);
+    lv_obj_set_x(ui_TryAgainBtnCntr, 0);
+    lv_obj_set_y(ui_TryAgainBtnCntr, 22);
+    lv_obj_set_align(ui_TryAgainBtnCntr, LV_ALIGN_CENTER);
+    addFlag(ui_TryAgainBtnCntr, LV_OBJ_FLAG_CHECKABLE | LV_OBJ_FLAG_HIDDEN);     /// Flags
+    removeFlag(ui_TryAgainBtnCntr, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_TryAgainBtnCntr, 25, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_color(ui_TryAgainBtnCntr, lv_color_hex(LIGHT_GREEN), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_TryAgainBtnCntr, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_TryAgainBtnCntr, 2, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_TryAgainBtnLbl = lv_label_create(ui_TryAgainBtnCntr);
+    lv_obj_set_width(ui_TryAgainBtnLbl, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_TryAgainBtnLbl, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_TryAgainBtnLbl, 0);
+    lv_obj_set_y(ui_TryAgainBtnLbl, 0);
+    lv_obj_set_align(ui_TryAgainBtnLbl, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_TryAgainBtnLbl, "Scan Again");
+    lv_obj_set_style_text_letter_space(ui_TryAgainBtnLbl, -1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_TryAgainBtnLbl, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_TryAgainBtnLbl, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     EnableBtGroup = lv_group_create();
 
     for (int i = 0; i < MAX_SCANNED_DEVICES; i++)
@@ -136,11 +165,13 @@ void ui_EnableConnectBt_screen_init(void)
     addFlag(ui_HiddenEnableBtScrBtn, LV_OBJ_FLAG_HIDDEN);
 
     // //Events
+    lv_obj_add_event_cb(ui_TryAgainBtnCntr, ui_event_btFindDevicesBtn, LV_EVENT_ALL, NULL);
     // lv_obj_add_event_cb(ui_EnableConnectBt,         ui_event_commonEvents, LV_EVENT_ALL, NULL);
     // lv_obj_add_event_cb(ui_HiddenEnableBtScrBtn,    ui_event_commonEvents, LV_EVENT_ALL, NULL);
 
     
     //Style of Focus
+    lv_obj_add_style(ui_TryAgainBtnCntr,  &style_focus, LV_STATE_FOCUS_KEY);
     // lv_obj_add_style(ui_btEnablePanel,        &colored_style_focus, LV_STATE_FOCUS_KEY);
     // lv_obj_add_style(ui_ScannedDevDropdown, &colored_style_focus, LV_STATE_FOCUS_KEY);
     // lv_obj_add_style(ui_btScanBtn,          &colored_style_focus, LV_STATE_FOCUS_KEY);
@@ -163,15 +194,14 @@ void ui_event_commonEvents(lv_event_t * e)
     lv_event_code_t event_code = lv_event_get_code(e);
     if(event_code == LV_EVENT_RELEASED) {
         // EnableBtFocus(false);
-        printf("Here changing screens to BT\n");
+        ESP_LOGD(TAG, "Here changing screens to BT\n");
         controlScreen = NULL;
         _ui_screen_change(&ui_BluetoothScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_BluetoothScreen_screen_init);
     }
     else if(event_code == LV_EVENT_CANCEL) {
         // EnableBtFocus(false);
-        // printf("Here changing screens to BT\n");
         // _ui_screen_change(&ui_BluetoothScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_BluetoothScreen_screen_init);
-        printf("commonEvents\n");
+        ESP_LOGD(TAG, "commonEvents\n");
         for (int i = 0; i < MAX_SCANNED_DEVICES; i++) {
             _ui_flag_modify(ui_btDevice[i], LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         }
@@ -184,7 +214,7 @@ void ui_event_commonEvents(lv_event_t * e)
 
 void resetScanScrParams()
 {
-    printf("reset Scan Scr Params\n");
+    ESP_LOGD(TAG, "reset Scan Scr Params\n");
     for (int i = 0; i < MAX_SCANNED_DEVICES; i++) {
         _ui_flag_modify(ui_btDevice[i], LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
     }
@@ -291,16 +321,21 @@ void checkBtDeviceConnectivity()
 {
     if(!(lv_obj_has_flag(ui_Spinner, LV_OBJ_FLAG_HIDDEN)) && xQueueReceive(xQueueDevData, &gotDevices, (TickType_t) 1))
     {
-        printf("Queue Received\n");
+        lv_group_remove_all_objs(EnableBtGroup);
+        ESP_LOGD(TAG, "Queue Received\n");
         _ui_flag_modify(ui_Spinner, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         if (btAudio.scanned_device_count == 0) {
-            printf("No devices found.\n");
+            ESP_LOGD(TAG, "No devices found.\n");
             lv_label_set_text_fmt(ui_btScanLbl, "%s", "No devices found!");
-            lv_obj_set_pos(ui_btScanLbl, 0, 0);
+            lv_obj_set_pos(ui_btScanLbl, 0, 65);
+            _ui_flag_modify(ui_TryAgainBtnCntr, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+            lv_group_add_obj(EnableBtGroup, ui_TryAgainBtnCntr);
+            lv_group_focus_obj(ui_TryAgainBtnCntr);
             return;
         }
 
         lv_group_remove_all_objs(EnableBtGroup);
+        _ui_flag_modify(ui_TryAgainBtnCntr, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_btScanLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_btEnablePanel, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         ScreenGroup[3] = EnableBtGroup;
@@ -322,5 +357,23 @@ void checkBtDeviceConnectivity()
     if(lv_screen_active() == ui_BluetoothScreen)
     {
         syncBtScreen(false);
+    }
+}
+
+void ui_event_btTryAgainBtn(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_PRESSED) {
+        _ui_flag_modify(ui_TryAgainBtnCntr, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        _ui_flag_modify(ui_btScanLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        btAudio.start_bt_scan();
+        // resetScanScrParams();
+    }
+    if(event_code == LV_EVENT_RELEASED) {
+        _ui_screen_change(&ui_BluetoothScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_BluetoothScreen_screen_init);
+        navigatingWidgets = false;
+        focusEnable = false;
+        // syncBtScreen(false);
     }
 }
