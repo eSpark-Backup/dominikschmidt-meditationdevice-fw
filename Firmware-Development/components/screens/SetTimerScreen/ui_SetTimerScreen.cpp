@@ -164,7 +164,7 @@ void ui_SetTimerScr_screen_init(void)
     lv_obj_set_style_bg_image_src(ui_midTime, &ui_img_44_blacktimeicon_png, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_SetTimerStartBtn = createStartBtnBox(ui_SetTimerScreen);
-    createUiNavslider(ui_SetTimerScreen, 0);
+    // createUiNavslider(ui_SetTimerScreen, 0);
 
     //Events
     lv_obj_add_event_cb(ui_SetTimerScreen,  ui_event_resetSetTimerEvent,LV_EVENT_ALL, NULL);

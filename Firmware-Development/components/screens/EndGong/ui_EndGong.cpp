@@ -169,7 +169,7 @@ void ui_EndGong1_screen_init(void)
 
 
     ui_endgongStartBtn = createStartBtnBox(ui_EndGong1);
-    createUiNavslider(ui_EndGong1, 2);
+    // createUiNavslider(ui_EndGong1, 2);
     
     //Events
     lv_obj_add_event_cb(ui_onButton, ui_event_onButton, LV_EVENT_ALL, NULL);

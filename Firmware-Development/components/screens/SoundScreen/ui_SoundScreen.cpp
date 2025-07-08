@@ -631,7 +631,7 @@ void ui_SoundScreen_screen_init(void)
     lv_obj_set_style_text_font(ui_SoundLabel, &lv_font_montserrat_20, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_SoundStartBtn = createStartBtnBox(ui_SoundScreen);
-    createUiNavslider(ui_SoundScreen, 1);
+    // createUiNavslider(ui_SoundScreen, 1);
 
     //Events
     lv_obj_add_event_cb(ui_SoundPanel, ui_event_toggleSoundPanelGroup, LV_EVENT_ALL, NULL);

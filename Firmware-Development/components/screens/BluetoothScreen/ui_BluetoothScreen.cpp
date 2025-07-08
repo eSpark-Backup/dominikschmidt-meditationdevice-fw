@@ -260,7 +260,7 @@ void ui_BluetoothScreen_screen_init(void)
     lv_obj_set_style_image_recolor(ui_ForgetDevBtnCntrIcon, lv_color_hex(RED), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_image_recolor_opa(ui_ForgetDevBtnCntrIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    createUiNavslider(ui_BluetoothScreen, 3);
+    // createUiNavslider(ui_BluetoothScreen, 3);
     
     //Events
     lv_obj_add_event_cb(ui_BluetoothScreen, ui_event_btTap, LV_EVENT_ALL, NULL);
