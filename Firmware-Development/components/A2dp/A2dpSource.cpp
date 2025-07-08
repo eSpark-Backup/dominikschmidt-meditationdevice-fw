@@ -289,6 +289,9 @@ void bt_app_a2d_cb(esp_a2d_cb_event_t event, esp_a2d_cb_param_t *param)
 void A2DP::start_bt_scan() {
 
     ESP_LOGI(TAG, "Starting Bluetooth scan...");
+    _ui_flag_modify(ui_TryAgainBtnCntr, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+    _ui_flag_modify(ui_btScanLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+    lv_label_set_text(ui_btScanLbl, "Scanning ...");
     scanned_device_count = 0;  // Reset scanned devices count
     memset(scanned_devices, 0, sizeof(scanned_devices));
     esp_bt_gap_start_discovery(ESP_BT_INQ_MODE_GENERAL_INQUIRY, 5, 0);

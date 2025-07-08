@@ -165,7 +165,7 @@ void ui_EnableConnectBt_screen_init(void)
     addFlag(ui_HiddenEnableBtScrBtn, LV_OBJ_FLAG_HIDDEN);
 
     // //Events
-    lv_obj_add_event_cb(ui_TryAgainBtnCntr, ui_event_btFindDevicesBtn, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_TryAgainBtnCntr, ui_event_btTryAgainBtn, LV_EVENT_ALL, NULL);
     // lv_obj_add_event_cb(ui_EnableConnectBt,         ui_event_commonEvents, LV_EVENT_ALL, NULL);
     // lv_obj_add_event_cb(ui_HiddenEnableBtScrBtn,    ui_event_commonEvents, LV_EVENT_ALL, NULL);
 
@@ -326,6 +326,7 @@ void checkBtDeviceConnectivity()
         _ui_flag_modify(ui_Spinner, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         if (btAudio.scanned_device_count == 0) {
             ESP_LOGD(TAG, "No devices found.\n");
+            _ui_flag_modify(ui_btScanLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
             lv_label_set_text_fmt(ui_btScanLbl, "%s", "No devices found!");
             lv_obj_set_pos(ui_btScanLbl, 0, 65);
             _ui_flag_modify(ui_TryAgainBtnCntr, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
@@ -367,13 +368,13 @@ void ui_event_btTryAgainBtn(lv_event_t * e)
     if(event_code == LV_EVENT_PRESSED) {
         _ui_flag_modify(ui_TryAgainBtnCntr, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_btScanLbl, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
+        _ui_flag_modify(ui_Spinner, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
         btAudio.start_bt_scan();
-        // resetScanScrParams();
     }
     if(event_code == LV_EVENT_RELEASED) {
-        _ui_screen_change(&ui_BluetoothScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_BluetoothScreen_screen_init);
         navigatingWidgets = false;
         focusEnable = false;
-        // syncBtScreen(false);
+        syncBtScreen(true);
+        _ui_screen_change(&ui_BluetoothScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_BluetoothScreen_screen_init);
     }
 }

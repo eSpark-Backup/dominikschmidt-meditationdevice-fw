@@ -17,6 +17,7 @@ void ui_EnableConnectBt_screen_init(void);
 extern lv_obj_t * ui_EnableConnectBt;
 extern lv_obj_t * ui_Spinner;
 extern lv_obj_t * ui_btScanLbl;
+extern lv_obj_t * ui_TryAgainBtnCntr;
 extern lv_obj_t * ui_midBt1;
 extern lv_obj_t * ui_btEnableLabel;
 extern lv_obj_t * ui_btEnablePanel;
