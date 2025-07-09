@@ -833,12 +833,13 @@ void ui_event_NatureSoundBtn(lv_event_t * e)
     }
     else if(event_code == LV_EVENT_RELEASED)
     {
-        selectSoundPanel(false);
         lv_dropdown_close(ui_NatureSoundDropList);
-        list_selected = false;
         lv_group_remove_obj(ui_NatureSoundDropList);
         _ui_flag_modify(ui_NatureSoundDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_NatureSoundBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        selSoundOpt = NONE_SELECTED;
+        selectSoundPanel(list_selected);
+        list_selected = false;
     }
 }
 
@@ -877,12 +878,13 @@ void ui_event_WhiteNoiseBtn(lv_event_t * e)
     }
     else if(event_code == LV_EVENT_RELEASED)
     {
-        selectSoundPanel(false);
         lv_dropdown_close(ui_WhiteNoiseDropList);
-        list_selected = false;
         lv_group_remove_obj(ui_WhiteNoiseDropList);
         _ui_flag_modify(ui_WhiteNoiseDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_WhiteNoiseBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        selSoundOpt = NONE_SELECTED;
+        selectSoundPanel(list_selected);
+        list_selected = false;
     }
 }
 
@@ -921,12 +923,13 @@ void ui_event_BinauralBeatBtn(lv_event_t * e)
     }
     else if(event_code == LV_EVENT_RELEASED)
     {
-        selectSoundPanel(false);
         lv_dropdown_close(ui_BinauralBeatDropList);
-        list_selected = false;
         lv_group_remove_obj(ui_BinauralBeatDropList);
         _ui_flag_modify(ui_BinauralBeatDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_BinauralBeatBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        selSoundOpt = NONE_SELECTED;
+        selectSoundPanel(list_selected);
+        list_selected = false;
     }
 }
 
@@ -966,12 +969,13 @@ void ui_event_LessonsBtn(lv_event_t * e)
     }
     else if(event_code == LV_EVENT_RELEASED)
     {
-        selectSoundPanel(false);
         lv_dropdown_close(ui_LessonsDropList);
-        list_selected = false;
         lv_group_remove_obj(ui_LessonsDropList);
         _ui_flag_modify(ui_LessonsDropList, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
         _ui_flag_modify(ui_LessonsBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_REMOVE);
+        selSoundOpt = NONE_SELECTED;
+        selectSoundPanel(true);
+        list_selected = false;
     }
 }
 

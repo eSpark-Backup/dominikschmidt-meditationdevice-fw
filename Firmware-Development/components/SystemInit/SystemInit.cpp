@@ -199,7 +199,7 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     }
     else
     {
-        if (!isAudioPlayed && list_selected && encDiff==0 && (getTime_mSec - nameSelectedTime) >= 2000)
+        if (deviceConnected && !isAudioPlayed && list_selected && encDiff==0 && (getTime_mSec - nameSelectedTime) >= 2000)
         {
             playPrevAudio();
             nameSelectedTime = getTime_mSec;
