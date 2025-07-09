@@ -65,6 +65,8 @@ extern lv_obj_t * ui_SoundLabel;
 extern lv_obj_t *ui_HiddenSoundBtn;
 extern lv_group_t *SoundGroup;
 // CUSTOM VARIABLES
+extern bool isAudioPlayed;
+extern uint32_t nameSelectedTime;
 
 typedef enum
 {

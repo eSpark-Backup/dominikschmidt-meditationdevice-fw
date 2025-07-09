@@ -189,10 +189,8 @@ void A2DP::bt_app_gap_cb(esp_bt_gap_cb_event_t event, esp_bt_gap_cb_param_t *par
             if (param->disc_st_chg.state == ESP_BT_GAP_DISCOVERY_STOPPED) {
                 ESP_LOGI(TAG, "Device discovery stopped. Found %d devices:", scanned_device_count);
                 // for (int i = 0; i < scanned_device_count; i++) {
-                //     ESP_LOGI(TAG, "[%d] Name: %s", i + 1, scanned_devices[i].name);
+                //     ESP_LOGD(TAG, "[%d] Name: %s", i + 1, scanned_devices[i].name);
                 // }
-                memset(scanned_devices, 0, sizeof(scanned_devices)); //for testing purpose only
-                scanned_device_count = 0;
                 if(xQueueSend(xQueueDevData, &scanned_devices, (TickType_t) 100) != pdPASS)
                     ESP_LOGE(TAG, "Failed to send Queue");
             } else if (param->disc_st_chg.state == ESP_BT_GAP_DISCOVERY_STARTED) {
@@ -491,10 +489,11 @@ void A2DP::A2dpAudioStart(char *filepath, int play_time_sec, bool Gong)
 
         AudioPlaying = true;
 
-        if (play_time_sec > 1)
+        if (play_time_sec > 0)
         {
             if (Gong == false) setTimerValues(play_time_sec, true);
             play_time_us = (int64_t)play_time_sec * 1000;
+            if(play_time_us == 1000) play_time_us = 1500;
             xTaskCreatePinnedToCore(loopAudioTask, "Audio_Monitor", 4096, NULL, 4, &xBtTaskHandler, 0);
         }
         ESP_LOGI(TAG, "loopAudioTask exit");

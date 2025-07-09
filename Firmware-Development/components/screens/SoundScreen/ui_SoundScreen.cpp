@@ -46,8 +46,10 @@ lv_obj_t *ui_SoundStartBtn;
 lv_obj_t *ui_SoundLabel;
 lv_obj_t *ui_HiddenSoundBtn;
 lv_group_t *SoundGroup;
-SoundType selSoundOpt = NO_SOUND;
 // CUSTOM VARIABLES
+SoundType selSoundOpt = NO_SOUND;
+bool isAudioPlayed = false;
+uint32_t nameSelectedTime = 0;
 
 
 void ui_SoundScreen_screen_init(void)
@@ -807,6 +809,8 @@ void ui_event_NatureSoundBtn(lv_event_t * e)
             _ui_flag_modify(ui_NatureSoundBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
             lv_dropdown_open(ui_NatureSoundDropList);
             list_selected = true;
+            isAudioPlayed = false;
+            nameSelectedTime = xTaskGetTickCount();
             selSoundOpt = NATURE_SOUND;
             ui_curDropdownList = ui_NatureSoundDropList;
         }
@@ -849,6 +853,8 @@ void ui_event_WhiteNoiseBtn(lv_event_t * e)
             _ui_flag_modify(ui_WhiteNoiseBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
             lv_dropdown_open(ui_WhiteNoiseDropList);
             list_selected = true;
+            isAudioPlayed = false;
+            nameSelectedTime = xTaskGetTickCount();
             selSoundOpt = WHITE_NOISE;
             ui_curDropdownList = ui_WhiteNoiseDropList;
         }
@@ -891,6 +897,8 @@ void ui_event_BinauralBeatBtn(lv_event_t * e)
             _ui_flag_modify(ui_BinauralBeatBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
             lv_dropdown_open(ui_BinauralBeatDropList);
             list_selected = true;
+            isAudioPlayed = false;
+            nameSelectedTime = xTaskGetTickCount();
             selSoundOpt = BINAURAL_BEATS;
             ui_curDropdownList = ui_BinauralBeatDropList;
         }
@@ -933,6 +941,8 @@ void ui_event_LessonsBtn(lv_event_t * e)
             _ui_flag_modify(ui_LessonsBtn, LV_OBJ_FLAG_HIDDEN, _UI_MODIFY_FLAG_ADD);
             lv_dropdown_open(ui_LessonsDropList);
             list_selected = true;
+            isAudioPlayed = false;
+            nameSelectedTime = xTaskGetTickCount();
             selSoundOpt = LESSONS;
             ui_curDropdownList = ui_LessonsDropList;
         }

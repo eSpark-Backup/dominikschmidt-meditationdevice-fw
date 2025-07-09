@@ -33,6 +33,8 @@ bool isScanned = false;
 #define PWM_FREQUENCY  5000               // 5 kHz
 #define PWM_RESOLUTION LEDC_TIMER_10_BIT  // 10-bit resolution (0-1023)
 #define PWM_PIN        GPIO_NUM_27        // BKL GPIO
+#define getTime_mSec    xTaskGetTickCount()
+#define getTime_Sec     getTime_mSec/1000
 
 /// Create system initializer object
 System Core;
@@ -126,6 +128,42 @@ void IRAM_ATTR System::checkButtons(void)
     }
 }
 
+void playPrevAudio()
+{
+    int Time = 1; //5 seconds
+    char soundPath[256] = {0};
+    lv_obj_t *prevSoundDropList = NULL;
+    char prevAudio[100] = {0};
+
+    if(selSoundOpt == NATURE_SOUND)         
+    {
+        prevSoundDropList = ui_NatureSoundDropList;
+        snprintf(soundDirectory, sizeof(soundDirectory), "/sdcard/audio/Nature/");
+    }
+    else if(selSoundOpt == WHITE_NOISE)     
+    {
+        prevSoundDropList = ui_WhiteNoiseDropList;
+        snprintf(soundDirectory, sizeof(soundDirectory), "/sdcard/audio/WhiteNoise/");
+    }
+    else if(selSoundOpt == BINAURAL_BEATS)  
+    {
+        prevSoundDropList = ui_BinauralBeatDropList;
+        snprintf(soundDirectory, sizeof(soundDirectory), "/sdcard/audio/BinauralBeats/");
+    }
+    else if(selSoundOpt == LESSONS)         
+    {
+        prevSoundDropList = ui_LessonsDropList;
+        snprintf(soundDirectory, sizeof(soundDirectory), "/sdcard/audio/Lessons/");
+    }
+    else 
+    {
+        prevSoundDropList = NULL;
+    }
+    if(prevSoundDropList != NULL) lv_dropdown_get_selected_str(prevSoundDropList, prevAudio, sizeof(prevAudio));
+    snprintf(soundPath, sizeof(soundPath), "%s%s", soundDirectory, prevAudio);
+    btAudio.A2dpAudioStart(soundPath, Time, true);
+}
+
 void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
 {    
     static int last_encoder_counter = 0;
@@ -145,7 +183,13 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     {
         if ((roller_selected && roller != NULL) || list_selected)  // Only update if roller is in selection mode
         {
-            if (list_selected == true)          {rotateScannedDropdown(encDiff);    return;}
+            if (list_selected == true)          
+            {
+                rotateScannedDropdown(encDiff);
+                nameSelectedTime = getTime_mSec;
+                isAudioPlayed = false;
+                return;
+            }
             else if (roller_selected == true)   {rotateRoller(encDiff);             return;}
         }
         if (roller_selected == false || list_selected == false) {
@@ -155,6 +199,12 @@ void System::ButtonRead(lv_indev_t * indev, lv_indev_data_t * data)
     }
     else
     {
+        if (!isAudioPlayed && list_selected && encDiff==0 && (getTime_mSec - nameSelectedTime) >= 2000)
+        {
+            playPrevAudio();
+            nameSelectedTime = getTime_mSec;
+            isAudioPlayed = true;
+        }
         checkButtons();
         Btn_A = {A, button1.getState()};
         Btn_B = {B, button2.getState()};
